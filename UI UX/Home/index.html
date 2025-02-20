@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <title>Safari Packages</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: #222;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 30px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .navbar img {
+            height: 50px;
+            margin-left: 6%;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+        header {
+            width: 100%;
+            height: 100vh;
+            background: url('Gambar1.png') no-repeat center center/cover;
+            filter: contrast(1.1) brightness(0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+        header h1 {
+            position: absolute;
+            top: 35%;
+            color: white;
+            font-size: 3em;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 30px;
+            border-radius: 10px;
+            transform: translateY(-50%);
+        }
+        .package-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 80%;
+            margin: 20px auto; /* Menambahkan margin untuk memisahkan dari header */
+        }
+        .package-item {
+            width: 200px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: center;
+            padding: 10px;
+            transition: transform 0.3s ease, background 0.3s ease;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+        }
+        .package-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .package-item:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0px 6px 15px rgba(255, 255, 255, 0.3);
+        }
+        @media (max-width: 768px) {
+            .package-container {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+            .package-item {
+                width: 80%;
+                height: 200px;
+            }
+        }
+        .footer {
+            background: #111;
+            padding: 40px 0;
+            color: white;
+        }
+        .footer h4 {
+            color: #ffcc00;
+            margin-bottom: 20px;
+        }
+        .footer ul {
+            list-style: none;
+            padding: 0;
+        }
+        .footer ul li {
+            margin-bottom: 10px;
+        }
+        .footer ul li i {
+            margin-right: 10px;
+            color: #ffcc00;
+        }
+        .footer ul li:hover {
+            color: #ffcc00;
+            cursor: pointer;
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 300px;
+            border-radius: 12px;
+            border: 2px solid #ffcc00;
+            transition: transform 0.3s ease;
+        }
+        .map-container iframe:hover {
+            transform: scale(1.02);
+        }
+        .logo {
+            max-width: 120px;
+            margin: 10px;
+        }
+        .navbar .login-btn {
+            background: #ffcc00;
+            color: black;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.3s ease, transform 0.2s;
+        }
+        .navbar .login-btn:hover {
+            background: #c1a225;
+            transform: scale(1.05);
+        }
+    </style>
+      <style>
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html">
+            <img src="logo.png" alt="Logo">
+        </a>
+        <div class="menu">
+            <a href="Login.html" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+        </div>
+    </nav>
+    
+    <header>
+
+    </header>
+    <body class="bg-gray-800 text-white">
+        <div class="container mx-auto py-12">
+            <div class="text-center mb-8">
+                <h1 class="text-lg font-semibold">DESTINATION</h1>
+                <h2 class="text-4xl font-bold text-yellow-500">POPULAR PLACE</h2>
+            </div>
+            <div class="flex items-center justify-center space-x-4">
+                <button class="bg-yellow-500 text-black p-2 rounded-full">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <div class="bg-gray-700 p-4 rounded-lg">
+                        <img src="bea.jpg" alt="Coastal Trip" class="rounded-lg mb-4" width="300" height="200">
+                        <h3 class="text-yellow-500 font-semibold">COASTAL TRIP</h3>
+                        <p>1 Hour</p>
+                        <p>IDR 1.500.000</p>
+                        <button class="bg-black text-white py-2 px-4 rounded mt-2" onclick="openPopup('Coastal Trip', 'IDR 1.500.000')">Book Now</button>
+                    </div>
+                    <div class="bg-gray-700 p-4 rounded-lg">
+                        <img src="image.png" alt="Batu Gantung Trip" class="rounded-lg mb-4" width="300" height="200">
+                        <h3 class="text-yellow-500 font-semibold">BATU GANTUNG TRIP</h3>
+                        <p>1 Hour</p>
+                        <p>IDR 2.000.000</p>
+                        <button class="bg-black text-white py-2 px-4 rounded mt-2" onclick="openPopup('Batu Gantung Trip', 'IDR 2.000.000')">Book Now</button>
+                    </div>
+                    <div class="bg-gray-700 p-4 rounded-lg">
+                        <img src="Gambar1.png" alt="Coastal Trip" class="rounded-lg mb-4" width="300" height="200">
+                        <h3 class="text-yellow-500 font-semibold">COASTAL TRIP</h3>
+                        <p>1 Hour</p>
+                        <p>IDR 900.000</p>
+                        <button class="bg-yellow-500 text-black py-2 px-4 rounded mt-2" onclick="openPopup('Coastal Trip', 'IDR 900.000')">Book Now</button>
+                    </div>
+                </div>
+                <button class="bg-yellow-500 text-black p-2 rounded-full">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="popup-overlay" id="popup-overlay" onclick="closePopup()"></div>
+        <div class="popup" id="popup">
+            <h3 id="popup-title" class="text-xl font-bold mb-2"></h3>
+            <p id="popup-price" class="mb-4"></p>
+            <button class="bg-red-500 text-white py-2 px-4 rounded" onclick="closePopup()">Close</button>
+        </div>
+        
+        <script>
+            function openPopup(title, price) {
+                document.getElementById('popup-title').innerText = title;
+                document.getElementById('popup-price').innerText = `Price: ${price}`;
+                document.getElementById('popup-overlay').style.display = 'block';
+                document.getElementById('popup').style.display = 'block';
+            }
+            function closePopup() {
+                document.getElementById('popup-overlay').style.display = 'none';
+                document.getElementById('popup').style.display = 'none';
+            }
+        </script>
+
+    <!-- FOOTER -->
+<footer class="bg-black text-white py-10">
+    <div class="container mx-auto px-5">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <!-- Follow Us Section -->
+            <div>
+                <h2 class="text-xl font-bold mb-5">Follow Us</h2>
+                <ul>
+                    <li class="mb-3 flex items-center hover:text-yellow-400 transition">
+                        <i class="fab fa-instagram mr-3 text-pink-500"></i> Instagram
+                    </li>
+                    <li class="mb-3 flex items-center hover:text-yellow-400 transition">
+                        <i class="fab fa-facebook mr-3 text-blue-500"></i> Facebook
+                    </li>
+                    <li class="mb-3 flex items-center hover:text-yellow-400 transition">
+                        <i class="fab fa-tiktok mr-3 text-gray-500"></i> TikTok
+                    </li>
+                    <li class="mb-3 flex items-center hover:text-yellow-400 transition">
+                        <i class="fab fa-youtube mr-3 text-red-500"></i> YouTube
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Location Section -->
+            <div class="text-center">
+                <h2 class="text-xl font-bold text-yellow-500 mb-5">Location</h2>
+                <p>Jalan Lingkar, Tuktuk Siadong, Kabupaten Samosir, Sumatera Utara, 22395</p>
+                <div class="my-5">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3814.214630319171!2d98.84166901030349!3d2.6767433558641707!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3031ebf3b944b9dd%3A0xc0b508b6a21d8075!2sSeadoo%20Safari%20Samosir!5e1!3m2!1sid!2sid!4v1740041762917!5m2!1sid!2sid" 
+                            width="600" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" 
+                            class="rounded-lg shadow-md border border-gray-700 w-full md:w-3/4 mx-auto"></iframe>
+                </div>
+                <p class="mt-2 text-gray-300">Working hour: 7AM - 5PM</p>
+            </div>
+
+            <!-- Booking & Information Section -->
+            <div class="text-center">
+                <h2 class="text-xl font-bold text-yellow-500 mb-5">Booking & Information</h2>
+                <p class="text-green-500 text-lg font-semibold">+62 823 6959 5172 (WhatsApp)</p>
+                <div class="mt-10">
+                    <h2 class="text-xl font-bold mb-5">Supported By</h2>
+                    <div class="flex justify-center items-center space-x-5">
+                        <img src="https://storage.googleapis.com/a1aa/image/AvxXQewEIXMIj5ejBC3rhSR3GzM8VwkVVW16HUoCofE.jpg" 
+                             alt="Seadoo logo" 
+                             class="h-12 w-auto">
+                        <img src="https://storage.googleapis.com/a1aa/image/YYrn2zY69YlQRyDyt7i_lGU3D3aa6ql7M9lSyNcnE8Y.jpg" 
+                             alt="Tripwe logo" 
+                             class="h-12 w-auto">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="border-t border-gray-700 mt-10 pt-5 text-center text-gray-400 text-sm">
+            © 2025 Seadoo Safari Samosir. All Rights Reserved.
+        </div>
+    </div>
+</footer>
+    
+</body>
+</html>
