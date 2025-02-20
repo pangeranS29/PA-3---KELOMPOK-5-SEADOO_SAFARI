@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Payment</title>
+
+        <link rel="stylesheet" href="../css/main.css">
+    </head>
+
+    <body>
+        <nav class="container relative my-4 lg:my-10">
+            <div class="flex flex-col justify-between w-full lg:flex-row lg:items-center">
+                <!-- Logo & Toggler Button here -->
+                <div class="flex items-center justify-between">
+                    <!-- LOGO -->
+                    <a href="./index.html">
+                        <img src="../assets/svgs/logo.svg" alt="stream" />
+                    </a>
+                    <!-- RESPONSIVE NAVBAR BUTTON TOGGLER -->
+                    <div class="block lg:hidden">
+                        <button class="p-1 outline-none mobileMenuButton" id="navbarToggler" data-target="#navigation">
+                            <svg class="text-dark w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 8h16M4 16h16"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Nav Menu -->
+                <div class="hidden w-full lg:block" id="navigation">
+                    <div
+                        class="flex flex-col items-baseline gap-4 mt-6 lg:justify-between lg:flex-row lg:items-center lg:mt-0">
+                        <div
+                            class="flex flex-col w-full ml-auto lg:w-auto gap-4 lg:gap-[50px] lg:items-center lg:flex-row">
+                            <a href="./index.html" class="nav-link-item">Landing</a>
+                            <a href="#!" class="nav-link-item">Catalog</a>
+                            <a href="#!" class="nav-link-item">Benefits</a>
+                            <a href="#!" class="nav-link-item">Stories</a>
+                            <a href="#!" class="nav-link-item">Maps</a>
+                        </div>
+                        <div
+                            class="relative flex flex-col w-full ml-auto lg:w-auto lg:gap-12 lg:items-center lg:flex-row">
+                            <!-- GUEST USER -->
+                            <!-- <a href="#!" class="btn-secondary">
+                                Log In
+                            </a> -->
+
+                            <!-- AUTH USER -->
+                            <a href="javascript:void(0);"
+                                class="flex flex-row-reverse lg:flex-row items-center justify-end lg:justify-start gap-[10px]"
+                                onclick="toggleDropdown(this)">
+                                <p class="text-base font-semibold text-dark">
+                                    Hello <br> Sakhirna
+                                </p>
+                                <span class="p-1 rounded-full w-[55px] border-2 border-secondary">
+                                    <img src="../assets/images/user.png" class="w-full" alt="">
+                                </span>
+                            </a>
+                            <!-- Dropdown menu -->
+                            <div class="absolute bottom-0 lg:right-0 translate-y-[107%] z-50 w-max hidden"
+                                id="userDropdownMenu">
+                                <div class="border border-secondary rounded-[22px] bg-white p-[26px]">
+                                    <div class="flex flex-col gap-4">
+                                        <a href="#!"
+                                            class="text-base font-medium transition-all text-dark hover:underline underline-offset-2 decoration-1">
+                                            My Transactions
+                                        </a>
+                                        <a href="#!"
+                                            class="text-base font-medium transition-all text-dark hover:underline underline-offset-2 decoration-1">
+                                            Rewards
+                                        </a>
+                                        <a href="#!"
+                                            class="text-base font-medium transition-all text-dark hover:underline underline-offset-2 decoration-1">
+                                            Add Benefit
+                                        </a>
+                                        <a href="#!"
+                                            class="text-base font-medium transition-all text-dark hover:underline underline-offset-2 decoration-1">
+                                            Payments
+                                        </a>
+                                        <a href="#!"
+                                            class="text-base font-medium transition-all text-dark hover:underline underline-offset-2 decoration-1">
+                                            Logout
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <section class="bg-darkGrey relative py-[70px]">
+            <div class="container">
+                <header class="mb-[30px]">
+                    <h2 class="font-bold text-dark text-[26px] mb-1">
+                        Checkout Booking  Jetski
+                    </h2>
+                    <p class="text-base text-secondary">We will help you get ready today</p>
+                </header>
+
+                <div class="flex items-center gap-5 lg:justify-between">
+                    <!-- Form Card -->
+                    <form action="" class="bg-white p-[30px] pb-10 rounded-3xl max-w-[490px] w-full">
+                        <div class="flex flex-col gap-[30px]">
+                            <div class="flex flex-col gap-4">
+                                <h5 class="text-lg font-semibold">
+                                    Review Order
+                                </h5>
+                                <!-- Items -->
+                                <div class="flex items-center justify-between">
+                                    <p class="text-base font-normal">
+                                        Choose jet ski
+                                    </p>
+                                    <p class="text-base font-semibold">
+                                        Porsche GTR 3 RS
+                                    </p>
+                                </div>
+                                <!-- Items -->
+                                <div class="flex items-center justify-between">
+                                    <p class="text-base font-normal">
+                                        Total day
+                                    </p>
+                                    <p class="text-base font-semibold">
+                                        6 hari
+                                    </p>
+                                </div>
+                                <!-- Items -->
+                                <div class="flex items-center justify-between">
+                                    <p class="text-base font-normal">
+                                        Service
+                                    </p>
+                                    <p class="text-base font-semibold">
+                                        Booking
+                                    </p>
+                                </div>
+                                <!-- Items -->
+                                <div class="flex items-center justify-between">
+                                    <p class="text-base font-normal">
+                                        Price
+                                    </p>
+                                    <p class="text-base font-semibold">
+                                       Rp 600k per day
+                                    </p>
+                                </div>
+                                <!-- Items -->
+                                <div class="flex items-center justify-between">
+                                    <p class="text-base font-normal">
+                                        VAT (10%)
+                                    </p>
+                                    <p class="text-base font-semibold">
+                                       Rp. 12000
+                                    </p>
+                                </div>
+                                <!-- Items -->
+                                <div class="flex items-center justify-between">
+                                    <p class="text-base font-normal">
+                                        Grand total
+                                    </p>
+                                    <p class="text-base font-semibold">
+                                        Rp.612.000
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-4">
+                                <h5 class="text-lg font-semibold">
+                                    Payment Method
+                                </h5>
+                                <div class="grid md:grid-cols-2 gap-4 md:gap-[30px] items-center">
+                                    <div class="relative boxPayment">
+                                        <input type="radio" value="mastercard" name="paymentMethod" id="mastercard"
+                                            class="absolute inset-0 z-50 opacity-0 cursor-pointer">
+                                        <label for="mastercard"
+                                            class="flex items-center justify-center gap-4 border border-grey rounded-[20px] p-5 min-h-[80px]">
+                                            <img src="../assets/svgs/logo-mastercard.svg" alt="">
+                                            <p class="text-base font-semibold">
+                                                MasterCard
+                                            </p>
+                                        </label>
+                                    </div>
+                                    <div class="relative boxPayment">
+                                        <input type="radio" value="midtrans" name="paymentMethod" id="midtrans"
+                                            class="absolute inset-0 z-50 opacity-0 cursor-pointer">
+                                        <label for="midtrans"
+                                            class="flex items-center justify-center gap-4 border border-grey rounded-[20px] p-5 min-h-[80px]">
+                                            <img src="../assets/svgs/logo-midtrans.svg" alt="">
+                                            <p class="text-base font-semibold">
+                                                Midtrans
+                                            </p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- CTA Button -->
+                            <div class="col-span-2 mt-5">
+                                <!-- Button Primary -->
+                                <div class="p-1 rounded-full bg-primary group">
+                                    <a href="payment-success.html" class="btn-primary">
+                                        <p>
+                                            Continue
+                                        </p>
+                                        <img src="../assets/svgs/ic-arrow-right.svg" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <img src="../assets/images/foto1.png" class=""
+                        alt="">
+                </div>
+            </div>
+        </section>
+
+        <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+            integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="../scripts/script.js"></script>
+    </body>
+
+</html>
