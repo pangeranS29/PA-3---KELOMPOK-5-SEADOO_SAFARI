@@ -11,11 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jetski', function (Blueprint $table) {
+        Schema::create('items', function (Blueprint $table) {
             $table->id();
+            $table->integer('stock');
 
-            $table->string('name');
-            $table->string('slug')->unique();
+
+            $table->foreignId('pilihpakets_id')->nullable()->constrained('pilihpakets');
+
+            $table->text('photos')->nullable();
+
+            $table->integer('review')->default(0);
 
             $table->softDeletes();
             $table->timestamps();
@@ -27,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jetski');
+        Schema::dropIfExists('items');
     }
 };

@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pilihpaket_', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('items', function (Blueprint $table) {
+            $table->text('deksripsi')->nullable()->after('stock'); // Menambahkan kolom 'deksripsi'
         });
     }
 
@@ -22,6 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pilihpaket_');
+        Schema::table('items', function (Blueprint $table) {
+
+            $table->dropColumn('deksripsi'); // Menghapus kolom 'deksripsi' jika rollback
+        });
     }
 };
