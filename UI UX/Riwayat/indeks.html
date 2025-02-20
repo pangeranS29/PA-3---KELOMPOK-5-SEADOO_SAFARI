@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeaDoo Safari Samosir</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-white">
+
+    <!-- Header -->
+    <header class="bg-black p-4 flex justify-between items-center">
+        <h1 class="flex items-center">
+            <img src="image 1.png" alt="SeaDoo Safari Samosir" class="h-10">  
+        </h1>
+        <nav>
+            <ul class="flex space-x-6">
+                <li><a href="#" class="hover:text-yellow-400">HOME</a></li>
+                <li class="relative group">
+                    <a href="#" class="hover:text-yellow-400">SAFARI PACKAGES ▼</a>
+                    <ul class="absolute hidden bg-gray-700 text-white p-2 rounded group-hover:block w-40">
+                        <li><a href="#" class="block hover:bg-gray-600 p-2">Photo Trip</a></li>
+                        <li><a href="#" class="block hover:bg-gray-600 p-2">Coastal Trip</a></li>
+                        <li><a href="#" class="block hover:bg-gray-600 p-2">Batu Gantung Trip</a></li>
+                        <li><a href="#" class="block hover:bg-gray-600 p-2">Air Terjun SitumurunTrip</a></li>
+                        <li><a href="#" class="block hover:bg-gray-600 p-2">Bukit Sibea-bea Trip</a></li>
+                    </ul>
+                </li>
+                <li class="relative group">
+                    <a href="#" class="hover:text-yellow-400">LINK ▼</a>
+                    <ul class="absolute hidden bg-gray-700 text-white p-2 rounded group-hover:block w-40">
+                        <li><a href="#" class="block hover:bg-gray-600 p-2">Seado Safari</a></li>
+                        <li><a href="#" class="block hover:bg-gray-600 p-2">BRP Indonesia</a></li>
+                    </ul>
+                </li>
+                <li><a href="#"><img src="user.png" alt="User" class="h-6"></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex p-6 space-x-6">
+        <!-- Sidebar -->
+        <aside class="bg-gray-800 p-6 w-1/4 rounded-lg">
+            <h2 class="text-xl font-bold">DAVID SILALAHI</h2>
+            <p>08123456789</p>
+            <div class="mt-4">
+                <p class="flex items-center cursor-pointer"><span class="mr-2">📜</span>Riwayat</p>
+                <p class="flex items-center text-red-500 cursor-pointer mt-2"><span class="mr-2">🚪</span>Keluar</p>
+            </div>
+        </aside>
+
+        <!-- Detail Riwayat -->
+        <section class="bg-gray-800 p-6 w-3/4 rounded-lg">
+            <h2 class="text-xl font-bold">Detail Riwayat</h2>
+            <form class="grid grid-cols-2 gap-4 mt-4">
+                <div>
+                    <label for="nama">Nama</label>
+                    <input type="text" id="nama" value="David Silalahi" class="w-full p-2 rounded bg-gray-700 text-white">
+                </div>
+                <div>
+                    <label for="telepon">Nomor Telepon</label>
+                    <input type="text" id="telepon" value="08123456789" class="w-full p-2 rounded bg-gray-700 text-white">
+                </div>
+                <div>
+                    <label for="tanggal">Tanggal</label>
+                    <input type="date" id="tanggal" value="2025-02-20" class="w-full p-2 rounded bg-gray-700 text-white">
+                </div>
+                <div>
+                    <label for="jam">Jam</label>
+                    <select id="jam" class="w-full p-2 rounded bg-gray-700 text-white">
+                        <option value="09.00 - 10.00" selected>09.00 - 10.00</option>
+                        <option value="10.00 - 11.00">10.00 - 11.00</option>
+                        <option value="11.00 - 12.00">11.00 - 12.00</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="penumpang">Penumpang</label>
+                    <input type="number" id="penumpang" value="2" class="w-full p-2 rounded bg-gray-700 text-white">
+                </div>
+            </form>
+        </section>
+    </main>
+
+   <!-- Footer -->
+<footer class="bg-gray-900 p-6 text-gray-400">
+    <div class="flex justify-between items-center">
+
+        <!-- Social Media -->
+        <div class="text-left">
+            <h3 class="text-white font-semibold">Follow Us</h3>
+            <ul class="space-y-2">
+                <li>📷 Instagram</li>
+                <li>📘 Facebook</li>
+                <li>🎵 Tiktok</li>
+                <li>▶ Youtube</li>
+            </ul>
+        </div>
+
+        <!-- Location -->
+        <div class="flex flex-col items-center text-center">
+            <h3 class="text-yellow-400 text-lg font-semibold">Location:</h3>
+            <p>Jalan Lingkar, TukTuk Siadong, Kabupaten Samosir, Sumatera Utara, 22395</p>
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.4848352836897!2d98.83431707685213!3d2.667853049307883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x303176b0a2eb3ff9%3A0x6562a53b2b28a1d2!2sSeaDoo%20Safari%20Jetski%20Samosir!5e0!3m2!1sen!2sid!4v1708410804123!5m2!1sen!2sid" 
+                width="250" height="150" class="rounded-lg border border-gray-700 shadow-lg" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+            <p>Working hour: 7AM - 5PM</p>
+            <p class="text-yellow-400">
+                Booking & Information: +62 823 6959 5172 (WhatsApp)
+            </p>
+        </div>
+
+        <!-- Sponsors (Sejajar dengan Follow Us) -->
+        <div class="text-left">
+            <h3 class="text-white text-lg font-semibold">Supported By</h3>
+            <img src="image 5 (1).png" alt="New Support" class="h-10 mt-2">
+        </div>
+
+    </div>
+</footer>
