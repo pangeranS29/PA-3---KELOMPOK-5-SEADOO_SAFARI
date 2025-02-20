@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Pengguna</title>
+    <style>
+        body {
+            font-family: Source Serif 4, Source Serif 4;
+            background-color: black;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #222;
+            padding: 20px 80px;
+        }
+        .navbar .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .logo {
+            max-height: 70px;
+            margin-right: 20px;
+        }
+        .navbar .logo-text {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .navbar .menu {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .menu a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 20px;
+        }
+        .navbar .menu a:hover {
+            color: orange;
+        }
+        .navbar .user-icon {
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 80vh;
+            gap: 50px;
+            padding: 60px;
+            max-width: 1400px;
+            margin: auto;
+        }
+        
+        .sidebar {
+            background-color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            flex: 1;
+            max-width: 350px;
+        }
+        .sidebar h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+        .sidebar p {
+            font-size: 18px;
+            margin: 12px 0;
+        }
+
+        .profile {
+            background-color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            flex: 2;
+            max-width: 500px;
+        }
+        .profile h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .profile label {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .profile .data-field {
+            background: #555;
+            color: white;
+            padding: 14px;
+            margin: 7px 0;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+        .btn {
+            background-color: orange;
+            color: black;
+            padding: 14px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+        }
+        .btn:hover {
+            background-color: darkorange;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 25px;
+            background-color: #222;
+            font-size: 18px;
+        }
+        .social-links a {
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            margin: 8px;
+            font-size: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo-container">
+                <img src="logo.png" alt="Logo Seadoo Safari" class="logo">
+            </div>
+            <div class="menu">
+                <a href="#">HOME</a>
+                <a href="#">SAFARI PACKAGES</a>
+                <a href="#">LINK</a>
+                <a href="#" class="user-icon">&#128100;</a>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="sidebar">
+            <h3>DAVID SILALAHI</h3>
+            <p>08123456789</p>
+            <p>&#128197; Riwayat</p>
+            <p>&#128682; Keluar</p>
+        </div>
+        <div class="profile">
+            <h3>Detail Akun</h3>
+            <label>User_ID</label>
+            <div class="data-field">001</div>
+            <label>Username</label>
+            <div class="data-field">David Silalahi</div>
+            <label>Nomor Telepon</label>
+            <div class="data-field">08123456789</div>
+            <button class="btn">Ubah Profil</button>
+            <button class="btn">Ubah Password</button>
+        </div>
+    </div>
+    <div class="footer">
+        <p>Jalan Lingkar, TukTuk Samosir, Sumatera Utara</p>
+        <p>
+            <a href="https://www.google.com/maps/place/Seadoo+Safari+Samosir/@2.676738,98.844249,16z/data=!4m6!3m5!1s0x3031ebf3b944b9dd:0xc0b508b6a21d8075!8m2!3d2.676738!4d98.8442493!16s%2Fg%2F11vx6z7qkx?hl=en&entry=ttu" target="_blank">
+                <img src="https://seadoosafarisamosir.com/wp-content/uploads/2024/05/map-seadoo-safari-samosir-768x151.jpg" 
+                     alt="Peta Seadoo Safari Samosir" 
+                     style="max-width: 100%; height: auto; border-radius: 10px;">
+            </a>
+        </p>
+        <p>Booking & Information: +62 823 6959 5172 (WhatsApp)</p>
+        <div class="social-links">
+            <a href="#">Instagram</a>
+            <a href="#">Facebook</a>
+            <a href="#">Tiktok</a>
+            <a href="#">Youtube</a>
+        </div>
+    </div>
+    
+</body>
+</html>
