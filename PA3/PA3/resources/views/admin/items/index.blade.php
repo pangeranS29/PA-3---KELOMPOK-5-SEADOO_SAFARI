@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Pilih Paket') }}
+            {{ __('Item') }}
         </h2>
     </x-slot>
 
@@ -25,15 +25,22 @@
                 name: 'id',
               },
               {
-                data: 'title',
-                name: 'title'
+                data: 'stock',
+                name: 'stock',
               },
               {
-                data: 'price',
+                data: 'pilihpaket.title',
+                name: 'title',
+                orderable: false,
+                searchable:false,
+              },
+              {
+                data: 'pilihpaket.price',
                 name: 'price'
+
               },
               {
-                data: 'deskripsi',
+                data: 'pilihpaket.deskripsi',
                 name: 'deskripsi'
               },
               {
@@ -51,9 +58,9 @@
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
               <div class="mb-10">
-                <a href="{{ route('admin.pilihpakets.create') }}"
+                <a href="{{ route('admin.items.create') }}"
                    class="px-4 py-2 font-bold text-white bg-green-500 rounded shadow-lg hover:bg-green-700">
-                  + Buat Paket
+                  + Buat Item
                 </a>
               </div>
               <div class="overflow-hidden shadow sm:rounded-md">
@@ -62,10 +69,11 @@
                     <thead>
                       <tr>
                         <th style="max-width: 1%">ID</th>
-                        <th>Title</th>
+                        <th>Stock <stock>
+                        <th>Nama Paket</th>
                         <th>Price</th>
                         <th>Deskripsi</th>
-                        <th>Aksi </th>
+                        <th>Aksi
 
 
                       </tr>
