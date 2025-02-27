@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-black border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -12,12 +12,14 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')">
+                    <x-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')"
+                        class="text-white hover:text-blue-500">
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                    <x-nav-link href="{{ route('admin.pilihpakets.index') }}" :active="request()->routeIs('admin.pilihpakets.index')">
-                        {{ __('PilihPaket') }}
+                    <x-nav-link href="{{ route('admin.pilihpakets.index') }}" :active="request()->routeIs('admin.pilihpakets.index')"
+                        class="text-white hover:text-blue-500">
+                        {{ __('Pilih Paket') }}
                     </x-nav-link>
                 </div>
             </div>

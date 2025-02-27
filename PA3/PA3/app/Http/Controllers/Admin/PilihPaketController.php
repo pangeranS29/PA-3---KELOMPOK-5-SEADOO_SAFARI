@@ -60,34 +60,33 @@ class PilihPaketController extends Controller
      */
     public function store(PilihPaketRequest $request)
     {
-         // Data sudah divalidasi oleh PilihPaketRequest
-         PilihPaket::create($request->validated());
+        // Data sudah divalidasi oleh PilihPaketRequest
+        PilihPaket::create($request->validated());
 
-         return redirect()->route('admin.pilihpakets.index')->with('success', 'Paket berhasil ditambahkan!');
+        return redirect()->route('admin.pilihpakets.index')->with('success', 'Paket berhasil ditambahkan!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
+    public function show(string $id) {}
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(PilihPaket $pilihpaket)
     {
-        //
+        return view('admin.pilihpakets.edit', compact('pilihpaket'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(PilihPaketRequest $request, string $id)
     {
-        //
+        $pilihpakets = PilihPaket::findOrFail($id);
+        $pilihpakets->update($request->validated());
+        return redirect()->route('admin.pilihpakets.index')->with('success', 'Paket berhasil diperbarui!');
     }
 
     /**
@@ -95,6 +94,9 @@ class PilihPaketController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $pilihpaket = PilihPaket::findOrFail($id);
+        $pilihpaket->delete();
+
+        return redirect()->route('admin.pilihpakets.index')->with('success', 'Paket berhasil dihapus!');
     }
 }
