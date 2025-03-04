@@ -47,12 +47,12 @@
                             <!-- Field: Title -->
                             <div class="w-full px-3">
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                    for="title">
+                                    for="nama_paket">
                                     Nama Paket*
                                 </label>
-                                <input value="{{ old('title') }}" name="title"
+                                <input value="{{ old('nama_paket') }}" name="nama_paket"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    id="title" type="text" placeholder="Judul Paket" required>
+                                    id="nama_paket" type="text" placeholder="Judul Paket" required>
                                 <p class="text-gray-600 text-xs italic">Masukkan judul paket. Contoh: Paket A, Paket B.
                                 </p>
                             </div>
@@ -62,12 +62,12 @@
                             <!-- Field: Price -->
                             <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                    for="price">
+                                    for="harga">
                                     Harga*
                                 </label>
-                                <input value="{{ old('price') }}" name="price"
+                                <input value="{{ old('harga') }}" name="harga"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    id="price" type="number" placeholder="Harga Paket" required>
+                                    id="harga" type="number" placeholder="Harga Paket" required>
                                 <p class="text-gray-600 text-xs italic">Masukkan harga paket dalam angka. Contoh:
                                     100000.</p>
                             </div>
@@ -82,6 +82,23 @@
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     id="deskripsi" rows="3" placeholder="Deskripsi Paket" required>{{ old('deskripsi') }}</textarea>
                                 <p class="text-gray-600 text-xs italic">Masukkan deskripsi singkat tentang paket ini.
+                                </p>
+                            </div>
+
+
+                        </div>
+
+                        <div class="flex flex-wrap -mx-3 mb-6">
+                            <!-- Field: Title -->
+                            <div class="w-full px-3">
+                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                    for="stok">
+                                    Stok*
+                                </label>
+                                <input value="{{ old('stok') }}" name="stok"
+                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    id="stok" type="text" placeholder="Stok" required>
+                                <p class="text-gray-600 text-xs italic">Masukkan Stok Paket Berupa Angka
                                 </p>
                             </div>
                         </div>

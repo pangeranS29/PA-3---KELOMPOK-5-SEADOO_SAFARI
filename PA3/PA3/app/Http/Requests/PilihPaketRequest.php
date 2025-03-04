@@ -23,9 +23,10 @@ class PilihPaketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'price' => 'required|integer|min:0',
+            'nama_paket' => 'required|string|max:255',
+            'harga' => 'required|integer|min:0',
             'deskripsi' => 'nullable|string',
+            'stok' => 'required|integer|min:0',
         ];
     }
 
@@ -37,12 +38,14 @@ class PilihPaketRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'Judul paket wajib diisi.',
-            'title.max' => 'Judul paket tidak boleh lebih dari 255 karakter.',
-            'price.required' => 'Harga paket wajib diisi.',
-            'price.integer' => 'Harga paket harus berupa angka.',
-            'price.min' => 'Harga paket tidak boleh kurang dari 0.',
+            'nama_paket.required' => 'Judul paket wajib diisi.',
+            'nama_paket.max' => 'Judul paket tidak boleh lebih dari 255 karakter.',
+            'harga.required' => 'Harga paket wajib diisi.',
+            'harga.integer' => 'Harga paket harus berupa angka.',
+            'harga.min' => 'Harga paket tidak boleh kurang dari 0.',
             'deskripsi.string' => 'Deskripsi paket harus berupa teks.',
+            'stok.required' => 'stok paket wajib diisi.',
+            'stok.integer' => 'stok paket harus berupa angka.',
         ];
     }
 }

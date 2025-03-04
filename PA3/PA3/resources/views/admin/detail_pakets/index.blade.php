@@ -25,18 +25,18 @@
                 name: 'id',
               },
               {
-                data: 'stock',
-                name: 'stock',
+                data: 'pilihpaket.stok',
+                name: 'stok',
               },
               {
-                data: 'pilihpaket.title',
-                name: 'title',
+                data: 'pilihpaket.nama_paket',
+                name: 'nama_paket',
                 orderable: false,
                 searchable:false,
               },
               {
-                data: 'pilihpaket.price',
-                name: 'price'
+                data: 'pilihpaket.harga',
+                name: 'harga'
 
               },
               {
@@ -58,9 +58,9 @@
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
               <div class="mb-10">
-                <a href="{{ route('admin.items.create') }}"
+                <a href="{{ route('admin.detail_pakets.create') }}"
                    class="px-4 py-2 font-bold text-white bg-green-500 rounded shadow-lg hover:bg-green-700">
-                  + Buat Item
+                  + Buat Detail_Paket
                 </a>
               </div>
               <div class="overflow-hidden shadow sm:rounded-md">
@@ -69,9 +69,9 @@
                     <thead>
                       <tr>
                         <th style="max-width: 1%">ID</th>
-                        <th>Stock <stock>
+                        <th>Stok <stock>
                         <th>Nama Paket</th>
-                        <th>Price</th>
+                        <th>Harga</th>
                         <th>Deskripsi</th>
                         <th>Aksi
 

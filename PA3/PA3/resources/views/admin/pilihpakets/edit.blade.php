@@ -5,7 +5,7 @@
             <a href="#!" onclick="window.history.go(-1); return false;" class="text-gray-500 hover:text-gray-700">
                 ← Kembali
             </a>
-            {!! __('Pilih Paket &raquo; Edit &raquo; #') . $pilihpaket->id . ' &middot; ' . $pilihpaket->title !!}
+            {!! __('Pilih Paket &raquo; Edit &raquo; #') . $pilihpaket->id . ' &middot; ' . $pilihpaket->nama_paket !!}
         </h2>
     </x-slot>
 
@@ -35,12 +35,12 @@
                         <!-- Field: Title -->
                         <div class="flex flex-wrap -mx-3 mb-6">
                             <div class="w-full px-3">
-                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="title">
-                                    Judul Paket*
+                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="nama_paket">
+                                    Nama Paket*
                                 </label>
-                                <input value="{{ old('title', $pilihpaket->title) }}" name="title"
+                                <input value="{{ old('nama_paket', $pilihpaket->nama_paket) }}" name="nama_paket"
                                        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                       id="title" type="text" placeholder="Judul Paket" required>
+                                       id="nama_paket" type="text" placeholder="Judul Paket" required>
                                 <p class="text-gray-600 text-xs italic">Masukkan judul paket. Contoh: Paket A, Paket B.</p>
                             </div>
                         </div>
@@ -48,12 +48,12 @@
                         <!-- Field: Price -->
                         <div class="flex flex-wrap -mx-3 mb-6">
                             <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="price">
+                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="harga">
                                     Harga Paket*
                                 </label>
-                                <input value="{{ old('price', $pilihpaket->price) }}" name="price"
+                                <input value="{{ old('harga', $pilihpaket->harga) }}" name="harga"
                                        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                       id="price" type="number" placeholder="Harga Paket" required>
+                                       id="harga" type="number" placeholder="Harga Paket" required>
                                 <p class="text-gray-600 text-xs italic">Masukkan harga paket dalam angka. Contoh: 100000.</p>
                             </div>
 
@@ -66,6 +66,18 @@
                                           class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                           id="deskripsi" rows="3" placeholder="Deskripsi Paket">{{ old('deskripsi', $pilihpaket->deskripsi) }}</textarea>
                                 <p class="text-gray-600 text-xs italic">Masukkan deskripsi singkat tentang paket ini.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap -mx-3 mb-6">
+                            <div class="w-full px-3">
+                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="stok">
+                                    Stok Paket*
+                                </label>
+                                <input value="{{ old('stok', $pilihpaket->stok) }}" name="stok"
+                                       class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                       id="stok" type="text" placeholder="Stok" required>
+                                <p class="text-gray-600 text-xs italic">Masukkan Stok Paket.</p>
                             </div>
                         </div>
 

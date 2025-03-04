@@ -13,13 +13,14 @@ class PilihPaket extends Model
 
 
     protected $fillable = [
-        'title',
-        'price',
+        'nama_paket',
+        'harga',
         'deskripsi',
+        'stok',
     ];
 
     public function item()
     {
-        return $this->hasMany(Items::class);
+        return $this->hasMany(DetailPaket::class);
     }
 }

@@ -2,32 +2,32 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Items;
-use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\PilihPaket;
+use App\Models\DetailPaket;
+use Yajra\DataTables\DataTables;
 
-class ItemController extends Controller
+class DetailPaketController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-          //Script untuk Datatables,Ajax
-          if (request()->ajax()) {
-            $query = Items::with(['pilihpaket']);
+         //Script untuk Datatables,Ajax
+         if (request()->ajax()) {
+            $query = DetailPaket::with(['pilihpaket']);
 
             return DataTables::of($query)
-                ->addColumn('action', function ($items) {
+                ->addColumn('action', function ($detail_paket) {
                     return '
                         <a class="block w-full px-2 py-1 mb-1 text-xs text-center text-white transition duration-500 bg-gray-700 border border-gray-700 rounded-md select-none ease hover:bg-gray-800 focus:outline-none focus:shadow-outline"
-                            href="' . route('admin.items.edit', $items->id) . '">
+                            href="' . route('admin.detail_pakets.edit', $detail_paket->id) . '">
                            Edit
                         </a>
 
-                        <form class="block w-full" onsubmit="return confirm(\'Apakah anda yakin?\');" -block" action="' . route('admin.items.destroy', $items->id) . '" method="POST">
+                        <form class="block w-full" onsubmit="return confirm(\'Apakah anda yakin?\');" -block" action="' . route('admin.detail_pakets.destroy', $detail_paket->id) . '" method="POST">
                         <button class="w-full px-2 py-1 text-xs text-white transition duration-500 bg-red-500 border border-red-500 rounded-md select-none ease hover:bg-red-600 focus:outline-none focus:shadow-outline" >
                             Hapus
                         </button>
@@ -41,17 +41,17 @@ class ItemController extends Controller
 
 
         //Script untuk return halaman view Item
-        return view('admin.items.index');
+        return view('admin.detail_pakets.index');
     }
 
     /**
-     * Showph the form for creating a new resource.
+     * Show the form for creating a new resource.
      */
     public function create()
     {
         $pilihpakets = PilihPaket::all();
 
-        return view('admin.items.create', compact('pilihpakets'));
+        return view('admin.detail_pakets.create', compact('pilihpakets'));
     }
 
     /**

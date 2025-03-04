@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PilihPaketController as AdminPilihPaketController;
-use App\Http\Controllers\Admin\ItemController as AdminItemController;
+use App\Http\Controllers\Admin\DetailPaketController as AdminDetailPaketController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,7 +16,7 @@ Route::prefix('admin')->name('admin.')->middleware([
 ])->group(function () {
    Route::get('/dashboard',[AdminDashboardController::class,'index'])->name('dashboard');
    Route::resource('pilihpakets',AdminPilihPaketController::class);
-   Route::resource('items',AdminItemController::class);
+   Route::resource('detail_pakets',AdminDetailPaketController::class);
 
 
 });

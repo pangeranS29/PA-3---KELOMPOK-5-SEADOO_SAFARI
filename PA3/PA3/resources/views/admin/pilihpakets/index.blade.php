@@ -25,17 +25,24 @@
                 name: 'id',
               },
               {
-                data: 'title',
-                name: 'title'
+                data: 'nama_paket',
+                name: 'nama_paket'
               },
               {
-                data: 'price',
-                name: 'price'
+                data: 'harga',
+                name: 'harga'
+              },
+
+              {
+                data: 'stok',
+                name: 'stok'
               },
               {
                 data: 'deskripsi',
                 name: 'deskripsi'
               },
+
+
               {
                 data: 'action',
                 name: 'action',
@@ -62,8 +69,9 @@
                     <thead>
                       <tr>
                         <th style="max-width: 1%">ID</th>
-                        <th>Title</th>
-                        <th>Price</th>
+                        <th>Nama_Paket</th>
+                        <th>Harga</th>
+                        <th>Stok</th>
                         <th>Deskripsi</th>
                         <th>Aksi </th>
 

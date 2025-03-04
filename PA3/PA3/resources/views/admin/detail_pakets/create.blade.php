@@ -40,7 +40,7 @@
                         </div>
                     @endif
 
-                    <form class="w-full" action="{{ route('admin.items.store') }}" method="post"
+                    <form class="w-full" action="{{ route('admin.detail_pakets.store') }}" method="post"
                         enctype="multipart/form-data">
                         @csrf
 
@@ -49,17 +49,17 @@
                             <div class="w-full px-3">
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                     for="pilihpakets_id">
-                                    Paket*
+                                   Nama Paket*
                                 </label>
                                 <select name="pilihpakets_id" id="pilihpakets_id"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     required>
-                                    <option value="" data-price="" data-deskripsi="">Pilih Paket</option>
+                                    <option value="" data-harga="" data-deskripsi="" data-stok="">Pilih Paket</option>
                                     @foreach ($pilihpakets as $pilihpaket)
-                                        <option value="{{ $pilihpaket->id }}" data-price="{{ $pilihpaket->price }}"
-                                            data-deskripsi="{{ $pilihpaket->deskripsi }}"
+                                        <option value="{{ $pilihpaket->id }}" data-harga="{{ $pilihpaket->harga }}"
+                                            data-deskripsi="{{ $pilihpaket->deskripsi }}"  data-stok="{{ $pilihpaket->stok }}"
                                             {{ old('pilihpakets_id') == $pilihpaket->id ? 'selected' : '' }}>
-                                            {{ $pilihpaket->title }}
+                                            {{ $pilihpaket->nama_paket }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -74,12 +74,12 @@
                             <!-- Field: Price -->
                             <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                    for="price">
+                                    for="harga">
                                     Harga*
                                 </label>
-                                <input value="{{ old('price') }}" name="price" id="price"
+                                <input value="{{ old('harga') }}" name="harga" id="harga"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    id="price" type="number" placeholder="Harga Paket" required readonly>
+                                    id="harga" type="number" placeholder="Harga Paket" required readonly>
                                 <p class="text-gray-600 text-xs italic">Masukkan harga paket dalam angka. Contoh:
                                     100000.</p>
                             </div>
@@ -106,11 +106,11 @@
                             <div class="w-full px-3">
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                     for="title">
-                                    Stock*
+                                    Stok*
                                 </label>
-                                <input value="{{ old('stock') }}" name="stock"
+                                <input value="{{ old('stok') }}" name="stok"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    id="stock" type="number" placeholder="Masukkan Jumlah Stock" required>
+                                    id="stok" type="number" placeholder="Masukkan Jumlah Stok" required>
                                 <p class="text-gray-600 text-xs italic">Masukkan Stock dalam angka . Contoh: 10, 100.
                                     10000
                                 </p>
@@ -184,8 +184,9 @@
     <script>
         document.getElementById('pilihpakets_id').addEventListener('change', function() {
             let selectedOption = this.options[this.selectedIndex];
-            document.getElementById('price').value = selectedOption.getAttribute('data-price') || '';
+            document.getElementById('harga').value = selectedOption.getAttribute('data-harga') || '';
             document.getElementById('deskripsi').value = selectedOption.getAttribute('data-deskripsi') || '';
+            document.getElementById('stok').value = selectedOption.getAttribute('data-stok') || '';
         });
     </script>
 </x-app-layout>

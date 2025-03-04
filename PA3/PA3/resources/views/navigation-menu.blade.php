@@ -22,9 +22,9 @@
                             {{ __('Pilih Paket') }}
                         </x-nav-link>
 
-                        <x-nav-link href="{{ route('admin.items.index') }}" :active="request()->routeIs('admin.items.index')"
+                        <x-nav-link href="{{ route('admin.detail_pakets.index') }}" :active="request()->routeIs('admin.detail_pakets.index')"
                             class="text-white hover:text-blue-500">
-                            {{ __('Item') }}
+                            {{ __('Detail Paket') }}
                         </x-nav-link>
                     </div>
                 </div>
@@ -158,8 +158,8 @@
                     {{ __('PilihPaket') }}
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link href="{{ route('admin.items.index') }}" :active="request()->routeIs('admin.items.index')">
-                    {{ __('Item') }}
+                <x-responsive-nav-link href="{{ route('admin.detail_pakets.index') }}" :active="request()->routeIs('admin.detail_pakets.index')">
+                    {{ __('Detail Paket') }}
                 </x-responsive-nav-link>
             </div>
 

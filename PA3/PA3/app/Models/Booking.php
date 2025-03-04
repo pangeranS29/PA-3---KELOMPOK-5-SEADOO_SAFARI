@@ -37,7 +37,7 @@ class Booking extends Model
 
 
     public function item() {
-        return $this->belongsTo(Items::class);
+        return $this->belongsTo(DetailPaket::class);
     }
 
 
