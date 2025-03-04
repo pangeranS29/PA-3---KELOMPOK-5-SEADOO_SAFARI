@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class DetailPaketRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class DetailPaketRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true; // Ubah menjadi true agar request ini diizinkan
+        return Auth::check();
     }
 
     /**
@@ -20,8 +21,9 @@ class DetailPaketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_pilihpaket' => 'required|exists:pilihpakets,id',
-            'foto' => 'nullable|string',
+            'pilihpakets_id' => 'required|exists:pilihpakets,id',
+            'foto' => 'required|array',
+            'foto.*' => 'required|image|mimes:jpeg,png,jpg.wbep|max:2048',
             'rating' => 'nullable|numeric|min:0|max:5',
             'deskripsi' => 'nullable|string',
             'jumlah_penumpang' => 'nullable|integer|min:0',

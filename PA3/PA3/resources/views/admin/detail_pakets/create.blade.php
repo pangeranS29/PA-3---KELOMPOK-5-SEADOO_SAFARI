@@ -16,7 +16,7 @@
         <!-- Judul Halaman -->
         <center>
             <h2 class="text-2xl font-bold text-gray-800 leading-tight">
-                {{ __('Buat Item') }}
+                {{ __('Buat Detail Paket') }}
             </h2>
         </center>
     </x-slot>
@@ -49,15 +49,17 @@
                             <div class="w-full px-3">
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                     for="pilihpakets_id">
-                                   Nama Paket*
+                                    Nama Paket*
                                 </label>
                                 <select name="pilihpakets_id" id="pilihpakets_id"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     required>
-                                    <option value="" data-harga="" data-deskripsi="" data-stok="">Pilih Paket</option>
+                                    <option value="" data-harga="" data-deskripsi="" data-stok="">Pilih Paket
+                                    </option>
                                     @foreach ($pilihpakets as $pilihpaket)
                                         <option value="{{ $pilihpaket->id }}" data-harga="{{ $pilihpaket->harga }}"
-                                            data-deskripsi="{{ $pilihpaket->deskripsi }}"  data-stok="{{ $pilihpaket->stok }}"
+                                            data-deskripsi="{{ $pilihpaket->deskripsi }}"
+                                            data-stok="{{ $pilihpaket->stok }}"
                                             {{ old('pilihpakets_id') == $pilihpaket->id ? 'selected' : '' }}>
                                             {{ $pilihpaket->nama_paket }}
                                         </option>
@@ -79,20 +81,20 @@
                                 </label>
                                 <input value="{{ old('harga') }}" name="harga" id="harga"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    id="harga" type="number" placeholder="Harga Paket" required readonly>
+                                    type="number" placeholder="Harga Paket" required readonly>
                                 <p class="text-gray-600 text-xs italic">Masukkan harga paket dalam angka. Contoh:
                                     100000.</p>
                             </div>
 
-                             <!-- Field: Deskripsi -->
-                             <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                            <!-- Field: Deskripsi -->
+                            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                     for="deskripsi">
                                     Deskripsi*
                                 </label>
                                 <textarea name="deskripsi" id="deskripsi"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    id="deskripsi" rows="3" placeholder="Deskripsi Paket" required readonly>{{ old('deskripsi') }}</textarea>
+                                    rows="3" placeholder="Deskripsi Paket" required readonly>{{ old('deskripsi') }}</textarea>
                                 <p class="text-gray-600 text-xs italic">Masukkan deskripsi singkat tentang paket ini.
                                 </p>
                             </div>
@@ -136,14 +138,14 @@
                             <!-- Field: Deskripsi -->
                             <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                for="jumlah_penumpang">
-                                Jumlah Penumpang*
-                            </label>
-                            <input value="{{ old('jumlah_penumpang') }}" name="jumlah_penumpang"
-                                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                id="jumlah_penumpang" type="number" placeholder="Masukkan Jumlah Penumpang" >
-                            <p class="text-gray-600 text-xs italic">Masukkan Jumlah . Contoh: 1, 2
-                            </p>
+                                    for="jumlah_penumpang">
+                                    Jumlah Penumpang*
+                                </label>
+                                <input value="{{ old('jumlah_penumpang') }}" name="jumlah_penumpang"
+                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    id="jumlah_penumpang" type="number" placeholder="Masukkan Jumlah Penumpang">
+                                <p class="text-gray-600 text-xs italic">Masukkan Jumlah . Contoh: 1, 2
+                                </p>
                             </div>
                         </div>
 
@@ -154,11 +156,12 @@
                                     for="foto">
                                     Foto*
                                 </label>
-                                <input value="{{ old('photos') }}" name="photos[]"
+                                <input name="foto[]"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    accept="image/png,image/jpeg,image/jpg,image/webp"
-                                    id="foto" type="file" multiple >
-                                <p class="text-gray-600 text-xs italic">Foto Item. lebih dari satu foto dapat di upload.opsional
+                                    accept="image/png,image/jpeg,image/jpg,image/webp" id="foto" type="file"
+                                    multiple>
+                                <p class="text-gray-600 text-xs italic">Foto Item. lebih dari satu foto dapat di
+                                    upload.opsional
                                 </p>
                             </div>
                         </div>
@@ -182,11 +185,21 @@
 
 
     <script>
-        document.getElementById('pilihpakets_id').addEventListener('change', function() {
-            let selectedOption = this.options[this.selectedIndex];
-            document.getElementById('harga').value = selectedOption.getAttribute('data-harga') || '';
-            document.getElementById('deskripsi').value = selectedOption.getAttribute('data-deskripsi') || '';
-            document.getElementById('stok').value = selectedOption.getAttribute('data-stok') || '';
+        document.addEventListener("DOMContentLoaded", function() {
+            let paketDropdown = document.getElementById('pilihpakets_id');
+            if (paketDropdown) {
+                paketDropdown.addEventListener('change', function() {
+                    let selectedOption = this.options[this.selectedIndex];
+                    let hargaInput = document.getElementById('harga');
+                    let deskripsiInput = document.getElementById('deskripsi');
+                    let stokInput = document.getElementById('stok');
+
+                    if (hargaInput) hargaInput.value = selectedOption.getAttribute('data-harga') || '';
+                    if (deskripsiInput) deskripsiInput.value = selectedOption.getAttribute(
+                        'data-deskripsi') || '';
+                    if (stokInput) stokInput.value = selectedOption.getAttribute('data-stok') || '';
+                });
+            }
         });
     </script>
 </x-app-layout>

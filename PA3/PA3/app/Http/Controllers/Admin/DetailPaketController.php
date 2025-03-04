@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DetailPaketRequest;
 use Illuminate\Http\Request;
 use App\Models\PilihPaket;
 use App\Models\DetailPaket;
 use Yajra\DataTables\DataTables;
+
 
 class DetailPaketController extends Controller
 {
@@ -57,10 +59,29 @@ class DetailPaketController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(DetailPaketRequest $request)
+{
+    $data = $request->all();
+
+    // upload multiple photos
+    if ($request->hasFile('foto')) {
+        $foto = []; // Inisialisasi sebagai array kosong
+
+        foreach ($request->file('foto') as $file) { // Gunakan variabel berbeda (misal: $file)
+            $fotoPath = $file->store('assets/item', 'public');
+
+            // Push to array
+            array_push($foto, $fotoPath);
+        }
+
+        $data['foto'] = json_encode($foto);
     }
+
+    DetailPaket::create($data);
+
+    return redirect()->route('admin.detail_pakets.index');
+}
+
 
     /**
      * Display the specified resource.

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Item') }}
+            {{ __('Detail_Data') }}
         </h2>
     </x-slot>
 
@@ -24,10 +24,7 @@
                 data: 'id',
                 name: 'id',
               },
-              {
-                data: 'pilihpaket.stok',
-                name: 'stok',
-              },
+
               {
                 data: 'pilihpaket.nama_paket',
                 name: 'nama_paket',
@@ -42,6 +39,15 @@
               {
                 data: 'pilihpaket.deskripsi',
                 name: 'deskripsi'
+              },
+              {
+                data: 'pilihpaket.stok',
+                name: 'stok',
+              },
+
+              {
+                data: 'foto',
+                name: 'foto'
               },
               {
                 data: 'action',
@@ -69,10 +75,11 @@
                     <thead>
                       <tr>
                         <th style="max-width: 1%">ID</th>
-                        <th>Stok <stock>
                         <th>Nama Paket</th>
                         <th>Harga</th>
                         <th>Deskripsi</th>
+                        <th>stok</th>
+                        <th>foto</th>
                         <th>Aksi
 
 

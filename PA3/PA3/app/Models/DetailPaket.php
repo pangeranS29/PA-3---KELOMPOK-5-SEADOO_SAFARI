@@ -20,9 +20,23 @@ class DetailPaket extends Model
         'jumlah_penumpang',
     ];
 
+    protected $casts = [
+        'foto' =>'array',
+    ];
+
+    // public function getThumnailAttribute(){
+
+    //     if($this->foto){
+    //         return Storage::url(json_encode($this->foto)[0]);
+    //     }
+
+    //     return 'https://via.placeholder.com/800';
+    // }
+
+
     // Relasi ke tabel pilihpakets
-    public function pilihPaket()
+    public function pilihpaket()
     {
-        return $this->belongsTo(PilihPaket::class, 'id_pilihpaket');
+        return $this->belongsTo(PilihPaket::class, 'pilihpakets_id');
     }
 }

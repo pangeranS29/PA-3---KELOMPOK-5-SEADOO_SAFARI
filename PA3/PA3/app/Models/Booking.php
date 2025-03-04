@@ -4,39 +4,31 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Booking extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'phone',
-        'start_date',
-        'end_date',
+        'name_customer',
+        'no_telepon',
+        'waktu_mulai',
+        'waktu_selesai',
         'status',
         'payment_method',
         'payment_status',
         'payment_url',
-        'pilihpakets_id',
         'total_price',
-        'items_id',
+        'detail_paket_id',
         'users_id',
     ];
 
-    protected $casts =[
-        'start_date'=> 'datetime',
-        'end_date'=> 'datetime',
-    ];
 
 
-    public function pilihpaket() {
-        return $this->belongsTo(PilihPaket::class);
-    }
 
 
-    public function item() {
+    public function detail_paket() {
         return $this->belongsTo(DetailPaket::class);
     }
 
@@ -45,3 +37,5 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
 }
+
+

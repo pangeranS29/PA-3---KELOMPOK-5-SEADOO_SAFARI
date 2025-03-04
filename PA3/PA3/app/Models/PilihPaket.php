@@ -19,7 +19,8 @@ class PilihPaket extends Model
         'stok',
     ];
 
-    public function item()
+
+    public function detail_paket()
     {
         return $this->hasMany(DetailPaket::class);
     }
