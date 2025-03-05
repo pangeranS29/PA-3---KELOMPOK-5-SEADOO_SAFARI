@@ -58,8 +58,7 @@
                     {
                         data: 'foto',
                         name: 'foto',
-                        orderable: false,
-                        searchable: false,
+
                     },
                     {
                         data: 'action',

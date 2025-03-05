@@ -40,9 +40,19 @@ class DetailPaketController extends Controller
                 })
 
                 ->editColumn('foto', function ($detail_paket) {
-                    return '<img src="' . $detail_paket->foto . '" alt="foto" class="w-20 mx-auto rounded-md">';
+
+
+                    $photos = json_decode($detail_paket->foto, true);
+
+
+                    if (!empty($photos)) {
+
+                        return '<img src="' . asset('storage/' . $photos[0]) . '" alt="foto" class="w-20 mx-auto rounded-md">';
+                    }
+
+                    return 'Tidak ada foto';
                 })
-                ->rawColumns(['foto','action'])
+                ->rawColumns(['foto', 'action'])
                 ->make();
         }
 
@@ -102,21 +112,21 @@ class DetailPaketController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(DetailPaket $detail_paket)
-{
-    // Memuat relasi pilihpaket untuk dropdown
-    $detail_paket->load('pilihpaket');
+    {
+        // Memuat relasi pilihpaket untuk dropdown
+        $detail_paket->load('pilihpaket');
 
-    // Mengambil semua opsi pilihan paket untuk dropdown
-    $pilihpakets = PilihPaket::all();
+        // Mengambil semua opsi pilihan paket untuk dropdown
+        $pilihpakets = PilihPaket::all();
 
-    // Mengirimkan data ke view
-    return view('admin.detail_pakets.edit', compact('detail_paket', 'pilihpakets'));
-}
+        // Mengirimkan data ke view
+        return view('admin.detail_pakets.edit', compact('detail_paket', 'pilihpakets'));
+    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(DetailPaketRequest $request,DetailPaket $detail_paket )
+    public function update(DetailPaketRequest $request, DetailPaket $detail_paket)
     {
         $data = $request->all();
 
