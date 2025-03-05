@@ -23,10 +23,11 @@ class DetailPaketRequest extends FormRequest
         return [
             'pilihpakets_id' => 'required|exists:pilihpakets,id',
             'foto' => 'required|array',
-            'foto.*' => 'required|image|mimes:jpeg,png,jpg.wbep|max:2048',
+            'foto.*' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
             'rating' => 'nullable|numeric|min:0|max:5',
             'deskripsi' => 'nullable|string',
             'jumlah_penumpang' => 'nullable|integer|min:0',
         ];
     }
+
 }

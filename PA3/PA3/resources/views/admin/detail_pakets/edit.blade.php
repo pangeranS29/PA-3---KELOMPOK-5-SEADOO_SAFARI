@@ -16,7 +16,7 @@
         <!-- Judul Halaman -->
         <center>
             <h2 class="text-2xl font-bold text-gray-800 leading-tight">
-                {{ __('Buat Detail Paket') }}
+                {{ __('Edit Detail Paket') }}
             </h2>
         </center>
     </x-slot>
@@ -40,9 +40,10 @@
                         </div>
                     @endif
 
-                    <form class="w-full" action="{{ route('admin.detail_pakets.store') }}" method="post"
-                        enctype="multipart/form-data">
+                    <form class="w-full" action="{{ route('admin.detail_pakets.update', $detail_paket->id) }}"
+                        method="post" enctype="multipart/form-data">
                         @csrf
+                        @method('PUT')
 
                         <div class="flex flex-wrap -mx-3 mb-6">
                             <!-- Field: Title -->
@@ -60,7 +61,7 @@
                                         <option value="{{ $pilihpaket->id }}" data-harga="{{ $pilihpaket->harga }}"
                                             data-deskripsi="{{ $pilihpaket->deskripsi }}"
                                             data-stok="{{ $pilihpaket->stok }}"
-                                            {{ old('pilihpakets_id') == $pilihpaket->id ? 'selected' : '' }}>
+                                            {{ $detail_paket->pilihpakets_id == $pilihpaket->id ? 'selected' : '' }}>
                                             {{ $pilihpaket->nama_paket }}
                                         </option>
                                     @endforeach
@@ -79,7 +80,7 @@
                                     for="harga">
                                     Harga*
                                 </label>
-                                <input value="{{ old('harga') }}" name="harga" id="harga"
+                                <input value="{{ old('harga', $detail_paket->harga) }}" id="harga"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     type="number" placeholder="Harga Paket" required readonly>
                                 <p class="text-gray-600 text-xs italic">Masukkan harga paket dalam angka. Contoh:
@@ -94,7 +95,7 @@
                                 </label>
                                 <textarea name="deskripsi" id="deskripsi"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    rows="3" placeholder="Deskripsi Paket" required readonly>{{ old('deskripsi') }}</textarea>
+                                    rows="3" placeholder="Deskripsi Paket" required readonly>{{ old('deskripsi', $detail_paket->deskripsi) }}</textarea>
                                 <p class="text-gray-600 text-xs italic">Masukkan deskripsi singkat tentang paket ini.
                                 </p>
                             </div>
@@ -110,7 +111,7 @@
                                     for="title">
                                     Stok*
                                 </label>
-                                <input value="{{ old('stok') }}" name="stok"
+                                <input value="{{ old('stok', $detail_paket->stok) }}" name="stok"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     id="stok" type="number" placeholder="Masukkan Jumlah Stok" required>
                                 <p class="text-gray-600 text-xs italic">Masukkan Stock dalam angka . Contoh: 10, 100.
@@ -126,7 +127,7 @@
                                     for="rating">
                                     Rating*
                                 </label>
-                                <input value="{{ old('rating') }}" name="rating"
+                                <input value="{{ old('rating') ?? $detail_paket->rating }}" name="rating"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     id="rating" type="number" placeholder="Masukkan Jumlah Rating" step=".01">
                                 <p class="text-gray-600 text-xs italic">Masukkan Rating dalam angka . Contoh: 1, 3.
@@ -141,7 +142,8 @@
                                     for="jumlah_penumpang">
                                     Jumlah Penumpang*
                                 </label>
-                                <input value="{{ old('jumlah_penumpang') }}" name="jumlah_penumpang"
+                                <input value="{{ old('jumlah_penumpang') ?? $detail_paket->jumlah_penumpang }}"
+                                    name="jumlah_penumpang"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     id="jumlah_penumpang" type="number" placeholder="Masukkan Jumlah Penumpang">
                                 <p class="text-gray-600 text-xs italic">Masukkan Jumlah . Contoh: 1, 2
@@ -157,9 +159,9 @@
                                     Foto*
                                 </label>
                                 <input value="{{ old('foto') }}" name="foto[]"
-                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    accept="image/png,image/jpeg,image/jpg,image/webp" id="foto" type="file"
-                                    multiple>
+                                    class="block w-full px-4 py-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
+                                    id="grid-last-name" type="file" placeholder="Nama" multiple
+                                    accept="image/png, image/jpeg, image/webp">
                                 <p class="text-gray-600 text-xs italic">Foto Item. lebih dari satu foto dapat di
                                     upload.opsional
                                 </p>
@@ -187,19 +189,23 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let paketDropdown = document.getElementById('pilihpakets_id');
-            if (paketDropdown) {
-                paketDropdown.addEventListener('change', function() {
-                    let selectedOption = this.options[this.selectedIndex];
-                    let hargaInput = document.getElementById('harga');
-                    let deskripsiInput = document.getElementById('deskripsi');
-                    let stokInput = document.getElementById('stok');
+            let hargaInput = document.getElementById('harga');
+            let deskripsiInput = document.getElementById('deskripsi');
+            let stokInput = document.getElementById('stok');
 
-                    if (hargaInput) hargaInput.value = selectedOption.getAttribute('data-harga') || '';
-                    if (deskripsiInput) deskripsiInput.value = selectedOption.getAttribute(
-                        'data-deskripsi') || '';
-                    if (stokInput) stokInput.value = selectedOption.getAttribute('data-stok') || '';
-                });
+            // Fungsi untuk mengisi field berdasarkan pilihan paket
+            function updateFields() {
+                let selectedOption = paketDropdown.options[paketDropdown.selectedIndex];
+                hargaInput.value = selectedOption.getAttribute('data-harga') || "";
+                deskripsiInput.value = selectedOption.getAttribute('data-deskripsi') || "";
+                stokInput.value = selectedOption.getAttribute('data-stok') || "";
             }
+
+            // Panggil fungsi saat halaman dimuat
+            updateFields();
+
+            // Event listener ketika pilihan paket berubah
+            paketDropdown.addEventListener('change', updateFields);
         });
     </script>
 </x-app-layout>

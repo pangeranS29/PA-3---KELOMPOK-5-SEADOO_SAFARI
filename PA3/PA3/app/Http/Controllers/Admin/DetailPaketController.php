@@ -17,11 +17,13 @@ class DetailPaketController extends Controller
      */
     public function index()
     {
-         //Script untuk Datatables,Ajax
-         if (request()->ajax()) {
+        //Script untuk Datatables,Ajax
+        if (request()->ajax()) {
             $query = DetailPaket::with(['pilihpaket']);
 
             return DataTables::of($query)
+
+
                 ->addColumn('action', function ($detail_paket) {
                     return '
                         <a class="block w-full px-2 py-1 mb-1 text-xs text-center text-white transition duration-500 bg-gray-700 border border-gray-700 rounded-md select-none ease hover:bg-gray-800 focus:outline-none focus:shadow-outline"
@@ -36,7 +38,11 @@ class DetailPaketController extends Controller
                             ' . method_field('delete') . csrf_field() . '
                         </form>';
                 })
-                ->rawColumns(['action'])
+
+                ->editColumn('foto', function ($detail_paket) {
+                    return '<img src="' . $detail_paket->foto . '" alt="foto" class="w-20 mx-auto rounded-md">';
+                })
+                ->rawColumns(['foto','action'])
                 ->make();
         }
 
@@ -60,27 +66,28 @@ class DetailPaketController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(DetailPaketRequest $request)
-{
-    $data = $request->all();
+    {
+        $data = $request->all();
 
-    // upload multiple photos
-    if ($request->hasFile('foto')) {
-        $foto = []; // Inisialisasi sebagai array kosong
 
-        foreach ($request->file('foto') as $file) { // Gunakan variabel berbeda (misal: $file)
-            $fotoPath = $file->store('assets/item', 'public');
+        // Upload multiple photos
+        if ($request->hasFile('foto')) {
+            $foto = [];
 
-            // Push to array
-            array_push($foto, $fotoPath);
+            foreach ($request->file('foto') as $photo) {
+                $photoPath = $photo->store('assets/item', 'public');
+
+                // Store as json
+                array_push($foto, $photoPath);
+            }
+
+            $data['foto'] = json_encode($foto);
         }
 
-        $data['foto'] = json_encode($foto);
+        DetailPaket::create($data);
+
+        return redirect()->route('admin.detail_pakets.index');
     }
-
-    DetailPaket::create($data);
-
-    return redirect()->route('admin.detail_pakets.index');
-}
 
 
     /**
@@ -94,24 +101,54 @@ class DetailPaketController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
-    }
+    public function edit(DetailPaket $detail_paket)
+{
+    // Memuat relasi pilihpaket untuk dropdown
+    $detail_paket->load('pilihpaket');
+
+    // Mengambil semua opsi pilihan paket untuk dropdown
+    $pilihpakets = PilihPaket::all();
+
+    // Mengirimkan data ke view
+    return view('admin.detail_pakets.edit', compact('detail_paket', 'pilihpakets'));
+}
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(DetailPaketRequest $request,DetailPaket $detail_paket )
     {
-        //
+        $data = $request->all();
+
+
+        // Upload multiple photos
+        if ($request->hasFile('foto')) {
+            $foto = [];
+
+            foreach ($request->file('foto') as $photo) {
+                $photoPath = $photo->store('assets/item', 'public');
+
+                // Store as json
+                array_push($foto, $photoPath);
+            }
+
+            $data['foto'] = json_encode($foto);
+        } else {
+            // If photos is empty, then use old photos
+            $data['foto'] = $detail_paket->foto;
+        }
+
+        $detail_paket->update($data);
+        return redirect()->route('admin.detail_pakets.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(DetailPaket $detail_paket)
     {
-        //
+        $detail_paket->delete();
+
+        return redirect()->route('admin.detail_pakets.index');
     }
 }
