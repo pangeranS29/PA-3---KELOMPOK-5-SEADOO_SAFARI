@@ -26,6 +26,11 @@
                             class="text-white hover:text-blue-500">
                             {{ __('Detail Paket') }}
                         </x-nav-link>
+
+                        <x-nav-link href="{{ route('admin.bookings.index') }}" :active="request()->routeIs('admin.bookings.index')"
+                            class="text-white hover:text-blue-500">
+                            {{ __('Booking') }}
+                        </x-nav-link>
                     </div>
                 </div>
 
@@ -160,6 +165,10 @@
 
                 <x-responsive-nav-link href="{{ route('admin.detail_pakets.index') }}" :active="request()->routeIs('admin.detail_pakets.index')">
                     {{ __('Detail Paket') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link href="{{ route('admin.bookings.index') }}" :active="request()->routeIs('admin.bookings.index')">
+                    {{ __('Booking') }}
                 </x-responsive-nav-link>
             </div>
 

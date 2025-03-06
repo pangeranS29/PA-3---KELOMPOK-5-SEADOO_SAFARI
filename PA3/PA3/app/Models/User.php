@@ -14,6 +14,8 @@ class User extends Authenticatable
 {
     use HasApiTokens;
 
+    protected $table = 'users'; // Pastikan ini ada jika nama tabel berbeda
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
     use HasProfilePhoto;

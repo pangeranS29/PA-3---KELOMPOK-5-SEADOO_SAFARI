@@ -18,7 +18,6 @@ class DetailPaket extends Model
         'foto',
         'rating',
         'deskripsi',
-        'jumlah_penumpang',
     ];
 
     protected $casts = [

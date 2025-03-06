@@ -9,19 +9,22 @@ use Illuminate\Database\Eloquent\Model;
 class Booking extends Model
 {
     use HasFactory;
+    protected $table = 'bookings'; // Nama tabel
 
     protected $fillable = [
-        'name_customer',
+        'nama_customer',
         'no_telepon',
         'waktu_mulai',
         'waktu_selesai',
         'status',
-        'payment_method',
-        'payment_status',
-        'payment_url',
-        'total_price',
+        'jumlah_penumpang', // Tambahkan ini
+        'method_pembayaran',
+        'status_pembayaran',
+        'url_pembayaran',
+        'total_harga    ',
         'detail_paket_id',
         'users_id',
+
     ];
 
 
@@ -33,8 +36,9 @@ class Booking extends Model
     }
 
 
-    public function user() {
-        return $this->belongsTo(User::class);
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'users_id');
     }
 }
 

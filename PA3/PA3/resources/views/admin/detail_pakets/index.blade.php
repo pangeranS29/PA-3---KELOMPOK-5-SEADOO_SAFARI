@@ -50,10 +50,7 @@
                         name: 'rating',
                     },
 
-                    {
-                        data: 'jumlah_penumpang',
-                        name: 'jumlah_penumpang',
-                    },
+
 
                     {
                         data: 'foto',
@@ -91,7 +88,6 @@
                                 <th>Deskripsi</th>
                                 <th>stok</th>
                                 <th>rating</th>
-                                <th>jumlah_penumpang</th>
                                 <th>foto</th>
                                 <th>Aksi
 
