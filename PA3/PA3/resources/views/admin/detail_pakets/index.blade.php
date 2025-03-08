@@ -41,8 +41,8 @@
                         name: 'deskripsi'
                     },
                     {
-                        data: 'pilihpaket.stok',
-                        name: 'stok',
+                        data: 'pilihpaket.jumlah_jetski',
+                        name: 'jumlah_jetski',
                     },
 
                     {
@@ -86,7 +86,7 @@
                                 <th>Nama Paket</th>
                                 <th>Harga</th>
                                 <th>Deskripsi</th>
-                                <th>stok</th>
+                                <th>Jumlah Jetski</th>
                                 <th>rating</th>
                                 <th>foto</th>
                                 <th>Aksi

@@ -26,7 +26,7 @@ class PilihPaketRequest extends FormRequest
             'nama_paket' => 'required|string|max:255',
             'harga' => 'required|integer|min:0',
             'deskripsi' => 'nullable|string',
-            'stok' => 'required|integer|min:0',
+            'jumlah_jetski' => 'required|integer|min:0',
         ];
     }
 
@@ -44,8 +44,8 @@ class PilihPaketRequest extends FormRequest
             'harga.integer' => 'Harga paket harus berupa angka.',
             'harga.min' => 'Harga paket tidak boleh kurang dari 0.',
             'deskripsi.string' => 'Deskripsi paket harus berupa teks.',
-            'stok.required' => 'stok paket wajib diisi.',
-            'stok.integer' => 'stok paket harus berupa angka.',
+            'jumlah_jetski.required' => 'stok paket wajib diisi.',
+            'jumlah_jetski.integer' => 'stok paket harus berupa angka.',
         ];
     }
 }

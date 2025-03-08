@@ -14,7 +14,7 @@ class DetailPaket extends Model
     protected $table = 'detail_paket'; // Nama tabel
 
     protected $fillable = [
-        'pilihpakets_id',
+        'paket_jetski_id', // Ubah dari pilihpakets_id ke paket_jetski_id
         'foto',
         'rating',
         'deskripsi',
@@ -48,6 +48,6 @@ class DetailPaket extends Model
     // Relasi ke tabel pilihpakets
     public function pilihpaket()
     {
-        return $this->belongsTo(PilihPaket::class, 'pilihpakets_id');
+        return $this->belongsTo(PilihPaket::class, 'paket_jetski_id', 'id');
     }
 }

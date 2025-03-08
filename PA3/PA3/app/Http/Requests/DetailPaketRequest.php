@@ -21,7 +21,7 @@ class DetailPaketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'pilihpakets_id' => 'required|exists:pilihpakets,id',
+            'paket_jetski_id' => 'required|exists:paket_jetski,id',
             'foto' => 'required|array',
             'foto.*' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
             'rating' => 'nullable|numeric|min:0|max:5',

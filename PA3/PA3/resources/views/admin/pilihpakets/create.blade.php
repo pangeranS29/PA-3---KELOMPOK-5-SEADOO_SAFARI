@@ -93,13 +93,12 @@
                             <div class="w-full px-3">
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                     for="stok">
-                                    Stok*
+                                    Jumlah Paket Jetski*
                                 </label>
-                                <input value="{{ old('stok') }}" name="stok"
+                                <input value="{{ old('jumlah_jetski') }}" name="jumlah_jetski"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    id="stok" type="text" placeholder="Stok" required>
-                                <p class="text-gray-600 text-xs italic">Masukkan Stok Paket Berupa Angka
-                                </p>
+                                    id="jumlah_jetski" type="text" placeholder="jumlah_jetski" required>
+                                <p class="text-gray-600 text-xs italic">Masukkan Jumlah Paket Jetski
                             </div>
                         </div>
 

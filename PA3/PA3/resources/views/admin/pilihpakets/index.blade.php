@@ -34,8 +34,8 @@
               },
 
               {
-                data: 'stok',
-                name: 'stok'
+                data: 'jumlah_jetski',
+                name: 'jumlah_jetski'
               },
               {
                 data: 'deskripsi',
@@ -71,7 +71,7 @@
                         <th style="max-width: 1%">ID</th>
                         <th>Nama_Paket</th>
                         <th>Harga</th>
-                        <th>Stok</th>
+                        <th>Jumlah Jetski</th>
                         <th>Deskripsi</th>
                         <th>Aksi </th>
 

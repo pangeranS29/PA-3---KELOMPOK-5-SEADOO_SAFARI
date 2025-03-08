@@ -59,7 +59,7 @@
                                     @foreach ($pilihpakets as $pilihpaket)
                                         <option value="{{ $pilihpaket->id }}" data-harga="{{ $pilihpaket->harga }}"
                                             data-deskripsi="{{ $pilihpaket->deskripsi }}"
-                                            data-stok="{{ $pilihpaket->stok }}"
+                                            data-stok="{{ $pilihpaket->jumlah_jetski }}"
                                             {{ old('pilihpakets_id') == $pilihpaket->id ? 'selected' : '' }}>
                                             {{ $pilihpaket->nama_paket }}
                                         </option>
@@ -108,11 +108,11 @@
                             <div class="w-full px-3">
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                     for="title">
-                                    Stok*
+                                    Jumlah Jetski*
                                 </label>
-                                <input value="{{ old('stok') }}" name="stok"
+                                <input value="{{ old('jumlah_jetski') }}" name="jumlah_jetski"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    id="stok" type="number" placeholder="Masukkan Jumlah Stok" required>
+                                    id="jumlah_jetski" type="number" placeholder="Masukkan Jumlah Jetski" required>
                                 <p class="text-gray-600 text-xs italic">Masukkan Stock dalam angka . Contoh: 10, 100.
                                     10000
                                 </p>
@@ -181,7 +181,7 @@
                     let selectedOption = this.options[this.selectedIndex];
                     let hargaInput = document.getElementById('harga');
                     let deskripsiInput = document.getElementById('deskripsi');
-                    let stokInput = document.getElementById('stok');
+                    let stokInput = document.getElementById('jumlah_jetski');
 
                     if (hargaInput) hargaInput.value = selectedOption.getAttribute('data-harga') || '';
                     if (deskripsiInput) deskripsiInput.value = selectedOption.getAttribute(

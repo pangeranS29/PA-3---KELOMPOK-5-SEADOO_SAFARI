@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PilihPaket extends Model
 {
     use HasFactory;
-    protected $table = 'pilihpakets'; // Pastikan ini ada jika nama tabel berbeda
+    protected $table = 'paket_jetski';
 
 
 
@@ -16,8 +16,16 @@ class PilihPaket extends Model
         'nama_paket',
         'harga',
         'deskripsi',
-        'stok',
+        'jumlah_jetski',
+        'id_jetski'
     ];
+
+
+    // Relasi ke tabel Jetski (PaketJetski milik satu Jetski)
+    public function jetski()
+    {
+        return $this->belongsTo(Jetski::class, 'id_jetski', 'id_jetski');
+    }
 
 
     public function detail_paket()
