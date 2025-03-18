@@ -1,29 +1,118 @@
-<div class="main-sidebar sidebar-style-2">
-    <aside id="sidebar-wrapper">
-        <div class="sidebar-brand">
-            <a href="{{ url('/') }}">Stisla</a>
-        </div>
-        <div class="sidebar-brand sidebar-brand-sm">
-            <a href="{{ url('/') }}">St</a>
-        </div>
-        <ul class="sidebar-menu">
-            <li class="menu-header">Dashboard</li>
-            <li class="nav-item active">
-                <a href="{{ url('/') }}" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
+<aside  id="sidebar" class="bg-black text-white w-64 min-h-screen fixed">
+    <div class="p-4 flex justify-between items-center">
+        <!-- Logo -->
+        <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-2">
+            <x-application-mark class="block h-9 w-auto" />
+
+        </a>
+
+
+    </div>
+
+
+    <!-- Navigation Links -->
+    <nav class="mt-auto p-4 border-t border-gray-700">
+        <ul class="space-y-4">
+            <li>
+                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('admin.dashboard') ? 'bg-gray-700' : '' }}">
+                    Dashboard
+                </a>
             </li>
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Dropdown</span></a>
-                <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="#">Test</a></li>
-                </ul>
+
+            <li>
+                <a href="{{ route('admin.jetski.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('admin.jetski.index') ? 'bg-gray-700' : '' }}">
+                    Jetski
+                </a>
             </li>
-            <li class="menu-header">Starter</li>
-            <li><a class="nav-link" href="#"><i class="far fa-square"></i> <span>Blank Page</span></a></li>
-            <li><a class="nav-link" href="#"><i class="far fa-square"></i> <span>Form Page</span></a></li>
-            <li><a class="nav-link" href="#"><i class="far fa-square"></i> <span>Profile</span></a></li>
-            <li><a class="nav-link" href="#"><i class="far fa-square"></i> <span>Login</span></a></li>
-            <li><a class="nav-link" href="#"><i class="far fa-square"></i> <span>Register</span></a></li>
-            <li><a class="nav-link" href="#"><i class="far fa-square"></i> <span>Forgot Password</span></a></li>
+
+            <li>
+                <a href="{{ route('admin.pilihpakets.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('admin.pilihpakets.index') ? 'bg-gray-700' : '' }}">
+                    Pilih Paket
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.detail_pakets.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('admin.detail_pakets.index') ? 'bg-gray-700' : '' }}">
+                    Detail Paket
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.bookings.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('admin.bookings.index') ? 'bg-gray-700' : '' }}">
+                    Booking
+                </a>
+            </li>
         </ul>
-    </aside>
-</div>
+    </nav>
+
+    <!-- User Profile and Settings -->
+    <div class="mt-auto p-4 border-t border-gray-700">
+        <!-- User Info -->
+        <div class="flex items-center space-x-3">
+            @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+                <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" class="size-10 rounded-full object-cover">
+            @endif
+            <div>
+                <div class="font-medium text-sm">{{ Auth::user()->name }}</div>
+                <div class="text-xs text-gray-400">{{ Auth::user()->email }}</div>
+            </div>
+        </div>
+
+        <!-- Settings Dropdown -->
+        <div class="mt-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="{{ route('profile.show') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('profile.show') ? 'bg-gray-700' : '' }}">
+                        Profile
+                    </a>
+                </li>
+                @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
+                    <li>
+                        <a href="{{ route('api-tokens.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('api-tokens.index') ? 'bg-gray-700' : '' }}">
+                            API Tokens
+                        </a>
+                    </li>
+                @endif
+                <li>
+                    <form method="POST" action="{{ route('logout') }}" x-data>
+                        @csrf
+                        <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-700">
+                            Log Out
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Team Management -->
+        @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
+            <div class="mt-4">
+                <div class="text-xs text-gray-400">Manage Team</div>
+                <ul class="mt-2 space-y-2">
+                    <li>
+                        <a href="{{ route('teams.show', Auth::user()->currentTeam->id) }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('teams.show') ? 'bg-gray-700' : '' }}">
+                            Team Settings
+                        </a>
+                    </li>
+                    @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
+                        <li>
+                            <a href="{{ route('teams.create') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('teams.create') ? 'bg-gray-700' : '' }}">
+                                Create New Team
+                            </a>
+                        </li>
+                    @endcan
+                    @if (Auth::user()->allTeams()->count() > 1)
+                        <li>
+                            <div class="text-xs text-gray-400 mt-2">Switch Teams</div>
+                            <ul class="mt-2 space-y-2">
+                                @foreach (Auth::user()->allTeams() as $team)
+                                    <li>
+                                        <x-switchable-team :team="$team" class="block px-4 py-2 hover:bg-gray-700" />
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
+                    @endif
+                </ul>
+            </div>
+        @endif
+    </div>
+</aside>

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PilihPaketController as AdminPilihPaketController;
 use App\Http\Controllers\Admin\DetailPaketController as AdminDetailPaketController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
+use App\Http\Controllers\Admin\JetskiController as AdminJetskiController;
 
 
 Route::get('/', function () {
@@ -20,6 +21,8 @@ Route::prefix('admin')->name('admin.')->middleware([
    Route::resource('pilihpakets',AdminPilihPaketController::class);
    Route::resource('detail_pakets',AdminDetailPaketController::class);
    Route::resource('bookings',AdminBookingController::class);
+   Route::resource('jetski', AdminJetskiController::class);
+
 
 
 });
