@@ -27,6 +27,7 @@ class PilihPaketRequest extends FormRequest
             'harga' => 'required|integer|min:0',
             'deskripsi' => 'nullable|string',
             'jumlah_jetski' => 'required|integer|min:0',
+            'durasi' => 'required|integer|min:0', // Tambahkan ini
         ];
     }
 

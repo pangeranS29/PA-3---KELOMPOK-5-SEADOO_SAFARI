@@ -16,6 +16,7 @@ class PilihPaket extends Model
         'nama_paket',
         'harga',
         'deskripsi',
+        'durasi',
         'jumlah_jetski',
         'id_jetski'
     ];

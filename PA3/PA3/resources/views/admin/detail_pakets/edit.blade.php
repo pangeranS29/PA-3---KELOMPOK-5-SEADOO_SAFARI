@@ -49,10 +49,10 @@
                             <!-- Field: Title -->
                             <div class="w-full px-3">
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                    for="pilihpakets_id">
+                                    for="paket_jetski_id">
                                     Nama Paket*
                                 </label>
-                                <select name="pilihpakets_id" id="pilihpakets_id"
+                                <select name="paket_jetski_id" id="paket_jetski_id"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     required>
                                     <option value="" data-harga="" data-deskripsi="" data-stok="">Pilih Paket
@@ -61,7 +61,7 @@
                                         <option value="{{ $pilihpaket->id }}" data-harga="{{ $pilihpaket->harga }}"
                                             data-deskripsi="{{ $pilihpaket->deskripsi }}"
                                             data-stok="{{ $pilihpaket->jumlah_jetski }}"
-                                            {{ $detail_paket->pilihpakets_id == $pilihpaket->id ? 'selected' : '' }}>
+                                            {{ $detail_paket->paket_jetski_id == $pilihpaket->id ? 'selected' : '' }}>
                                             {{ $pilihpaket->nama_paket }}
                                         </option>
                                     @endforeach
@@ -134,6 +134,18 @@
                                     5
                                 </p>
                             </div>
+                            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                    for="durasi">
+                                    Durasi*
+                                </label>
+                                <input value="{{ old('durasi') ?? $detail_paket->durasi }}" name="durasi"
+                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    id="durasi" type="number" placeholder="Masukkan Jumlah Durasi" step=".01">
+                                <p class="text-gray-600 text-xs italic">Masukkan Jumlah Durasi
+                                    5
+                                </p>
+                            </div>
 
 
 
@@ -176,7 +188,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            let paketDropdown = document.getElementById('pilihpakets_id');
+            let paketDropdown = document.getElementById('paket_jetski_id');
             let hargaInput = document.getElementById('harga');
             let deskripsiInput = document.getElementById('deskripsi');
             let stokInput = document.getElementById('jumlah_jetski');

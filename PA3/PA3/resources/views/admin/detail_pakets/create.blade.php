@@ -48,19 +48,20 @@
                             <!-- Field: Title -->
                             <div class="w-full px-3">
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                    for="pilihpakets_id">
+                                    for="paket_jetski_id">
                                     Nama Paket*
                                 </label>
-                                <select name="pilihpakets_id" id="pilihpakets_id"
+                                <select name="paket_jetski_id" id="paket_jetski_id"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     required>
-                                    <option value="" data-harga="" data-deskripsi="" data-stok="">Pilih Paket
-                                    </option>
+                                    <option value="" data-harga="" data-deskripsi="" data-stok=""
+                                        data-durasi="">Pilih Paket</option>
                                     @foreach ($pilihpakets as $pilihpaket)
                                         <option value="{{ $pilihpaket->id }}" data-harga="{{ $pilihpaket->harga }}"
                                             data-deskripsi="{{ $pilihpaket->deskripsi }}"
                                             data-stok="{{ $pilihpaket->jumlah_jetski }}"
-                                            {{ old('pilihpakets_id') == $pilihpaket->id ? 'selected' : '' }}>
+                                            data-durasi="{{ $pilihpaket->durasi }}"
+                                            {{ old('paket_jetski_id') == $pilihpaket->id ? 'selected' : '' }}>
                                             {{ $pilihpaket->nama_paket }}
                                         </option>
                                     @endforeach
@@ -134,6 +135,16 @@
                                 </p>
                             </div>
 
+                            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                    for="durasi">
+                                    Durasi*
+                                </label>
+                                <input value="{{ old('durasi') }}" name="durasi" id="durasi"
+                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    type="text" placeholder="Durasi Paket" required readonly>
+                                <p class="text-gray-600 text-xs italic">Masukkan Durasi Paket</p>
+                            </div>
 
 
                         </div>
@@ -175,18 +186,20 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            let paketDropdown = document.getElementById('pilihpakets_id');
+            let paketDropdown = document.getElementById('paket_jetski_id');
             if (paketDropdown) {
                 paketDropdown.addEventListener('change', function() {
                     let selectedOption = this.options[this.selectedIndex];
                     let hargaInput = document.getElementById('harga');
                     let deskripsiInput = document.getElementById('deskripsi');
                     let stokInput = document.getElementById('jumlah_jetski');
+                    let durasiInput = document.getElementById('durasi');
 
                     if (hargaInput) hargaInput.value = selectedOption.getAttribute('data-harga') || '';
                     if (deskripsiInput) deskripsiInput.value = selectedOption.getAttribute(
                         'data-deskripsi') || '';
                     if (stokInput) stokInput.value = selectedOption.getAttribute('data-stok') || '';
+                    if (durasiInput) durasiInput.value = selectedOption.getAttribute('data-durasi') || '';
                 });
             }
         });

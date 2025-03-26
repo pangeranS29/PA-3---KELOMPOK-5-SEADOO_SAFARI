@@ -118,7 +118,8 @@
                                         Pending</option>
                                     <option value="confirmed" {{ $booking->status == 'confirmed' ? 'selected' : '' }}>
                                         Confirmed</option>
-                                    <option value="done" {{ $booking->status == 'done' ? 'selected' : '' }}>Done
+                                    <option value="done" {{ $booking->status == 'done' ? 'selected' : '' }}>
+                                        Done
                                     </option>
                                 </select>
                                 <div class="mt-2 text-sm text-gray-500">

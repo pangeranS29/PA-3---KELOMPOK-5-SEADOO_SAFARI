@@ -32,6 +32,10 @@
                 data: 'harga',
                 name: 'harga'
               },
+              {
+                data: 'durasi',
+                name: 'durasi'
+              },
 
               {
                 data: 'jumlah_jetski',
@@ -71,6 +75,7 @@
                         <th style="max-width: 1%">ID</th>
                         <th>Nama_Paket</th>
                         <th>Harga</th>
+                        <th>durasi</th>
                         <th>Jumlah Jetski</th>
                         <th>Deskripsi</th>
                         <th>Aksi </th>

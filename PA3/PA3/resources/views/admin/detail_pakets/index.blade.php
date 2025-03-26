@@ -41,6 +41,11 @@
                         name: 'deskripsi'
                     },
                     {
+                        data: 'pilihpaket.durasi',
+                        name: 'durasi'
+                    },
+
+                    {
                         data: 'pilihpaket.jumlah_jetski',
                         name: 'jumlah_jetski',
                     },
@@ -86,6 +91,7 @@
                                 <th>Nama Paket</th>
                                 <th>Harga</th>
                                 <th>Deskripsi</th>
+                                <th>Durasi</th>
                                 <th>Jumlah Jetski</th>
                                 <th>rating</th>
                                 <th>foto</th>

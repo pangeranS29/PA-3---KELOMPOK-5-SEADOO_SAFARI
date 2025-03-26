@@ -84,13 +84,11 @@
                                 <p class="text-gray-600 text-xs italic">Masukkan deskripsi singkat tentang paket ini.
                                 </p>
                             </div>
-
-
                         </div>
 
                         <div class="flex flex-wrap -mx-3 mb-6">
                             <!-- Field: Title -->
-                            <div class="w-full px-3">
+                            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                     for="stok">
                                     Jumlah Paket Jetski*
@@ -99,6 +97,18 @@
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     id="jumlah_jetski" type="text" placeholder="jumlah_jetski" required>
                                 <p class="text-gray-600 text-xs italic">Masukkan Jumlah Paket Jetski
+                            </div>
+
+                            <!-- Field: Deskripsi -->
+                            <div class="w-full md:w-1/2 px-3">
+                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                    for="stok">
+                                    Durasi*
+                                </label>
+                                <input value="{{ old('durasi') }}" name="durasi"
+                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    id="durasi" type="text" placeholder="durasi" required>
+                                <p class="text-gray-600 text-xs italic">Masukkan Jumlah Durasi
                             </div>
                         </div>
 
