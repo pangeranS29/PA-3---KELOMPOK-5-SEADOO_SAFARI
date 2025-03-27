@@ -8,12 +8,14 @@ use App\Models\DetailPaket;
 
 class DetailController extends Controller
 {
-    public  function index()
+    public function index($id) // Tambahkan parameter id
     {
-        $detail_paket = DetailPaket::with(['pilihpaket'])->firstOrFail();
-        $similiarItems = DetailPaket::with(['pilihpaket'])
+        // Ambil data sesuai ID
+        $detail_paket = DetailPaket::with(['pilihpaket'])->find($id);
 
-            ->where('id', '!=', $detail_paket->id)
+        // Ambil item lain yang tidak memiliki id yang sama
+        $similiarItems = DetailPaket::with(['pilihpaket'])
+            ->where('id', '!=', $id)
             ->get();
 
         return view('detail', [

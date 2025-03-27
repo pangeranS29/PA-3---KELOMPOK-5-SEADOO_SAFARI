@@ -97,7 +97,9 @@
 
                                 </h5>
                                 <div class="flex items-center justify-between gap-1">
-                                    <p class="text-sm font-normal text-secondary"> {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->durasi : '-' }}/Minutes </p>
+                                    <p class="text-sm font-normal text-secondary">
+                                        {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->durasi : '-' }}/Minutes
+                                    </p>
 
 
 
@@ -107,22 +109,24 @@
                                     </p>
 
 
+                                    <a href="{{ route('front.detail',$detail_paket->id) }}" class="absolute inset-0"></a>
 
                                 </div>
 
-                            </div>
 
-                            <a href="{{ 'front.detail'}}" class="absolute inset-0"></a>
-                        </div>
-                        <img src="{{ $detail_paket->thumbnail}}" class="rounded-[18px] min-w-[216px] w-full h-[150px]"
+                            </div>
+                         </div>
+                        <img src="{{ $detail_paket->thumbnail }}" class="rounded-[18px] min-w-[216px] w-full h-[150px]"
                             alt="">
                         <div class="flex items-center justify-between gap-1">
                             <!-- Price -->
                             <p class="text-sm font-normal text-secondary">
-                                <span class="text-yellow-500 text-base font-bold ">Rp.  {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->harga : '-' }}
+                                <span class="text-yellow-500 text-base font-bold ">Rp.
+                                    {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->harga : '-' }}
                             </p>
 
-                            <button class="bg-black text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-black">
+                            <button
+                                class="bg-black text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-black">
                                 Book Now
                             </button>
 

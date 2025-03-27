@@ -59,12 +59,20 @@
                                     </p>
                                 </div>
                             </div>
-                            <!-- Features -->
-                            <ul class="flex flex-col gap-4 flex-start pt-5 pb-[25px]">
-                                <h1> Description : </hi>
+
+                            <ul class="flex flex-col gap-4 flex-start pt-3 pb-[25px]">
+                                @php
+                                $deskripsi = explode(',', $detail_paket->deskripsi);
+                              @endphp
+                              @foreach ($deskripsi as $desk)
                                 <li class="flex items-center gap-3 text-base font-semibold text-dark">
-                                    {{ $detail_paket->deskripsi }}
+                                  <img src="/svgs/ic-checkDark.svg" alt="">
+                                  {{ $desk }}
                                 </li>
+
+
+                              @endforeach
+
 
                             </ul>
                             <!-- Price, CTA Button -->
@@ -240,7 +248,7 @@
 
                             </div>
 
-                            <a href="{{ route('front.detail') }}" class="absolute inset-0"></a>
+                            <a href="{{ route('front.detail',$similiarItem->id) }}" class="absolute inset-0"></a>
                         </div>
                         <img src="{{ $similiarItem->thumbnail}}" class="rounded-[18px] min-w-[216px] w-full h-[150px]"
                             alt="">

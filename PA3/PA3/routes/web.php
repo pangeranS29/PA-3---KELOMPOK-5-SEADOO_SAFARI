@@ -13,11 +13,7 @@ use App\Http\Controllers\Front\DetailController ;
 Route::name('front.')->group(function (){
 
     Route::get('/', [LandingController::class, 'index'])->name('index');
-    Route::get('/detail', [DetailController::class, 'index'])->name('detail');
-
-
-
-
+    Route::get('/detail/{id}', [DetailController::class, 'index'])->name('detail');
 
 });
 
