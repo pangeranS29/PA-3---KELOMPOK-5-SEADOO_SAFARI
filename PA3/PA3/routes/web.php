@@ -7,12 +7,17 @@ use App\Http\Controllers\Admin\DetailPaketController as AdminDetailPaketControll
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\JetskiController as AdminJetskiController;
 use App\Http\Controllers\Front\LandingController ;
-
+use App\Http\Controllers\Front\DetailController ;
 
 
 Route::name('front.')->group(function (){
 
     Route::get('/', [LandingController::class, 'index'])->name('index');
+    Route::get('/detail', [DetailController::class, 'index'])->name('detail');
+
+
+
+
 
 });
 

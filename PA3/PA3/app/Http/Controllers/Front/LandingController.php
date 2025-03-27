@@ -10,6 +10,7 @@ class LandingController extends Controller
 {
     public function index()
     {
+
         $detail_pakets = DetailPaket::with(['pilihpaket'])->latest()->take(4)->get()->reverse();
 
         return view('landing', [

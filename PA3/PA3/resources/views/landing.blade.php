@@ -91,18 +91,28 @@
                     <!-- Card -->
                     <div class="card-popular">
                         <div>
-                            <div class="flex items-center justify-between gap-1">
+                            <div class="">
                                 <h5 class="text-lg text-dark font-bold mb-[2px]">
                                     {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->nama_paket : '-' }}
 
                                 </h5>
-                                <p class="text-dark text-xs font-semibold flex items-center gap-[2px]">
-                                    ({{ $detail_paket->rating }}/5)
-                                    <img src="/svgs/ic-star.svg" alt="">
-                                </p>
+                                <div class="flex items-center justify-between gap-1">
+                                    <p class="text-sm font-normal text-secondary"> {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->durasi : '-' }}/Minutes </p>
+
+
+
+                                    <p class="text-dark text-xs font-semibold flex items-center gap-[2px]">
+                                        ({{ $detail_paket->rating }}/5)
+                                        <img src="/svgs/ic-star.svg" alt="">
+                                    </p>
+
+
+
+                                </div>
+
                             </div>
-                            <p class="text-sm font-normal text-secondary"> {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->durasi : '-' }}/Minutes </p>
-                            <a href="./details.html" class="absolute inset-0"></a>
+
+                            <a href="{{ 'front.detail'}}" class="absolute inset-0"></a>
                         </div>
                         <img src="{{ $detail_paket->thumbnail}}" class="rounded-[18px] min-w-[216px] w-full h-[150px]"
                             alt="">
