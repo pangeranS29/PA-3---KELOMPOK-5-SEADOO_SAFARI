@@ -86,10 +86,8 @@
                                 <div class="w-full max-w-[70%]">
                                     <!-- Button Primary -->
                                     <div class="flex justify-end p-1">
-                                        <a href="checkout.html">
-                                            <button class="bg-black text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-black">
-                                                Book Now
-                                            </button>
+                                        <a href="{{ route('front.checkout', $detail_paket->id) }}" class="bg-black text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-gray-800 inline-block">
+                                            Book Now
                                         </a>
                                     </div>
                                 </div>

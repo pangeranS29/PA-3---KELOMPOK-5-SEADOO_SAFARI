@@ -55,6 +55,11 @@
                         name: 'rating',
                     },
 
+                    {
+                        data: 'harga_drone',
+                        name: 'harga_drone',
+                    },
+
 
 
                     {
@@ -94,6 +99,7 @@
                                 <th>Durasi</th>
                                 <th>Jumlah Jetski</th>
                                 <th>rating</th>
+                                <th>Harga Drone</th>
                                 <th>foto</th>
                                 <th>Aksi
 

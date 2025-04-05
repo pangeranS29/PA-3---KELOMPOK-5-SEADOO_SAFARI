@@ -230,6 +230,18 @@
 
     <script src="{{ url('js/script.js') }}"></script>
 
+    <script>
+        function toggleDroneTerms() {
+            var checkbox = document.getElementById('include-drone');
+            var terms = document.getElementById('drone-terms');
+            if (checkbox.checked) {
+                terms.style.display = 'block';
+            } else {
+                terms.style.display = 'none';
+            }
+        }
+    </script>
+
 
 
 </body>

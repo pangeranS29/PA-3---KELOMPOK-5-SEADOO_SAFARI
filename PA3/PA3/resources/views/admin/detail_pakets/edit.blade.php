@@ -106,7 +106,7 @@
 
                         <div class="flex flex-wrap -mx-3 mb-6">
                             <!-- Field: Stock -->
-                            <div class="w-full px-3">
+                            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                     for="title">
                                     Jumlah jetski*
@@ -116,6 +116,18 @@
                                     id="jumlah_jetski" type="number" placeholder="Masukkan Jumlah Jetski" required>
                                 <p class="text-gray-600 text-xs italic">Masukkan Jumlah Jetski dalam angka . Contoh: 10, 100.
                                     10000
+                                </p>
+                            </div>
+
+                            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                    for="harga_drone">
+                                    Harga Drone*
+                                </label>
+                                <input value="{{ old('harga_drone') ?? $detail_paket->harga_drone }}" name="harga_drone"
+                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    id="harga_drone" type="number" placeholder="Masukkan Harga Drone" step=".01">
+                                <p class="text-gray-600 text-xs italic">Masukkan Harga Drone
                                 </p>
                             </div>
                         </div>

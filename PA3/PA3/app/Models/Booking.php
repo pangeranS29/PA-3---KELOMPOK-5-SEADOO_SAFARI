@@ -21,7 +21,7 @@ class Booking extends Model
         'method_pembayaran',
         'status_pembayaran',
         'url_pembayaran',
-        'total_harga    ',
+        'total_harga',
         'detail_paket_id',
         'users_id',
 

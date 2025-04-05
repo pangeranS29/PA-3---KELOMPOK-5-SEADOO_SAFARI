@@ -17,6 +17,7 @@ class DetailPaket extends Model
         'paket_jetski_id', // Ubah dari pilihpakets_id ke paket_jetski_id
         'foto',
         'rating',
+        'harga_drone',
         'deskripsi',
     ];
 
