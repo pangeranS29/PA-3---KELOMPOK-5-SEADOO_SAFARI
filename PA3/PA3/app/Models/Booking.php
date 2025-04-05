@@ -18,7 +18,7 @@ class Booking extends Model
         'waktu_selesai',
         'status',
         'jumlah_penumpang', // Tambahkan ini
-        'method_pembayaran',
+        'metode_pembayaran',
         'status_pembayaran',
         'url_pembayaran',
         'total_harga',
