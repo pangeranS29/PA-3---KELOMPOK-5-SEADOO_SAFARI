@@ -38,7 +38,7 @@ Route::name('front.')->group(function () {
         Route::post('/payment/{bookingId}', [PaymentController::class, 'update'])->name('payment.update');
 
         // 👇 Batalkan Pembayaran (route baru)
-        Route::post('/payment/cancel/{bookingId}', [PaymentController::class, 'cancel'])->name('payment.cancel');
+        Route::get('/payment/cancel/{bookingId}', [PaymentController::class, 'cancel'])->name('payment.cancel');
     });
 });
 
@@ -48,10 +48,10 @@ Route::name('front.')->group(function () {
 | API Routes for Midtrans Notification
 |--------------------------------------------------------------------------
 */
-Route::post('/midtrans/notification', [PaymentController::class, 'notification'])
-    ->name('midtrans.notification')
-    ->withoutMiddleware(['web']); // Nonaktifkan middleware web untuk endpoint ini
-
+// ✅ Midtrans Notification Route - HARUS DI LUAR SEMUA MIDDLEWARE
+Route::post('/payment/notification', [PaymentController::class, 'notification'])
+    ->withoutMiddleware(['web']) // Nonaktifkan middleware 'web'
+    ->name('midtrans.notification');
 /*
 |--------------------------------------------------------------------------
 | Admin Routes
