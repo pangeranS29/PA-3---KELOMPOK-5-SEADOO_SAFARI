@@ -52,12 +52,7 @@ class PaymentController extends Controller
                 'first_name' => $booking->nama_customer,
                 'email' => $userEmail,
             ],
-            'enabled_payments' => [
-                'credit_card', 'gopay', 'shopeepay', 'bank_transfer',
-                'echannel', 'permata_va', 'bca_va', 'bni_va', 'bri_va',
-                'other_va', 'cstore', 'qris', 'danamon_online',
-                'akulaku', 'kredivo'
-            ],
+            'enabled_payments' => ['gopay', 'bank_transfer'],
             'vtweb' => []
         ];
 
@@ -82,47 +77,6 @@ class PaymentController extends Controller
         return view('front.success');
     }
 
-    public function notification(Request $request)
-    {
-        try {
-            $notif = new Notification();
-
-            $transaction = $notif->transaction_status;
-            $type = $notif->payment_type;
-            $orderId = $notif->order_id;
-            $fraud = $notif->fraud_status;
-
-            $booking = Booking::findOrFail($orderId);
-
-            switch ($transaction) {
-                case 'capture':
-                    $booking->status_pembayaran = ($type === 'credit_card' && $fraud === 'challenge') ? 'pending' : 'settlement';
-                    break;
-                case 'settlement':
-                    $booking->status_pembayaran = 'settlement';
-                    break;
-                case 'pending':
-                    $booking->status_pembayaran = 'pending';
-                    break;
-                case 'deny':
-                    $booking->status_pembayaran = 'failed';
-                    break;
-                case 'expire':
-                    $booking->status_pembayaran = 'expired';
-                    break;
-                case 'cancel':
-                    $booking->status_pembayaran = 'cancelled';
-                    break;
-            }
-
-            $booking->save();
-
-            return response()->json(['status' => 'success']);
-        } catch (\Exception $e) {
-            Log::error('Midtrans Notification Error: ' . $e->getMessage());
-            return response()->json(['status' => 'error', 'message' => 'Notification failed.'], 500);
-        }
-    }
 
     public function cancel($bookingId)
     {

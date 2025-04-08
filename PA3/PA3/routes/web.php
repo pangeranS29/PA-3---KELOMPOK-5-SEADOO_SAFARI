@@ -49,9 +49,9 @@ Route::name('front.')->group(function () {
 |--------------------------------------------------------------------------
 */
 // ✅ Midtrans Notification Route - HARUS DI LUAR SEMUA MIDDLEWARE
-Route::post('/payment/notification', [PaymentController::class, 'notification'])
-    ->withoutMiddleware(['web']) // Nonaktifkan middleware 'web'
-    ->name('midtrans.notification');
+// Route::post('/payment/notification', [PaymentController::class, 'notification'])
+//     ->withoutMiddleware(['web']) // Nonaktifkan middleware 'web'
+//     ->name('midtrans.notification');
 /*
 |--------------------------------------------------------------------------
 | Admin Routes
