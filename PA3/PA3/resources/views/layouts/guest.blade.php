@@ -1,27 +1,76 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="id">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ config('app.name', 'Laravel') }} - Login</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
 
-        <!-- Styles -->
-        @livewireStyles
-    </head>
-    <body>
-        <div class="font-sans text-gray-900 antialiased">
-            {{ $slot }}
+    <!-- Google Fonts -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+        }
+    </style>
+
+    @livewireStyles
+</head>
+
+<body class="gradient-bg text-white min-h-screen flex flex-col">
+    <!-- Header / Logo -->
+    <header class="w-full p-4 flex justify-start items-center pl-8">
+        <a href="{{ url('/') }}">
+            <img src="{{ asset('images/logo.png') }}" class="h-12 hover:scale-105 transition-transform duration-200"
+                alt="Logo">
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex flex-1 flex-col md:flex-row">
+
+        <!-- Left Image with Gradient Overlay -->
+        <div class="md:w-1/2 relative overflow-hidden hidden md:flex flex-col justify-between">
+            {{-- <!-- Teks di bawah gambar -->
+            <div class="w-full px-8 py-6 text-center bg-black bg-opacity-60">
+                <h1 class="text-3xl font-bold text-yellow-400 mb-2">Selamat Datang Kembali</h1>
+                <p class="text-gray-300 max-w-md mx-auto">Masuk untuk mengakses semua fitur eksklusif SeaDoo Safari
+                    Samosir</p>
+            </div> --}}
+
+            <!-- Gambar -->
+            <div class="relative w-full h-full">
+                <img src="{{ asset('images/image.png') }}" alt="Login Image"
+                    class="w-full h-full object-cover object-center transform hover:scale-105 transition duration-1000" />
+                <!-- Gradient overlay agar gambar tetap gelap di atas -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70">
+                </div>
+            </div>
+
+
         </div>
 
-        @livewireScripts
-    </body>
+
+        <!-- Right Form Area -->
+        <div class="w-full md:w-1/2 flex items-center justify-center p-6 sm:p-12">
+            <div class="w-full max-w-md">
+                {{ $slot }}
+            </div>
+        </div>
+    </main>
+
+    @livewireScripts
+</body>
+
 </html>
