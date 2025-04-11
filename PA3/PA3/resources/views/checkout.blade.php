@@ -11,13 +11,15 @@
                     <div class="mb-4">
                         <label class="block mb-2 text-white" for="name">Identitas Pemesan</label>
                         <input class="w-full p-2 rounded bg-gray-700 text-white" id="name" name="name"
-                               type="text" required value="{{ Auth::user()->name }}" placeholder="Insert Full Name">
+                            type="text" required value="{{ Auth::user()->name }}" placeholder="Insert Full Name">
                     </div>
 
                     <div class="mb-4">
                         <label class="block mb-2 text-white" for="phone">No. Telepon</label>
                         <input class="w-full p-2 rounded bg-gray-700 text-white" id="phone" name="phone"
-                               type="text" required placeholder="No. Telepon">
+                            type="text" required placeholder="No. Telepon"
+                            value="{{ old('phone', Auth::user()->phone) }}">
+
                     </div>
                 </section>
 
@@ -26,13 +28,13 @@
                     <div class="mb-4">
                         <label class="block mb-2 text-white" for="date">Jadwal Kedatangan (Check In)</label>
                         <input class="w-full p-2 rounded bg-gray-700 text-white" id="date" name="date"
-                               type="date" required>
+                            type="date" required>
                     </div>
 
                     <div class="mb-4">
                         <label class="block mb-2 text-white" for="time">Pilih Jam</label>
                         <input class="w-full p-2 rounded bg-gray-700 text-white" id="time" name="time"
-                               type="time" required>
+                            type="time" required>
                     </div>
                 </section>
 
@@ -41,13 +43,13 @@
                     <div class="mb-4">
                         <label class="block mb-2 text-white" for="date-out">Jadwal Kepulangan (Check Out)</label>
                         <input class="w-full p-2 rounded bg-gray-700 text-white" id="date-out" name="date_out"
-                               type="date" required readonly>
+                            type="date" required readonly>
                     </div>
 
                     <div class="mb-4">
                         <label class="block mb-2 text-white" for="time-out">Pilih Jam</label>
                         <input class="w-full p-2 rounded bg-gray-700 text-white" id="time-out" name="time_out"
-                               type="time" required readonly>
+                            type="time" required readonly>
                     </div>
                 </section>
 
@@ -56,7 +58,7 @@
                     <div class="mb-4">
                         <label class="block mb-2 text-white" for="passenger">Jumlah Penumpang</label>
                         <input class="w-full p-2 rounded bg-gray-700 text-white" id="passenger" name="jumlah_penumpang"
-                               type="number" required min="1" placeholder="Masukkan Jumlah Penumpang">
+                            type="number" required min="1" placeholder="Masukkan Jumlah Penumpang">
                     </div>
                 </section>
 
@@ -71,7 +73,7 @@
 
                 <!-- Modal Drone -->
                 <div id="drone-modal"
-                     class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50">
+                    class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50">
                     <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md">
                         <h3 class="text-lg text-white mb-2">SYARAT DAN KETENTUAN DRONE</h3>
                         <p class="text-sm text-white mb-4">
@@ -79,17 +81,16 @@
                             peraturan keselamatan penerbangan lokal.
                         </p>
                         <p class="text-yellow-400 mb-4">
-                            <strong>Biaya Tambahan: Rp {{ number_format($detail_paket->harga_drone, 0, ',', '.') }}</strong>
+                            <strong>Biaya Tambahan: Rp
+                                {{ number_format($detail_paket->harga_drone, 0, ',', '.') }}</strong>
                         </p>
                         <div class="flex justify-between space-x-4">
-                            <button id="cancel-modal"
-                                    type="button"
-                                    class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-400">
+                            <button id="cancel-modal" type="button"
+                                class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-400">
                                 Batal
                             </button>
-                            <button id="close-modal"
-                                    type="button"
-                                    class="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-400">
+                            <button id="close-modal" type="button"
+                                class="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-400">
                                 Lanjutkan
                             </button>
                         </div>
@@ -112,7 +113,7 @@
         const closeModal = document.getElementById('close-modal');
         const cancelModal = document.getElementById('cancel-modal');
 
-        checkbox.addEventListener('change', function () {
+        checkbox.addEventListener('change', function() {
             if (this.checked) {
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
@@ -149,7 +150,7 @@
         document.getElementById('date').addEventListener('change', updateCheckoutTime);
         document.getElementById('time').addEventListener('change', updateCheckoutTime);
 
-        document.getElementById('checkoutForm').addEventListener('submit', function (e) {
+        document.getElementById('checkoutForm').addEventListener('submit', function(e) {
             const date = document.getElementById('date').value;
             const time = document.getElementById('time').value;
             const dateOut = document.getElementById('date-out').value;

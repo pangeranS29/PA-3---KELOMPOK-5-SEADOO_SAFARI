@@ -39,6 +39,9 @@ Route::name('front.')->group(function () {
 
         // 👇 Batalkan Pembayaran (route baru)
         Route::get('/payment/cancel/{bookingId}', [PaymentController::class, 'cancel'])->name('payment.cancel');
+
+
+
     });
 });
 

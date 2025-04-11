@@ -2,63 +2,92 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
+use App\Models\Booking;
+use Illuminate\Support\Facades\Log;
 use Midtrans\Config;
 use Midtrans\Notification;
-use App\Models\Booking;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Log;
 
 class MidtransCallbackController extends Controller
 {
     public function callback()
     {
-        // Set konfigurasi Midtrans
+        // Konfigurasi Midtrans
         Config::$serverKey = config('services.midtrans.serverKey');
         Config::$isProduction = config('services.midtrans.isProduction');
         Config::$isSanitized = config('services.midtrans.isSanitized');
         Config::$is3ds = config('services.midtrans.is3ds');
 
         try {
-            // Buat instance Midtrans notification
+            // Ambil notifikasi pembayaran dari Midtrans
             $notification = new Notification();
 
-            // Ambil detail status dari notifikasi
-            $status = $notification->transaction_status;
-            $type = $notification->payment_type;
-            $fraud = $notification->fraud_status;
-            $order_id = $notification->order_id;
+            // Ambil data penting dari notifikasi
+            $transactionStatus = $notification->transaction_status;
+            $paymentType = $notification->payment_type;
+            $fraudStatus = $notification->fraud_status;
+            $orderId = $notification->order_id;
 
-            // Cari booking berdasarkan order_id
-            $booking = Booking::findOrFail($order_id);
+            // Cari booking berdasarkan order_id (pastikan order_id di Midtrans == id booking)
+            $booking = Booking::findOrFail($orderId);
 
-            // Atur status pembayaran berdasarkan status dari Midtrans
-            if ($status === 'capture') {
-                if ($type === 'credit_card') {
-                    $booking->status_pembayaran = $fraud === 'challenge' ? 'pending' : 'success';
-                }
-            } elseif ($status === 'settlement') {
-                $booking->status_pembayaran = 'success';
-            } elseif ($status === 'pending') {
-                $booking->status_pembayaran = 'pending';
-            } elseif (in_array($status, ['deny', 'expire', 'cancel'])) {
-                $booking->status_pembayaran = 'cancelled';
+            // Debug log (optional)
+            Log::info('Midtrans Callback Received', [
+                'transaction_status' => $transactionStatus,
+                'payment_type' => $paymentType,
+                'order_id' => $orderId,
+            ]);
+
+            // Proses status pembayaran
+            switch ($transactionStatus) {
+                case 'capture':
+                    if ($paymentType === 'credit_card') {
+                        if ($fraudStatus === 'challenge') {
+                            $booking->status_pembayaran = 'pending';
+                        } else {
+                            $booking->status_pembayaran = 'success';
+                        }
+                    }
+                    break;
+
+                case 'settlement':
+                    $booking->status_pembayaran = 'success';
+                    break;
+
+                case 'pending':
+                    $booking->status_pembayaran = 'pending';
+                    break;
+
+                case 'deny':
+                case 'cancel':
+                case 'expire':
+                    $booking->status_pembayaran = 'cancelled';
+                    break;
+
+                default:
+                    $booking->status_pembayaran = 'unknown';
+                    break;
             }
 
-            // Jika pembayaran sukses, ubah juga status booking menjadi success
+            // Update status booking jika pembayaran sukses
             if ($booking->status_pembayaran === 'success') {
                 $booking->status = 'success';
             }
 
+            // Simpan perubahan
             $booking->save();
 
             return response()->json([
                 'meta' => [
                     'code' => 200,
-                    'message' => 'Midtrans Notification Success'
+                    'message' => 'Midtrans Notification Processed Successfully'
                 ]
             ]);
         } catch (\Exception $e) {
-            Log::error('Midtrans Callback Error: ' . $e->getMessage());
+            // Log error jika terjadi exception
+            Log::error('Midtrans Callback Error', [
+                'error' => $e->getMessage()
+            ]);
 
             return response()->json([
                 'meta' => [
