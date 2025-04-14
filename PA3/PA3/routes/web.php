@@ -25,7 +25,8 @@ Route::name('front.')->group(function () {
     Route::get('/detail/{id}', [DetailController::class, 'index'])->name('detail');
 
     // Payment Success Page
-    Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
+    Route::get('/payment/success/{bookingId}', [PaymentController::class, 'success'])->name('payment.success');
+
 
     // Group Middleware Auth (Hanya Pengguna yang Login)
     Route::group(['middleware' => 'auth'], function () {
@@ -39,6 +40,7 @@ Route::name('front.')->group(function () {
 
         // 👇 Batalkan Pembayaran (route baru)
         Route::get('/payment/cancel/{bookingId}', [PaymentController::class, 'cancel'])->name('payment.cancel');
+        Route::get('/cetak-resi/{bookingId}', [PaymentController::class, 'cetakResi'])->name('cetak.resi');
 
 
 

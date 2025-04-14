@@ -58,7 +58,10 @@
                     <div class="mb-4">
                         <label class="block mb-2 text-white" for="passenger">Jumlah Penumpang</label>
                         <input class="w-full p-2 rounded bg-gray-700 text-white" id="passenger" name="jumlah_penumpang"
-                            type="number" required min="1" placeholder="Masukkan Jumlah Penumpang">
+                            type="number" required min="1" placeholder="Masukkan Jumlah Penumpang"
+                            oninput="generatePassengerFields()">
+
+                        <div id="passenger-names" class="mt-4 space-y-2"></div>
                     </div>
                 </section>
 
@@ -178,5 +181,30 @@
             this.appendChild(inputMulai);
             this.appendChild(inputSelesai);
         });
+
+        function generatePassengerFields() {
+            const count = parseInt(document.getElementById('passenger').value) || 0;
+            const container = document.getElementById('passenger-names');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= count; i++) {
+                const label = document.createElement('label');
+                label.classList.add('block', 'mb-1', 'text-white');
+                label.innerText = `Nama Penumpang ${i}`;
+
+                const input = document.createElement('input');
+                input.classList.add('w-full', 'p-2', 'rounded', 'bg-gray-700', 'text-white');
+                input.setAttribute('type', 'text');
+                input.setAttribute('name', `nama_penumpang[${i}]`);
+                input.setAttribute('required', true);
+                input.setAttribute('placeholder', `Masukkan Nama Penumpang ${i}`);
+
+                const div = document.createElement('div');
+                div.appendChild(label);
+                div.appendChild(input);
+
+                container.appendChild(div);
+            }
+        }
     </script>
 </x-front-layout>

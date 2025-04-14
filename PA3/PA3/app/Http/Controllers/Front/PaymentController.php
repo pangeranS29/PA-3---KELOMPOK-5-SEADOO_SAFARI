@@ -56,7 +56,7 @@ class PaymentController extends Controller
                 'enabled_payments' => ['gopay', 'bank_transfer'],
                 'vtweb' => [],
                 'callbacks' => [
-                    'finish' => route('front.payment.success'), // ✅ INI WAJIB UNTUK REDIRECT
+                    'finish' => route('front.payment.success', ['bookingId' => $booking->id]),
                 ]
             ];
 
@@ -76,10 +76,12 @@ class PaymentController extends Controller
     }
 
 
-    public function success(Request $request)
+    public function success($bookingId)
     {
-        return view('success');
+        $booking = Booking::findOrFail($bookingId);
+        return view('success', compact('booking'));
     }
+
 
 
     public function cancel($bookingId)
@@ -94,6 +96,11 @@ class PaymentController extends Controller
             ->with('success', 'Pembayaran berhasil dibatalkan. Silakan pilih metode pembayaran kembali.');
     }
 
+    public function cetakResi($bookingId)
+    {
+        $booking = Booking::with('detail_paket.pilihpaket', 'user')->findOrFail($bookingId);
 
-
+        $pdf = Pdf::loadView('pdf.resi', compact('booking'));
+        return $pdf->download('resi_booking_' . $booking->id . '.pdf');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\PilihPaket;
 use Illuminate\Support\Facades\Log;
 use Midtrans\Config;
 use Midtrans\Notification;
@@ -69,10 +70,22 @@ class MidtransCallbackController extends Controller
                     break;
             }
 
-            // Update status booking jika pembayaran sukses
-            if ($booking->status_pembayaran === 'success') {
+            // Update status booking jika pembayaran sukses dan sebelumnya belum success
+            if ($booking->status_pembayaran === 'success' && $booking->getOriginal('status_pembayaran') !== 'success') {
                 $booking->status = 'success';
+
+                // ✅ Kurangi jumlah jetski di SEMUA paket
+                $allPilihPaket = \App\Models\PilihPaket::all();
+
+                foreach ($allPilihPaket as $paket) {
+                    if ($paket->jumlah_jetski > 0) {
+                        $paket->jumlah_jetski -= 1;
+                        $paket->save();
+                    }
+                }
             }
+
+
 
             // Simpan perubahan
             $booking->save();
