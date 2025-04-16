@@ -56,13 +56,15 @@
                 <!-- Jumlah Penumpang -->
                 <section class="mb-6">
                     <div class="mb-4">
-                        <label class="block mb-2 text-white" for="passenger">Jumlah Penumpang</label>
+                        <label class="block mb-2 text-white" for="passenger">Jumlah Penumpang (Maksimal 2)</label>
                         <input class="w-full p-2 rounded bg-gray-700 text-white" id="passenger" name="jumlah_penumpang"
-                            type="number" required min="1" placeholder="Masukkan Jumlah Penumpang"
-                            oninput="generatePassengerFields()">
+                            type="number" required min="1" max="2"
+                            placeholder="Masukkan Jumlah Penumpang (maks. 2)" oninput="generatePassengerFields()">
 
-                        <div id="passenger-names" class="mt-4 space-y-2"></div>
-                    </div>
+                        <div id="passenger-names" class="mt-4 space-y-2">
+
+                            <div id="passenger-names" class="mt-4 space-y-2"></div>
+                        </div>
                 </section>
 
                 <!-- Drone Option -->
@@ -183,10 +185,18 @@
         });
 
         function generatePassengerFields() {
+            const maxPassengers = 2;
             const count = parseInt(document.getElementById('passenger').value) || 0;
             const container = document.getElementById('passenger-names');
-            container.innerHTML = '';
+            container.innerHTML = ''; // Clear existing fields
 
+            if (count > maxPassengers) {
+                alert(`Maksimal hanya ${maxPassengers} penumpang yang diizinkan.`);
+                document.getElementById('passenger').value = maxPassengers;
+                return generatePassengerFields(); // Reset the fields if count exceeds max
+            }
+
+            // Create passenger fields dynamically based on the count
             for (let i = 1; i <= count; i++) {
                 const label = document.createElement('label');
                 label.classList.add('block', 'mb-1', 'text-white');
@@ -195,7 +205,7 @@
                 const input = document.createElement('input');
                 input.classList.add('w-full', 'p-2', 'rounded', 'bg-gray-700', 'text-white');
                 input.setAttribute('type', 'text');
-                input.setAttribute('name', `nama_penumpang[${i}]`);
+                input.setAttribute('name', `nama_penumpang[${i}]`); // Use correct name format
                 input.setAttribute('required', true);
                 input.setAttribute('placeholder', `Masukkan Nama Penumpang ${i}`);
 
