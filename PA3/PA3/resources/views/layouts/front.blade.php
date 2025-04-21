@@ -112,14 +112,14 @@
                                         class="mt-2 w-full md:w-56 bg-white rounded-lg shadow-lg z-50 md:absolute md:right-0 overflow-hidden">
 
                                         <!-- Profile -->
-                                        <a href=""
+                                        <a href="{{ url('account?tab=profile') }}"
                                             class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 transition">
                                             <i class="fa-solid fa-id-badge mr-3 text-blue-600"></i>
                                             <span>Profile</span>
                                         </a>
 
                                         <!-- Transaction -->
-                                        <a href=""
+                                        <a href="{{ url('account?tab=transaction') }}"
                                             class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 transition">
                                             <i class="fa-solid fa-money-check-dollar mr-3 text-green-600"></i>
                                             <span>Transaction</span>
@@ -139,6 +139,7 @@
                                             </a>
                                         </form>
                                     </div>
+
                                 </div>
                             </div>
                         @else

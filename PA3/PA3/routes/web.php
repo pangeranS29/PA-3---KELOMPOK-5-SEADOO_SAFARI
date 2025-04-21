@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PilihPaketController as AdminPilihPaketController;
 use App\Http\Controllers\Admin\DetailPaketController as AdminDetailPaketController;
 use App\Http\Controllers\Front\PaymentController;
+use App\Http\Controllers\Front\AccountController; // Pastikan controller sudah ada
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,11 @@ Route::name('front.')->group(function () {
         // 👇 Batalkan Pembayaran (route baru)
         Route::get('/payment/cancel/{bookingId}', [PaymentController::class, 'cancel'])->name('payment.cancel');
         Route::get('/cetak-resi/{bookingId}', [PaymentController::class, 'cetakResi'])->name('cetak.resi');
+
+         // Halaman Akun dan Tab Profile/Transaction/Reset Password
+         Route::get('/account', [AccountController::class, 'index'])->name('account'); // Tampilkan akun user
+         // Tambahkan tab sebagai parameter
+         Route::get('/account?tab={tab}', [AccountController::class, 'index'])->name('account.tab');
 
 
 

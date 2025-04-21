@@ -3,7 +3,7 @@
         <div class="bg-gray-800 p-8 rounded-lg w-full max-w-md">
             <h1 class="text-center text-white text-2xl mb-6">BOOKING TICKET</h1>
 
-            <form action="{{ route('front.checkout.store', $detail_paket->id) }}" method="POST" id="checkoutForm">
+            <form action="{{ route('front.checkout.store', $detail_paket->id) }}" methodm="POST" id="checkoutForm">
                 @csrf
 
                 <!-- Identitas Pemesan -->
