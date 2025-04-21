@@ -94,21 +94,48 @@
                         @auth
                             <div class="flex flex-col w-full ml-auto lg:w-auto lg:gap-12 lg:items-center lg:flex-row">
                                 <!-- Dropdown User -->
+                                <!-- Wrapper -->
                                 <div class="relative" x-data="{ open: false }">
+                                    <!-- Dropdown Trigger -->
                                     <button @click="open = !open"
                                         class="flex items-center gap-2 px-4 py-2 text-white hover:bg-gray-700 rounded focus:outline-none w-full md:w-auto">
-                                        <i class="fa-solid fa-user"></i>
-                                        <span>{{ Auth::user()->name }}</span>
+                                        <i class="fa-solid fa-user text-white"></i>
+                                        <span class="text-white">{{ Auth::user()->name }}</span>
+                                        <svg class="w-4 h-4 ml-1 text-white" fill="none" stroke="currentColor"
+                                            stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
                                     </button>
 
+                                    <!-- Dropdown Menu -->
                                     <div x-show="open" @click.outside="open = false" x-cloak
-                                        class="mt-2 w-full md:w-48 bg-white rounded-md shadow-md z-50 md:absolute md:right-0">
+                                        class="mt-2 w-full md:w-56 bg-white rounded-lg shadow-lg z-50 md:absolute md:right-0 overflow-hidden">
+
+                                        <!-- Profile -->
+                                        <a href=""
+                                            class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 transition">
+                                            <i class="fa-solid fa-id-badge mr-3 text-blue-600"></i>
+                                            <span>Profile</span>
+                                        </a>
+
+                                        <!-- Transaction -->
+                                        <a href=""
+                                            class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 transition">
+                                            <i class="fa-solid fa-money-check-dollar mr-3 text-green-600"></i>
+                                            <span>Transaction</span>
+                                        </a>
+
+                                        <!-- Divider -->
+                                        <div class="border-t border-gray-200 my-1"></div>
+
+                                        <!-- Logout -->
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
                                             <a href="{{ route('logout') }}"
                                                 onclick="event.preventDefault(); this.closest('form').submit();"
-                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                Log Out
+                                                class="flex items-center px-4 py-3 text-red-600 hover:bg-red-50 transition">
+                                                <i class="fa-solid fa-right-from-bracket mr-3"></i>
+                                                <span>Log Out</span>
                                             </a>
                                         </form>
                                     </div>
