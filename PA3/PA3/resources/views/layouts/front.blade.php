@@ -71,10 +71,8 @@
                     </a>
                     <div class="block lg:hidden">
                         <button class="p-1 outline-none mobileMenuButton" id="navbarToggler">
-                            <svg class="text-dark w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 8h16M4 16h16"></path>
+                            <svg class="w-7 h-7" fill="none" stroke="white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
                             </svg>
                         </button>
                     </div>

@@ -42,7 +42,7 @@
                                 class="bg-gray-700 p-3 md:p-4 rounded-lg flex flex-col md:flex-row justify-between gap-3 md:gap-4">
                                 <div class="flex items-center space-x-3 md:space-x-4">
                                     <img alt="Paket Image" class="h-8 md:h-12 rounded-full" height="50"
-                                        src="{{ $booking->detail_paket->thumbnail ?? asset('images/default.jpg') }}"
+                                        src="{{ $booking->detail_paket->thumbnail ?? asset('images/default.jpg') }} "
                                         width="50" />
                                     <div>
                                         <p class="font-semibold text-sm md:text-base text-white">
@@ -67,12 +67,25 @@
                                         <p>Order ID</p>
                                         <p class="font-semibold truncate">{{ $booking->id }}</p>
                                     </div>
-                                    <a href="{{ route('front.cetak.resi', $booking->id) }}"
-                                        class="text-yellow-500 hover:underline text-xs md:text-base whitespace-nowrap"
-                                        target="_blank" rel="noopener">
-                                        Cetak Resi
-                                    </a>
+                                    @php
+                                        $isExpired =
+                                            $booking->status_pembayaran === 'pending' &&
+                                            now()->greaterThan($booking->waktu_selesai);
+                                    @endphp
 
+                                    @if ($isExpired)
+                                        <span
+                                            class="text-gray-400 text-xs md:text-base whitespace-nowrap cursor-not-allowed"
+                                            title="Resi tidak tersedia karena status expired">
+                                            Cetak Resi
+                                        </span>
+                                    @else
+                                        <a href="{{ route('front.cetak.resi', $booking->id) }}"
+                                            class="text-yellow-500 hover:underline text-xs md:text-base whitespace-nowrap"
+                                            target="_blank" rel="noopener">
+                                            Cetak Resi
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                         @empty
@@ -88,8 +101,47 @@
                     <h2 class="text-white text-xl font-semibold">Reset Password</h2>
                     <!-- Form reset password -->
                 @elseif (($activeTab ?? '') === 'profile')
-                    <h2 class="text-white text-xl font-semibold">Profile</h2>
-                    <!-- Konten profil -->
+                    <h2 class="text-white text-xl font-semibold">Account Details</h2>
+                    <section class="bg-gray-700 p-4 md:p-8 rounded-lg w-full space-y-4 md:space-y-6">
+
+                        <!-- Edit Profile Form -->
+                        <form action="" method="POST" class="space-y-3 md:space-y-4">
+                            {{-- {{ route('profile.update') }} --}}
+                            @csrf
+                            @method('PUT')
+
+                            <div>
+                                <label class="block mb-1 text-sm text-white" for="name">Name</label>
+                                <input class="w-full p-2 rounded bg-gray-800 border border-gray-600 text-sm text-white"
+                                    id="name" type="text" name="name" value="{{ Auth::user()->name }}" />
+                            </div>
+
+                            <div>
+                                <label class="block mb-1 text-sm text-white" for="email">E-mail</label>
+                                <input class="w-full p-2 rounded bg-gray-800 border border-gray-600 text-sm text-white"
+                                    id="email" type="email" name="email" value="{{ Auth::user()->email }}" />
+                            </div>
+
+                            <div>
+                                <label class="block mb-1 text-sm text-white" for="phone">Phone Number</label>
+                                <input class="w-full p-2 rounded bg-gray-800 border border-gray-600 text-sm text-white"
+                                    id="phone" type="tel" name="phone" value="{{ Auth::user()->phone }}" />
+                            </div>
+
+                            <div class="flex justify-between items-center">
+                                <button type="submit" class="mt-3 md:mt-4 p-2 bg-yellow-500 text-black rounded text-sm md:text-base">
+                                    Update Profile
+                                </button>
+
+                                <a class="text-yellow-500 mb-4 md:mb-6 block text-sm md:text-base " href="#">Reset Password</a>
+                            </div>
+
+
+
+
+
+                        </form>
+                    </section>
                 @else
                     <p class="text-red-500">Tab tidak ditemukan.</p>
                 @endif
