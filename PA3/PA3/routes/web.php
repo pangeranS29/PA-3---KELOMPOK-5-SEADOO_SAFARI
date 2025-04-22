@@ -45,8 +45,8 @@ Route::name('front.')->group(function () {
 
          // Halaman Akun dan Tab Profile/Transaction/Reset Password
          Route::get('/account', [AccountController::class, 'index'])->name('account'); // Tampilkan akun user
-         // Tambahkan tab sebagai parameter
-         Route::get('/account?tab={tab}', [AccountController::class, 'index'])->name('account.tab');
+        //  // Tambahkan tab sebagai parameter
+        //  Route::get('/account?tab={tab}', [AccountController::class, 'index'])->name('account.tab');
 
 
 

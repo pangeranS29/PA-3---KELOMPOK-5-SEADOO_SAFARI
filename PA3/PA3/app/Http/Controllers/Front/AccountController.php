@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Front;
-use App\Models\Booking;
 
+use App\Models\Booking;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -10,13 +10,17 @@ class AccountController extends Controller
 {
     public function index(Request $request)
     {
-        $activeTab = $request->get('tab', 'profile'); // Default ke 'profile' jika tidak ada parameter tab
+        $activeTab = $request->query('tab', 'profile'); // Default ke 'profile'
 
-        // Ambil semua booking user yang sedang login beserta detail_paket
-    $bookings = Booking::with('detail_paket')
-    ->where('users_id', auth()->id())
-    ->get();
+        $bookings = collect(); // Biar tetap aman di semua tab
 
-   return view('account', compact('activeTab', 'bookings'));
+        if ($activeTab === 'transaction') {
+            $bookings = Booking::with('detail_paket.pilihpaket')
+                ->where('users_id', auth()->id()) // ✅ Ganti ke kolom yang benar
+                ->orderByDesc('created_at')
+                ->paginate(5);
+        }
+
+        return view('account', compact('activeTab', 'bookings'));
     }
 }

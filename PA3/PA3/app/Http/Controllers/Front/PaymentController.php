@@ -17,6 +17,14 @@ class PaymentController extends Controller
     {
         $booking = Booking::with('detail_paket.pilihpaket', 'user')->findOrFail($bookingId);
 
+        // Cek apakah waktu sekarang sudah melewati waktu_selesai
+        if (now()->greaterThan($booking->waktu_selesai) && $booking->status_pembayaran === 'pending') {
+            $booking->status_pembayaran = 'expired';
+            $booking->save();
+
+            return redirect()->route('front.index')->with('error', 'Booking sudah kadaluarsa. Silakan lakukan booking ulang.');
+        }
+
         return view('payment', [
             'booking' => $booking
         ]);
@@ -25,6 +33,15 @@ class PaymentController extends Controller
     public function update(Request $request, $bookingId)
     {
         $booking = Booking::with('detail_paket.pilihpaket', 'user')->findOrFail($bookingId);
+
+
+        // Auto-expired check sebelum update
+        if (now()->greaterThan($booking->waktu_selesai) && $booking->status_pembayaran === 'pending') {
+            $booking->status_pembayaran = 'expired';
+            $booking->save();
+
+            return redirect()->route('front.index')->with('error', 'Booking sudah kadaluarsa. Silakan lakukan booking ulang.');
+        }
 
         $request->validate([
             'metode_pembayaran' => 'required|string'
