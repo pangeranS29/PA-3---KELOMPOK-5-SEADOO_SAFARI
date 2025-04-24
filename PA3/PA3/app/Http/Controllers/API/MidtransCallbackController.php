@@ -5,11 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\PilihPaket;
-use App\Models\Jetski;
 use Illuminate\Support\Facades\Log;
 use Midtrans\Config;
 use Midtrans\Notification;
-use Carbon\Carbon;
 
 class MidtransCallbackController extends Controller
 {
@@ -22,75 +20,74 @@ class MidtransCallbackController extends Controller
         Config::$is3ds = config('services.midtrans.is3ds');
 
         try {
-            // Ambil notifikasi dari Midtrans
+            // Ambil notifikasi pembayaran dari Midtrans
             $notification = new Notification();
 
+            // Ambil data penting dari notifikasi
             $transactionStatus = $notification->transaction_status;
             $paymentType = $notification->payment_type;
             $fraudStatus = $notification->fraud_status;
             $orderId = $notification->order_id;
 
-            // Cari data booking
+            // Cari booking berdasarkan order_id (pastikan order_id di Midtrans == id booking)
             $booking = Booking::findOrFail($orderId);
 
+            // Debug log (optional)
             Log::info('Midtrans Callback Received', [
                 'transaction_status' => $transactionStatus,
                 'payment_type' => $paymentType,
                 'order_id' => $orderId,
             ]);
 
-            // Update status pembayaran
+            // Proses status pembayaran
             switch ($transactionStatus) {
                 case 'capture':
                     if ($paymentType === 'credit_card') {
-                        $booking->status_pembayaran = $fraudStatus === 'challenge' ? 'pending' : 'success';
+                        if ($fraudStatus === 'challenge') {
+                            $booking->status_pembayaran = 'pending';
+                        } else {
+                            $booking->status_pembayaran = 'success';
+                        }
                     }
                     break;
 
                 case 'settlement':
-                    $booking->status_pembayaran = 'success';  // Pembayaran berhasil
+                    $booking->status_pembayaran = 'success';
                     break;
 
                 case 'pending':
-                    $booking->status_pembayaran = 'pending';  // Pembayaran masih dalam proses
+                    $booking->status_pembayaran = 'pending';
                     break;
 
                 case 'deny':
                 case 'cancel':
                 case 'expire':
-                    $booking->status_pembayaran = 'cancelled';  // Pembayaran gagal
+                    $booking->status_pembayaran = 'cancelled';
                     break;
 
                 default:
-                    $booking->status_pembayaran = 'unknown';  // Status tidak diketahui
+                    $booking->status_pembayaran = 'unknown';
                     break;
             }
 
-
-            // Jika pembayaran sukses dan sebelumnya belum sukses
+            // Update status booking jika pembayaran sukses dan sebelumnya belum success
             if ($booking->status_pembayaran === 'success' && $booking->getOriginal('status_pembayaran') !== 'success') {
                 $booking->status = 'success';
 
-                // ✅ Kurangi jumlah jetski dari semua paket
-                $allPilihPaket = PilihPaket::all();
+                // ✅ Kurangi jumlah jetski di SEMUA paket
+                $allPilihPaket = \App\Models\PilihPaket::all();
+
                 foreach ($allPilihPaket as $paket) {
                     if ($paket->jumlah_jetski > 0) {
                         $paket->jumlah_jetski -= 1;
                         $paket->save();
                     }
                 }
-
-                // ✅ Simpan data Jetski untuk user ini
-                Jetski::create([
-                    'status_jetski' => 'sedang digunakan',
-                    'jumlah_jetski' => 1,
-                    'waktu_mulai' => $booking->waktu_mulai,
-                    'waktu_selesai' => $booking->waktu_selesai,
-                    'booking_id' => $booking->id // Menggunakan booking_id sebagai penghubung
-                ]);
             }
 
-            // Simpan perubahan booking
+
+
+            // Simpan perubahan
             $booking->save();
 
             return response()->json([
@@ -100,6 +97,7 @@ class MidtransCallbackController extends Controller
                 ]
             ]);
         } catch (\Exception $e) {
+            // Log error jika terjadi exception
             Log::error('Midtrans Callback Error', [
                 'error' => $e->getMessage()
             ]);
