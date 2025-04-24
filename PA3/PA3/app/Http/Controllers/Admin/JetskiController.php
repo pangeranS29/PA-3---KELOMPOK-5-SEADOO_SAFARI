@@ -9,51 +9,43 @@ use Yajra\DataTables\DataTables;
 
 class JetskiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //Script untuk Datatables,Ajax
         if (request()->ajax()) {
-            $query = Jetski::with(['pilihpaket']);
+            $query = Jetski::with(['booking.user', 'booking.detail_paket.pilihpaket']);
 
             return DataTables::of($query)
+                ->addColumn('nama_customer', function ($jetski) {
+                    return optional($jetski->booking->user)->name ?? '-';
+                })
+                ->addColumn('jumlah_jetski', function ($jetski) {
+                    return optional($jetski->booking->detail_paket->pilihpaket)->jumlah_jetski ?? '-';
+                })
                 ->addColumn('action', function ($jetski) {
                     return '
                         <a class="block w-full px-2 py-1 mb-1 text-xs text-center text-white transition duration-500 bg-gray-700 border border-gray-700 rounded-md select-none ease hover:bg-gray-800 focus:outline-none focus:shadow-outline"
                             href="' . route('admin.jetski.edit', $jetski->id) . '">
                            Edit
                         </a>
-
-                        <form class="block w-full" onsubmit="return confirm(\'Apakah anda yakin?\');" -block" action="' . route('admin.jetski.destroy', $jetski->id) . '" method="POST">
-                        <button class="w-full px-2 py-1 text-xs text-white transition duration-500 bg-red-500 border border-red-500 rounded-md select-none ease hover:bg-red-600 focus:outline-none focus:shadow-outline" >
-                            Hapus
-                        </button>
+                        <form class="block w-full" onsubmit="return confirm(\'Apakah anda yakin?\');" action="' . route('admin.jetski.destroy', $jetski->id) . '" method="POST">
                             ' . method_field('delete') . csrf_field() . '
+                            <button class="w-full px-2 py-1 text-xs text-white transition duration-500 bg-red-500 border border-red-500 rounded-md select-none ease hover:bg-red-600 focus:outline-none focus:shadow-outline">
+                                Hapus
+                            </button>
                         </form>';
                 })
                 ->rawColumns(['action'])
-                ->make();
+                ->make(true);
         }
 
-
-
-        //Script untuk return halaman view pilihpaket
         return view('admin.jetski.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('admin.jetski.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -69,26 +61,12 @@ class JetskiController extends Controller
         return redirect()->route('admin.jetski.index')->with('success', 'Jetski berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $jetski = Jetski::findOrFail($id);
         return view('admin.jetski.edit', compact('jetski'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $request->validate([
@@ -105,9 +83,6 @@ class JetskiController extends Controller
         return redirect()->route('admin.jetski.index')->with('success', 'Jetski berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $jetski = Jetski::findOrFail($id);

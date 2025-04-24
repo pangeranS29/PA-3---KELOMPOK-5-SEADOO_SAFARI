@@ -16,18 +16,16 @@ class Jetski extends Model
         'jumlah_jetski',
         'waktu_mulai',
         'waktu_selesai',
-        'users_id'
+        'booking_id'
     ];
 
-    // Relasi ke tabel PaketJetski (Satu Jetski bisa memiliki banyak Paket)
     public function paketJetski()
     {
         return $this->hasMany(PilihPaket::class, 'id_jetski', 'id_jetski');
     }
 
-    public function user()
+    public function booking()
     {
-        return $this->belongsTo(User::class, 'users_id');
+        return $this->belongsTo(Booking::class, 'booking_id');
     }
-
 }

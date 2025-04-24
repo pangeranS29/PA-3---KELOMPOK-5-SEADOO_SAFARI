@@ -48,23 +48,24 @@ class MidtransCallbackController extends Controller
                     break;
 
                 case 'settlement':
-                    $booking->status_pembayaran = 'success';
+                    $booking->status_pembayaran = 'success';  // Pembayaran berhasil
                     break;
 
                 case 'pending':
-                    $booking->status_pembayaran = 'pending';
+                    $booking->status_pembayaran = 'pending';  // Pembayaran masih dalam proses
                     break;
 
                 case 'deny':
                 case 'cancel':
                 case 'expire':
-                    $booking->status_pembayaran = 'cancelled';
+                    $booking->status_pembayaran = 'cancelled';  // Pembayaran gagal
                     break;
 
                 default:
-                    $booking->status_pembayaran = 'unknown';
+                    $booking->status_pembayaran = 'unknown';  // Status tidak diketahui
                     break;
             }
+
 
             // Jika pembayaran sukses dan sebelumnya belum sukses
             if ($booking->status_pembayaran === 'success' && $booking->getOriginal('status_pembayaran') !== 'success') {
@@ -85,7 +86,7 @@ class MidtransCallbackController extends Controller
                     'jumlah_jetski' => 1,
                     'waktu_mulai' => $booking->waktu_mulai,
                     'waktu_selesai' => $booking->waktu_selesai,
-                    'users_id' => $booking->users_id
+                    'booking_id' => $booking->id // Menggunakan booking_id sebagai penghubung
                 ]);
             }
 

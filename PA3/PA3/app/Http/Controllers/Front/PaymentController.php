@@ -70,7 +70,7 @@ class PaymentController extends Controller
                     'first_name' => $booking->nama_customer,
                     'email' => $userEmail,
                 ],
-                'enabled_payments' => ['gopay', 'bank_transfer'],
+                'enabled_payments' => ['qris', 'gopay', 'bank_transfer'],
                 'vtweb' => [],
                 'callbacks' => [
                     'finish' => route('front.payment.success', ['bookingId' => $booking->id]),
