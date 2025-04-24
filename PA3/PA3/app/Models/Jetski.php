@@ -16,7 +16,7 @@ class Jetski extends Model
         'jumlah_jetski',
         'waktu_mulai',
         'waktu_selesai',
-        'tanggal'
+        'users_id'
     ];
 
     // Relasi ke tabel PaketJetski (Satu Jetski bisa memiliki banyak Paket)
@@ -24,4 +24,10 @@ class Jetski extends Model
     {
         return $this->hasMany(PilihPaket::class, 'id_jetski', 'id_jetski');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'users_id');
+    }
+
 }

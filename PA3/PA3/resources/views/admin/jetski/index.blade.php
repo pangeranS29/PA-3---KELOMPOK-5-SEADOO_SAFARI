@@ -25,6 +25,14 @@
                 name: 'id',
               },
               {
+                data: 'user.name',
+                name: 'user.name',
+              },
+              {
+                data: 'status_jetski',
+                name: 'status_jetski'
+              },
+              {
                 data: 'status_jetski',
                 name: 'status_jetski'
               },
@@ -41,11 +49,6 @@
                 data: 'waktu_selesai',
                 name: 'waktu_selesai'
               },
-              {
-                data: 'tanggal',
-                name: 'tanggal'
-              },
-
 
               {
                 data: 'action',
@@ -73,11 +76,11 @@
                     <thead>
                       <tr>
                         <th style="max-width: 1%">ID</th>
+                        <th>Nama_Customer</th>
                         <th>Status_jetski</th>
                         <th>Jumlah_jetski</th>
                         <th>waktu_mulai</th>
                         <th>waktu_selesai</th>
-                        <th>tanggal</th>
                         <th>Aksi </th>
 
 

@@ -83,7 +83,7 @@
                         class="flex flex-col items-baseline gap-4 mt-6 lg:justify-between lg:flex-row lg:items-center lg:mt-0">
                         <div
                             class="flex flex-col w-full ml-auto lg:w-auto gap-4 lg:gap-[50px] lg:items-center lg:flex-row">
-                            <a href="#!" class="nav_color">Home</a>
+                            <a href="{{ route('front.index')}}" class="nav_color">Home</a>
                             <a href="#!" class="nav_color">Safari Packages</a>
                             <a href="#!" class="nav_color">Benefits</a>
                             <a href="#!" class="nav_color">Stories</a>
