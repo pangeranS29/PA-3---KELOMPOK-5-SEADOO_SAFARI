@@ -19,13 +19,9 @@ class Jetski extends Model
         'booking_id'
     ];
 
-    public function paketJetski()
-    {
-        return $this->hasMany(PilihPaket::class, 'id_jetski', 'id_jetski');
-    }
-
+    // Relasi dengan model Booking (Many-to-One)
     public function booking()
     {
-        return $this->belongsTo(Booking::class, 'booking_id');
+        return $this->belongsTo(Booking::class, 'booking_id'); // Relasi many-to-one ke Booking
     }
 }

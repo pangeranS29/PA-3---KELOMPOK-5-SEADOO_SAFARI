@@ -5,11 +5,8 @@ namespace App\Http\Controllers\Front;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Log;
-use Midtrans\Config;
-use Midtrans\Snap;
-use Midtrans\Notification;
-use Barryvdh\DomPDF\Facade\Pdf; // Tambahkan di paling atas
+use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PaymentController extends Controller
 {
@@ -17,81 +14,68 @@ class PaymentController extends Controller
     {
         $booking = Booking::with('detail_paket.pilihpaket', 'user')->findOrFail($bookingId);
 
-        // Cek apakah waktu sekarang sudah melewati waktu_selesai
+        // Cek kadaluarsa
         if (now()->greaterThan($booking->waktu_selesai) && $booking->status_pembayaran === 'pending') {
             $booking->status_pembayaran = 'expired';
             $booking->save();
 
-            return redirect()->route('front.index')->with('error', 'Booking sudah kadaluarsa. Silakan lakukan booking ulang.');
+            return redirect()->route('front.index')->with('error', 'Booking sudah kadaluarsa. Silakan booking ulang.');
         }
 
-        return view('payment', [
-            'booking' => $booking
-        ]);
+        return view('payment', compact('booking'));
     }
 
-    public function update(Request $request, $bookingId)
+    public function updatePaymentMethod(Request $request, $bookingId)
     {
-        $booking = Booking::with('detail_paket.pilihpaket', 'user')->findOrFail($bookingId);
+        // Validasi input dari form
+        $request->validate([
+            'metode_pembayaran' => 'required|string',
+        ]);
 
+        // Temukan data booking berdasarkan ID
+        $booking = Booking::findOrFail($bookingId);
 
-        // Auto-expired check sebelum update
+        // Update metode pembayaran pada tabel bookings
+        $booking->metode_pembayaran = $request->input('metode_pembayaran');
+        $booking->save();
+
+        // Arahkan ke halaman continue.blade.php dengan data booking
+        return view('continue', compact('booking'));
+    }
+
+    public function uploadBuktiPembayaran(Request $request, $bookingId)
+    {
+        $booking = Booking::findOrFail($bookingId);
+
+        // Validasi input
+        $request->validate([
+            'bukti_pembayaran' => 'required|image|mimes:jpeg,png,jpg|max:5048', // max 5MB
+        ]);
+
+        // Cek kadaluarsa
         if (now()->greaterThan($booking->waktu_selesai) && $booking->status_pembayaran === 'pending') {
             $booking->status_pembayaran = 'expired';
             $booking->save();
 
-            return redirect()->route('front.index')->with('error', 'Booking sudah kadaluarsa. Silakan lakukan booking ulang.');
+            return redirect()->route('front.index')->with('error', 'Booking sudah kadaluarsa. Silakan booking ulang.');
         }
 
-        $request->validate([
-            'metode_pembayaran' => 'required|string'
-        ]);
+        // Simpan bukti pembayaran
+        if ($request->hasFile('bukti_pembayaran')) {
+            $file = $request->file('bukti_pembayaran');
+            $path = $file->store('bukti_pembayaran', 'public');
 
-        if ($booking->status_pembayaran === 'expired') {
-            return redirect()->route('front.index')->with('error', 'Booking sudah kadaluarsa. Silakan lakukan booking ulang.');
+            // Update data booking
+            $booking->bukti_pembayaran = $path;
+            $booking->status_pembayaran = 'menunggu_verifikasi';
+            $booking->save();
+
+             // Arahkan ke halaman continue.blade.php dengan data booking
+        return view('success', compact('booking'));
         }
 
-        $booking->metode_pembayaran = $request->metode_pembayaran;
-
-        if ($booking->metode_pembayaran === 'midtrans') {
-            Config::$serverKey = config('services.midtrans.serverKey');
-            Config::$isProduction = config('services.midtrans.isProduction');
-            Config::$isSanitized = config('services.midtrans.isSanitized');
-            Config::$is3ds = config('services.midtrans.is3ds');
-
-            $userEmail = optional($booking->user)->email ?? 'noemail@example.com';
-
-            $params = [
-                'transaction_details' => [
-                    'order_id' => $booking->id,
-                    'gross_amount' => (int) $booking->total_harga,
-                ],
-                'customer_details' => [
-                    'first_name' => $booking->nama_customer,
-                    'email' => $userEmail,
-                ],
-                'enabled_payments' => ['gopay', 'bank_transfer'],
-                'vtweb' => [],
-                'callbacks' => [
-                    'finish' => route('front.payment.success', ['bookingId' => $booking->id]),
-                ]
-            ];
-
-            try {
-                $snapTransaction = Snap::createTransaction($params);
-                $booking->url_pembayaran = $snapTransaction->redirect_url;
-                $booking->save();
-
-                return redirect($booking->url_pembayaran);
-            } catch (\Exception $e) {
-                Log::error('Midtrans Error: ' . $e->getMessage());
-                return redirect()->route('front.index')->with('error', 'Gagal membuat transaksi pembayaran.');
-            }
-        }
-
-        return redirect()->route('front.index');
+        return back()->with('error', 'Gagal upload bukti pembayaran.');
     }
-
 
     public function success($bookingId)
     {
@@ -99,18 +83,17 @@ class PaymentController extends Controller
         return view('success', compact('booking'));
     }
 
-
-
     public function cancel($bookingId)
     {
         $booking = Booking::findOrFail($bookingId);
 
-        $booking->metode_pembayaran = null;
-        $booking->url_pembayaran = null;
+        // Reset data pembayaran
+        $booking->bukti_pembayaran = null;
+        $booking->status_pembayaran = 'pending';
         $booking->save();
 
         return redirect()->route('front.payment', $booking->id)
-            ->with('success', 'Pembayaran berhasil dibatalkan. Silakan pilih metode pembayaran kembali.');
+            ->with('success', 'Upload bukti pembayaran dibatalkan. Silakan upload ulang.');
     }
 
     public function cetakResi($bookingId)

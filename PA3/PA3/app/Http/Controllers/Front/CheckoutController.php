@@ -48,6 +48,7 @@ class CheckoutController extends Controller
         'waktu_mulai'       => $validatedData['waktu_mulai'],
         'waktu_selesai'     => $validatedData['waktu_selesai'],
         'jumlah_penumpang'  => $validatedData['jumlah_penumpang'],
+        'status'            => 'success', // Tambahkan ini untuk mengubah status booking
         'nama_penumpang1'   => $namaPenumpang1,
         'nama_penumpang2'   => $namaPenumpang2,
         'total_harga'       => $totalHarga,

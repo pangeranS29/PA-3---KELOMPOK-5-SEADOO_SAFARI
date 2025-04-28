@@ -18,15 +18,10 @@ class PilihPaket extends Model
         'deskripsi',
         'durasi',
         'jumlah_jetski',
-        'id_jetski'
     ];
 
 
-    // Relasi ke tabel Jetski (PaketJetski milik satu Jetski)
-    public function jetski()
-    {
-        return $this->belongsTo(Jetski::class, 'id_jetski', 'id_jetski');
-    }
+
 
 
     public function detail_paket()

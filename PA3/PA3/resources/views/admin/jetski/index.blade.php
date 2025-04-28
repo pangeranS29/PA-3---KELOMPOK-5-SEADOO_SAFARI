@@ -5,55 +5,31 @@
         </h2>
     </x-slot>
 
-
-
     <x-slot name="script">
         <script>
-            // AJAX DataTable
-            var datatable = $('#dataTable').DataTable({
-                processing: true,
-                serverSide: true,
-                stateSave: true,
-                ajax: {
-                    url: '{!! url()->current() !!}',
-                },
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.12.1/i18n/id.json'
-                },
-                columns: [{
-                        data: 'id',
-                        name: 'id',
+            // Initialize DataTable with AJAX
+            $(document).ready(function() {
+                var datatable = $('#dataTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    stateSave: true,
+                    ajax: {
+                        url: '{!! url()->current() !!}',
+                        dataSrc: '' // Ensure we get the data in the correct format
                     },
-                    {
-                        data: 'booking.nama_customer',
-                        name: 'booking.nama_customer'
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.12.1/i18n/id.json' // Set the language to Bahasa Indonesia
                     },
-                    {
-                        data: 'status_jetski',
-                        name: 'status_jetski'
-                    },
-                    {
-                        data: 'jumlah_jetski',
-                        name: 'jumlah_jetski'
-                    },
-
-                    {
-                        data: 'waktu_mulai',
-                        name: 'waktu_mulai'
-                    },
-                    {
-                        data: 'waktu_selesai',
-                        name: 'waktu_selesai'
-                    },
-
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false,
-                        width: '15%'
-                    },
-                ],
+                    columns: [
+                        { data: 'id', name: 'id' },
+                        { data: 'booking.nama_customer', name: 'booking.nama_customer' },
+                        { data: 'status_jetski', name: 'status_jetski' },
+                        { data: 'jumlah_jetski', name: 'jumlah_jetski' },
+                        { data: 'waktu_mulai', name: 'waktu_mulai' },
+                        { data: 'waktu_selesai', name: 'waktu_selesai' },
+                    ],
+                    order: [[0, 'desc']] // Default ordering by ID, you can change this if needed
+                });
             });
         </script>
     </x-slot>
@@ -66,20 +42,18 @@
                   + Buat Paket
                 </a> --}}
             </div>
+
             <div class="overflow-hidden shadow sm:rounded-md">
                 <div class="px-4 py-5 bg-white sm:p-6">
-                    <table id="dataTable">
+                    <table id="dataTable" class="table table-striped table-bordered w-full">
                         <thead>
                             <tr>
                                 <th style="max-width: 1%">ID</th>
-                                <th>Nama_Customer</th>
-                                <th>Status_jetski</th>
-                                <th>Jumlah_jetski</th>
-                                <th>waktu_mulai</th>
-                                <th>waktu_selesai</th>
-                                <th>Aksi </th>
-
-
+                                <th>Nama Customer</th>
+                                <th>Status Jetski</th>
+                                <th>Jumlah Jetski</th>
+                                <th>Waktu Mulai</th>
+                                <th>Waktu Selesai</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -88,6 +62,5 @@
             </div>
         </div>
     </div>
-
 
 </x-app-layout>

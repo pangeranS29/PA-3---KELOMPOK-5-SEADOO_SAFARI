@@ -37,7 +37,9 @@ Route::name('front.')->group(function () {
 
         // Payment Page
         Route::get('/payment/{bookingId}', [PaymentController::class, 'index'])->name('payment');
-        Route::post('/payment/{bookingId}', [PaymentController::class, 'update'])->name('payment.update');
+        Route::post('/payment/update/{bookingId}', [PaymentController::class, 'updatePaymentMethod'])->name('payment.update');
+        Route::post('/payment/upload/{bookingId}', [PaymentController::class, 'uploadBuktiPembayaran'])->name('payment.upload');
+
 
         // 👇 Batalkan Pembayaran (route baru)
         Route::get('/payment/cancel/{bookingId}', [PaymentController::class, 'cancel'])->name('payment.cancel');
@@ -45,29 +47,12 @@ Route::name('front.')->group(function () {
 
          // Halaman Akun dan Tab Profile/Transaction/Reset Password
          Route::get('/account', [AccountController::class, 'index'])->name('account'); // Tampilkan akun user
-        //  // Tambahkan tab sebagai parameter
-        //  Route::get('/account?tab={tab}', [AccountController::class, 'index'])->name('account.tab');
 
 
 
     });
 });
 
-
-/*
-|--------------------------------------------------------------------------
-| API Routes for Midtrans Notification
-|--------------------------------------------------------------------------
-*/
-// ✅ Midtrans Notification Route - HARUS DI LUAR SEMUA MIDDLEWARE
-// Route::post('/payment/notification', [PaymentController::class, 'notification'])
-//     ->withoutMiddleware(['web']) // Nonaktifkan middleware 'web'
-//     ->name('midtrans.notification');
-/*
-|--------------------------------------------------------------------------
-| Admin Routes
-|--------------------------------------------------------------------------
-*/
 Route::prefix('admin')->name('admin.')->middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

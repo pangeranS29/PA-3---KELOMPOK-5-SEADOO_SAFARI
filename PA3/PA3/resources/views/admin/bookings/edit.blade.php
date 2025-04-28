@@ -76,37 +76,8 @@
                             </div>
                         </div>
 
-
-                        {{-- <div class="flex flex-wrap px-3 mt-4 mb-6 -mx-3">
-              <div class="w-full">
-                <label class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase" for="grid-last-name">
-                  Kota
-                </label>
-                <input value="{{ old('city') ?? $booking->city }}" name="city"
-                       class="block w-full px-4 py-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
-                       id="grid-last-name" type="text" placeholder="Nama">
-                <div class="mt-2 text-sm text-gray-500">
-                  Kota booking. Contoh: Jakarta Selatan
-                </div>
-              </div>
-            </div> --}}
-
-                        {{-- <div class="flex flex-wrap px-3 mt-4 mb-6 -mx-3">
-              <div class="w-full">
-                <label class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase" for="grid-last-name">
-                  Kode Pos
-                </label>
-                <input value="{{ old('zip') ?? $booking->zip }}" name="zip"
-                       class="block w-full px-4 py-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
-                       id="grid-last-name" type="text" placeholder="Nama">
-                <div class="mt-2 text-sm text-gray-500">
-                  Kode Pos booking. Contoh: 12780
-                </div>
-              </div>
-            </div> --}}
-
                         {{-- Status dropdown --}}
-                        <div class="flex flex-wrap px-3 mt-4 mb-6 -mx-3">
+                        {{-- <div class="flex flex-wrap px-3 mt-4 mb-6 -mx-3">
                             <div class="w-full">
                                 <label class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
                                     for="grid-last-name">
@@ -126,7 +97,7 @@
                                     Status booking. Contoh: Pending
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         {{-- Payment status dropdown --}}
                         <div class="flex flex-wrap px-3 mt-4 mb-6 -mx-3">
