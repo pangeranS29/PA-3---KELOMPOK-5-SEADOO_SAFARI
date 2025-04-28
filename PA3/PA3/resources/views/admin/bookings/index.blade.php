@@ -6,7 +6,6 @@
     </x-slot>
 
     <x-slot name="script">
-
         <script>
             $(document).ready(function () {
                 var datatable = $('#dataTable').DataTable({
@@ -26,9 +25,18 @@
                         { data: 'waktu_mulai', name: 'waktu_mulai' },
                         { data: 'waktu_selesai', name: 'waktu_selesai' },
                         { data: 'jumlah_penumpang', name: 'jumlah_penumpang' },
-                        { data: 'status', name: 'status' },
                         { data: 'status_pembayaran', name: 'status_pembayaran' },
                         { data: 'total_harga', name: 'total_harga' },
+                        {
+                            data: 'bukti_pembayaran',
+                            name: 'bukti_pembayaran',
+                            orderable: false,
+                            searchable: false,
+                            render: function(data, type, row) {
+                                // Display the Bukti Pembayaran as a clickable link
+                                return '<a href="#" class="view-image" data-image="'+ data + '" data-toggle="modal" data-target="#imageModal">Bukti Pembayaran</a>';
+                            }
+                        },
                         {
                             data: 'action',
                             name: 'action',
@@ -38,31 +46,54 @@
                         },
                     ],
                 });
+
+                // Event listener to open the image modal
+                $(document).on('click', '.view-image', function() {
+                    var imageUrl = $(this).data('image');
+                    $('#modal-image').attr('src', imageUrl);  // Set the image source for the modal
+                });
             });
         </script>
     </x-slot>
 
-    <div class="py-12"> <!-- Padding atas dan bawah sebesar 12 (3rem / 48px) -->
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8"> <!-- Lebar maksimal 7xl dan padding horizontal -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6"> <!-- Padding dalam 6 (1.5rem / 24px) -->
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <table id="dataTable" class="mt-6 min-w-full bg-white border border-gray-200 shadow-sm rounded-lg">
-                    <!-- Margin atas 6 (1.5rem / 24px) untuk memberikan jarak antara div dan tabel -->
                     <thead class="bg-gray-100 text-gray-700">
                         <tr>
-                            <th class="px-4 py-2">ID</th> <!-- Padding horizontal 4 (1rem / 16px), Padding vertikal 2 (0.5rem / 8px) -->
+                            <th class="px-4 py-2">ID</th>
                             <th class="px-4 py-2">User</th>
                             <th class="px-4 py-2">Nama Paket</th>
                             <th class="px-4 py-2">Mulai</th>
                             <th class="px-4 py-2">Selesai</th>
                             <th class="px-4 py-2">Jumlah Penumpang</th>
-                            <th class="px-4 py-2">Status Booking</th>
                             <th class="px-4 py-2">Status Pembayaran</th>
                             <th class="px-4 py-2">Total Harga</th>
+                            <th class="px-4 py-2">Bukti Pembayaran</th>
                             <th class="px-4 py-2">Aksi</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal to view the image -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Bukti Pembayaran</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="modal-image" src="" class="img-fluid" alt="Bukti Pembayaran">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>

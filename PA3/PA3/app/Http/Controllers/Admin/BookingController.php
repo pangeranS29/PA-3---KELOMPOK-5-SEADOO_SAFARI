@@ -8,9 +8,8 @@ use App\Models\Booking;
 use App\Models\PilihPaket;
 use App\Models\DetailPaket;
 use Illuminate\Http\Request;
-use PhpParser\Node\Expr\Cast\Bool_;
 use Yajra\DataTables\DataTables;
-
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
@@ -30,6 +29,14 @@ class BookingController extends Controller
                     return $row->detail_paket && $row->detail_paket->pilihpaket
                         ? $row->detail_paket->pilihpaket->nama_paket
                         : '-';
+                })
+                // Format waktu_mulai
+                ->addColumn('waktu_mulai', function ($row) {
+                    return $row->waktu_mulai ? Carbon::parse($row->waktu_mulai)->translatedFormat('d F Y, H:i') : '-';
+                })
+                // Format waktu_selesai
+                ->addColumn('waktu_selesai', function ($row) {
+                    return $row->waktu_selesai ? Carbon::parse($row->waktu_selesai)->translatedFormat('d F Y, H:i') : '-';
                 })
                 ->addColumn('action', function ($booking) {
                     return '

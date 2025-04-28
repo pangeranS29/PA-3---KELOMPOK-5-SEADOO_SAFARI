@@ -15,13 +15,16 @@
                 <p><strong>Nama:</strong> {{ $booking->nama_customer }}</p>
                 <p><strong>No. Telepon:</strong> {{ $booking->no_telepon }}</p>
                 <p><strong>Paket:</strong> {{ $booking->detail_paket->pilihpaket->nama_paket }}</p>
-                <p><strong>Waktu Mulai:</strong> {{ $booking->waktu_mulai }}</p>
-                <p><strong>Waktu Selesai:</strong> {{ $booking->waktu_selesai }}</p>
+                <p><strong>Waktu Mulai:</strong>
+                    {{ \Carbon\Carbon::parse($booking->waktu_mulai)->translatedFormat('d F Y, H:i') }}</p>
+                <p><strong>Waktu Selesai:</strong>
+                    {{ \Carbon\Carbon::parse($booking->waktu_selesai)->translatedFormat('d F Y, H:i') }}</p>
 
 
 
                 @if ($booking->harga_drone)
-                    <p class="text-yellow-400"><strong>Include Drone:</strong> Rp {{ number_format($booking->harga_drone, 0, ',', '.') }}</p>
+                    <p class="text-yellow-400"><strong>Include Drone:</strong> Rp
+                        {{ number_format($booking->harga_drone, 0, ',', '.') }}</p>
                 @endif
 
                 <p><strong>Jumlah Penumpang:</strong> {{ $booking->jumlah_penumpang }}</p>
@@ -42,16 +45,17 @@
                     <div class="bg-red-600 text-white p-4 rounded mb-4">
                         Pembayaran Anda <strong>kadaluarsa</strong>. Silakan lakukan pemesanan ulang.
                     </div>
-                    <a href="{{ route('front.index') }}" class="block text-center bg-blue-500 hover:bg-blue-400 text-white font-semibold py-2 rounded">
+                    <a href="{{ route('front.index') }}"
+                        class="block text-center bg-blue-500 hover:bg-blue-400 text-white font-semibold py-2 rounded">
                         Booking Ulang
                     </a>
-                    @break
+                @break
 
                 @case('settlement')
                     <div class="bg-green-500 text-white p-4 rounded mb-4">
                         Pembayaran Anda <strong>berhasil</strong>.
                     </div>
-                    @break
+                @break
 
                 @default
                     @if ($booking->metode_pembayaran === 'midtrans' && $booking->url_pembayaran)
@@ -81,8 +85,11 @@
 
                                     {{-- Manual Transfer --}}
                                     <div class="relative">
-                                        <input type="radio" id="manual_transfer" name="metode_pembayaran" value="manual_transfer" class="peer absolute inset-0 opacity-0 cursor-pointer" required onclick="showPaymentInstruction('manual_transfer')">
-                                        <label for="manual_transfer" class="flex items-center justify-center gap-4 bg-gray-700 border border-gray-500 rounded-2xl p-5 min-h-[80px] hover:border-yellow-400 peer-checked:border-yellow-400 peer-checked:ring-2 peer-checked:ring-yellow-400 transition-all">
+                                        <input type="radio" id="manual_transfer" name="metode_pembayaran"
+                                            value="manual_transfer" class="peer absolute inset-0 opacity-0 cursor-pointer"
+                                            required onclick="showPaymentInstruction('manual_transfer')">
+                                        <label for="manual_transfer"
+                                            class="flex items-center justify-center gap-4 bg-gray-700 border border-gray-500 rounded-2xl p-5 min-h-[80px] hover:border-yellow-400 peer-checked:border-yellow-400 peer-checked:ring-2 peer-checked:ring-yellow-400 transition-all">
                                             <img src="{{ asset('svgs/bank.svg') }}" alt="Manual Transfer" width="40">
                                             <p class="text-white font-semibold">Transfer Bank</p>
                                         </label>
@@ -90,8 +97,11 @@
 
                                     {{-- QRIS --}}
                                     <div class="relative">
-                                        <input type="radio" id="qris" name="metode_pembayaran" value="qris" class="peer absolute inset-0 opacity-0 cursor-pointer" required onclick="showPaymentInstruction('qris')">
-                                        <label for="qris" class="flex items-center justify-center gap-4 bg-gray-700 border border-gray-500 rounded-2xl p-5 min-h-[80px] hover:border-yellow-400 peer-checked:border-yellow-400 peer-checked:ring-2 peer-checked:ring-yellow-400 transition-all">
+                                        <input type="radio" id="qris" name="metode_pembayaran" value="qris"
+                                            class="peer absolute inset-0 opacity-0 cursor-pointer" required
+                                            onclick="showPaymentInstruction('qris')">
+                                        <label for="qris"
+                                            class="flex items-center justify-center gap-4 bg-gray-700 border border-gray-500 rounded-2xl p-5 min-h-[80px] hover:border-yellow-400 peer-checked:border-yellow-400 peer-checked:ring-2 peer-checked:ring-yellow-400 transition-all">
                                             <img src="{{ asset('svgs/qris.svg') }}" alt="QRIS" width="40">
                                             <p class="text-white font-semibold">QRIS</p>
                                         </label>
@@ -105,7 +115,8 @@
                                 {{-- JavaScript will fill this --}}
                             </div>
 
-                            <button type="submit" class="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold py-2 rounded w-full">
+                            <button type="submit"
+                                class="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold py-2 rounded w-full">
                                 Pilih dan Lanjutkan
                             </button>
                         </form>
