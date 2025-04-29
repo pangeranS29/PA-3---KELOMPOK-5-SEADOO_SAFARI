@@ -67,11 +67,11 @@ class PaymentController extends Controller
 
             // Update data booking
             $booking->bukti_pembayaran = $path;
-            $booking->status_pembayaran = 'menunggu_verifikasi';
+            $booking->status_pembayaran = 'pending';
             $booking->save();
 
-             // Arahkan ke halaman continue.blade.php dengan data booking
-        return view('success', compact('booking'));
+            // Arahkan ke halaman continue.blade.php dengan data booking
+            return view('success', compact('booking'));
         }
 
         return back()->with('error', 'Gagal upload bukti pembayaran.');
@@ -99,6 +99,10 @@ class PaymentController extends Controller
     public function cetakResi($bookingId)
     {
         $booking = Booking::with('detail_paket.pilihpaket', 'user')->findOrFail($bookingId);
+
+        if ($booking->status_pembayaran !== 'success') {
+            return redirect()->back()->with('error', 'Hanya pembayaran yang berhasil yang dapat mencetak resi');
+        }
 
         $pdf = Pdf::loadView('pdf.resi', compact('booking'));
         return $pdf->download('resi_booking_' . $booking->id . '.pdf');

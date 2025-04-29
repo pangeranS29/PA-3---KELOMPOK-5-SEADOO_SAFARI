@@ -76,29 +76,6 @@
                             </div>
                         </div>
 
-                        {{-- Status dropdown --}}
-                        {{-- <div class="flex flex-wrap px-3 mt-4 mb-6 -mx-3">
-                            <div class="w-full">
-                                <label class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
-                                    for="grid-last-name">
-                                    Status Booking
-                                </label>
-                                <select name="status"
-                                    class="block w-full px-4 py-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500">
-                                    <option value="pending" {{ $booking->status == 'pending' ? 'selected' : '' }}>
-                                        Pending</option>
-                                    <option value="confirmed" {{ $booking->status == 'confirmed' ? 'selected' : '' }}>
-                                        Confirmed</option>
-                                    <option value="done" {{ $booking->status == 'done' ? 'selected' : '' }}>
-                                        Done
-                                    </option>
-                                </select>
-                                <div class="mt-2 text-sm text-gray-500">
-                                    Status booking. Contoh: Pending
-                                </div>
-                            </div>
-                        </div> --}}
-
                         {{-- Payment status dropdown --}}
                         <div class="flex flex-wrap px-3 mt-4 mb-6 -mx-3">
                             <div class="w-full">

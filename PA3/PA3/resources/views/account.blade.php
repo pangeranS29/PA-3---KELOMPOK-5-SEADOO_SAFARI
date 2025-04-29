@@ -49,7 +49,9 @@
                                             {{ $booking->detail_paket->pilihpaket->nama_paket ?? 'Nama Paket Tidak Tersedia' }}
                                         </p>
                                         <p class="text-xs md:text-base text-white">
-                                            {{ $booking->waktu_mulai }} - {{ $booking->waktu_selesai }}
+                                            {{ Carbon\Carbon::parse($booking->waktu_mulai)->translatedFormat('d F Y, H:i') }}
+                                            -
+                                            {{ Carbon\Carbon::parse($booking->waktu_selesai)->translatedFormat('d F Y, H:i') }}
                                         </p>
                                     </div>
                                 </div>
@@ -73,18 +75,24 @@
                                             now()->greaterThan($booking->waktu_selesai);
                                     @endphp
 
-                                    @if ($isExpired)
+                                    @if ($booking->status_pembayaran === 'success')
+                                        <a href="{{ route('front.cetak.resi', $booking->id) }}"
+                                            class="text-yellow-500 hover:underline text-xs md:text-base whitespace-nowrap"
+                                            target="_blank" rel="noopener">
+                                            Cetak Resi
+                                        </a>
+                                    @elseif ($isExpired)
                                         <span
                                             class="text-gray-400 text-xs md:text-base whitespace-nowrap cursor-not-allowed"
                                             title="Resi tidak tersedia karena status expired">
                                             Cetak Resi
                                         </span>
                                     @else
-                                        <a href="{{ route('front.cetak.resi', $booking->id) }}"
-                                            class="text-yellow-500 hover:underline text-xs md:text-base whitespace-nowrap"
-                                            target="_blank" rel="noopener">
+                                        <span
+                                            class="text-gray-400 text-xs md:text-base whitespace-nowrap cursor-not-allowed"
+                                            title="Resi hanya tersedia untuk pembayaran yang sudah berhasil">
                                             Cetak Resi
-                                        </a>
+                                        </span>
                                     @endif
                                 </div>
                             </div>
@@ -129,11 +137,13 @@
                             </div>
 
                             <div class="flex justify-between items-center">
-                                <button type="submit" class="mt-3 md:mt-4 p-2 bg-yellow-500 text-black rounded text-sm md:text-base">
+                                <button type="submit"
+                                    class="mt-3 md:mt-4 p-2 bg-yellow-500 text-black rounded text-sm md:text-base">
                                     Update Profile
                                 </button>
 
-                                <a class="text-yellow-500 mb-4 md:mb-6 block text-sm md:text-base " href="#">Reset Password</a>
+                                <a class="text-yellow-500 mb-4 md:mb-6 block text-sm md:text-base " href="#">Reset
+                                    Password</a>
                             </div>
 
 
