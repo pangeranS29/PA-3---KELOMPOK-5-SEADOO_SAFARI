@@ -18,6 +18,7 @@ class BookingController extends Controller
      */
     public function index()
     {
+
         if (request()->ajax()) {
             $query = Booking::with(['user', 'detail_paket.pilihpaket'])->select('bookings.*');
 

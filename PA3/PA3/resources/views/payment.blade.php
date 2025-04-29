@@ -136,7 +136,8 @@
                     <div class="bg-blue-600 text-white p-4 rounded">
                         <h5 class="text-lg font-semibold mb-2">Instruksi Transfer Bank:</h5>
                         <p>Transfer ke rekening berikut:</p>
-                        <p class="mt-2 font-bold">Bank BCA 1234567890 a/n PT Jasa Anda</p>
+                        <p class="mt-2 font-bold">Bank BRI 208201010102569 a/n Seado Safari Samosir</p>
+                         <p class="mt-2 font-bold">Bank SUMUT 241.01.04.002036-3 a/n Seado Safari Samosir</p>
                         <p class="mt-2">Setelah transfer, upload bukti pembayaran di halaman selanjutnya.</p>
                     </div>
                 `;

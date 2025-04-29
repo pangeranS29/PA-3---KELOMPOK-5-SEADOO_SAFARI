@@ -22,21 +22,6 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.1/css/select.dataTables.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
-
-    <!-- plugins:css -->
-<link rel="stylesheet" href="{{ asset('vendors/mdi/css/materialdesignicons.min.css') }}">
-<link rel="stylesheet" href="{{ asset('vendors/ti-icons/css/themify-icons.css') }}">
-<link rel="stylesheet" href="{{ asset('vendors/css/vendor.bundle.base.css') }}">
-<link rel="stylesheet" href="{{ asset('vendors/font-awesome/css/font-awesome.min.css') }}">
-<!-- endinject -->
-<!-- Plugin css for this page -->
-<link rel="stylesheet" href="{{ asset('vendors/font-awesome/css/font-awesome.min.css') }}">
-<link rel="stylesheet" href="{{ asset('vendors/bootstrap-datepicker/bootstrap-datepicker.min.css') }}">
-<!-- End plugin css for this page -->
-<!-- inject:css -->
-<!-- endinject -->
-<!-- Layout styles -->
-<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -51,10 +36,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="//unpkg.com/alpinejs" defer></script>
 
+    <!-- CSS -->
+<link rel="stylesheet" href="{{ asset('css/materialdesignicons.min.css') }}">
+<link rel="stylesheet" href="{{ asset('css/themify-icons.css') }}">
+<link rel="stylesheet" href="{{ asset('css/vendor.bundle.base.css') }}">
+<link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
-
-
-    {{-- Sweetalert Notifications --}}
     @if (session()->has('error'))
         <script>
             Swal.fire({
@@ -79,9 +66,6 @@
 </head>
 
 <body class="font-sans antialiased flex">
-    <!-- Sidebar -->
-    @include('components.sidebar')
-
     <!-- Main Content -->
     <div id="main-content" class="flex-1 ml-64">
         <main class="min-h-screen bg-gray-100">
@@ -101,8 +85,6 @@
                         <div class="text-lg font-semibold">
                             {{ $header }}
                         </div>
-
-
                     </div>
                 </header>
             @endif
@@ -120,7 +102,6 @@
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('main-content');
 
-            // Pastikan sidebar ada sebelum menambahkan event listener
             if (hamburgerMenu && sidebar && mainContent) {
                 hamburgerMenu.addEventListener('click', function() {
                     sidebar.classList.toggle('-translate-x-full');
@@ -137,6 +118,15 @@
     {{ $script ?? '' }}
     {{ $modal ?? '' }}
 
+
+
+<!-- JS -->
+<script src="{{ asset('js/off-canvas.js') }}"></script>
+<script src="{{ asset('js/misc.js') }}"></script>
+<script src="{{ asset('js/settings.js') }}"></script>
+<script src="{{ asset('js/todolist.js') }}"></script>
+<script src="{{ asset('js/jquery.cookie.js') }}"></script>
+<script src="{{ asset('js/dashboard.js') }}"></script>
 </body>
 
 </html>
