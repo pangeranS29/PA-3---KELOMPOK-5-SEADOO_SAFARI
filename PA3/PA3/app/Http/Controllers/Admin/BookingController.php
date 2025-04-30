@@ -18,7 +18,6 @@ class BookingController extends Controller
      */
     public function index()
     {
-
         if (request()->ajax()) {
             $query = Booking::with(['user', 'detail_paket.pilihpaket'])->select('bookings.*');
 
@@ -26,32 +25,29 @@ class BookingController extends Controller
                 ->addColumn('user_name', function ($row) {
                     return $row->user ? $row->user->name : '-';
                 })
+                ->addColumn('no_telepon', function ($row) {
+                    return $row->user ? $row->user->no_telepon : '-';
+                })
                 ->addColumn('nama_paket', function ($row) {
                     return $row->detail_paket && $row->detail_paket->pilihpaket
                         ? $row->detail_paket->pilihpaket->nama_paket
                         : '-';
                 })
-                // Format waktu_mulai
                 ->addColumn('waktu_mulai', function ($row) {
                     return $row->waktu_mulai ? Carbon::parse($row->waktu_mulai)->translatedFormat('d F Y, H:i') : '-';
                 })
-                // Format waktu_selesai
                 ->addColumn('waktu_selesai', function ($row) {
                     return $row->waktu_selesai ? Carbon::parse($row->waktu_selesai)->translatedFormat('d F Y, H:i') : '-';
                 })
                 ->addColumn('action', function ($booking) {
                     return '
-                        <a class="block w-full px-2 py-1 mb-1 text-xs text-center text-white transition duration-500 bg-gray-700 border border-gray-700 rounded-md select-none ease hover:bg-gray-800 focus:outline-none focus:shadow-outline"
-                            href="' . route('admin.bookings.edit', $booking->id) . '">
-                           Edit
-                        </a>
-
-                        <form class="block w-full" onsubmit="return confirm(\'Apakah anda yakin?\');" -block" action="' . route('admin.bookings.destroy', $booking->id) . '" method="POST">
-                        <button class="w-full px-2 py-1 text-xs text-white transition duration-500 bg-red-500 border border-red-500 rounded-md select-none ease hover:bg-red-600 focus:outline-none focus:shadow-outline" >
-                            Hapus
-                        </button>
-                            ' . method_field('delete') . csrf_field() . '
-                        </form>';
+                    <button class="block w-full px-2 py-1 mb-1 text-xs text-center text-white transition duration-500 bg-blue-500 border border-blue-500 rounded-md select-none ease hover:bg-blue-600 focus:outline-none focus:shadow-outline preview-btn"
+                        data-id="' . $booking->id . '"
+                        data-image="' . asset('storage/' . $booking->bukti_pembayaran) . '"
+                        data-status="' . $booking->status_pembayaran . '"
+                        data-phone="' . ($booking->user ? $booking->user->no_telepon : '') . '">
+                        Preview
+                    </button>';
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -107,4 +103,52 @@ class BookingController extends Controller
 
         return redirect()->route('admin.bookings.index');
     }
+
+    /**
+     * Accept the booking payment
+     */
+    public function accept(Booking $booking)
+    {
+        $booking->update(['status_pembayaran' => 'success']);
+        return response()->json(['message' => 'Status pembayaran berhasil diubah']);
+    }
+
+    /**
+     * Reject the booking payment
+     */
+    /**
+ * Reject the booking payment
+ */
+public function reject(Booking $booking, Request $request)
+{
+    $request->validate([
+        'reason' => 'required|string'
+    ]);
+
+    $booking->update(['status_pembayaran' => 'rejected']);
+
+    // Get customer phone number
+    $customerPhone = $booking->user->phone;
+
+    // Format phone number (remove leading 0 if exists and add 62)
+    $formattedPhone = preg_replace('/^0/', '62', $customerPhone);
+
+    // Get admin phone from config
+    $adminPhone = env('ADMIN_PHONE', '6281234567890');
+
+    // Create WhatsApp message
+    $message = "Maaf, pembayaran Anda untuk booking #{$booking->id} ditolak dengan alasan: " . $request->reason;
+    $message .= "\n\nSilakan hubungi admin di: " . $adminPhone . " untuk informasi lebih lanjut.";
+
+    // URL encode the message
+    $encodedMessage = urlencode($message);
+
+    // Create WhatsApp deep link
+    $whatsappUrl = "https://wa.me/{$formattedPhone}?text={$encodedMessage}";
+
+    return response()->json([
+        'message' => 'Status pembayaran berhasil diubah',
+        'whatsapp_url' => $whatsappUrl
+    ]);
+}
 }

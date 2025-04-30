@@ -23,12 +23,12 @@
                             name: 'id'
                         },
                         {
-                            data: 'user.name',
-                            name: 'user.name'
+                            data: 'user_name',
+                            name: 'user_name'
                         },
                         {
-                            data: 'detail_paket.pilihpaket.nama_paket',
-                            name: 'detail_paket.pilihpaket.nama_paket'
+                            data: 'nama_paket',
+                            name: 'nama_paket'
                         },
                         {
                             data: 'waktu_mulai',
@@ -53,14 +53,10 @@
                         {
                             data: 'bukti_pembayaran',
                             name: 'bukti_pembayaran',
-                            orderable: false,
-                            searchable: false,
-                            render: function(data, type, row) {
-                                if (data) {
-                                    return `<a href="/storage/${data}" target="_blank" class="text-blue-600 hover:underline">Bukti Pembayaran</a>`;
-                                } else {
-                                    return '-';
-                                }
+                            render: function(data) {
+                                return data ?
+                                    `<a href="/storage/${data}" target="_blank" class="text-blue-600 hover:underline">Lihat Bukti</a>` :
+                                    '-';
                             }
                         },
                         {
@@ -68,16 +64,96 @@
                             name: 'action',
                             orderable: false,
                             searchable: false,
-                            width: '15%'
+                            width: '10%'
                         },
-                    ],
-
+                    ]
                 });
 
-                // Event listener to open the image modal
-                $(document).on('click', '.view-image', function() {
-                    var imageUrl = $(this).data('image');
-                    $('#modal-image').attr('src', imageUrl); // Set the image source for the modal
+                // Preview modal
+                $(document).on('click', '.preview-btn', function() {
+                    const imageUrl = $(this).data('image');
+                    const bookingId = $(this).data('id');
+                    const phoneNumber = $(this).data('phone');
+                    const currentStatus = $(this).data('status');
+
+                    $('#previewImage').attr('src', imageUrl);
+                    $('#bookingId').val(bookingId);
+                    $('#phoneNumber').val(phoneNumber);
+
+                    // Show/hide buttons based on current status
+                    if (currentStatus === 'pending') {
+                        $('#actionButtons').show();
+                    } else {
+                        $('#actionButtons').hide();
+                    }
+
+                    $('#rejectForm').hide();
+                    $('#previewModal').removeClass('hidden');
+                });
+
+                // Close modal
+                $('#closeModal').click(function() {
+                    $('#previewModal').addClass('hidden');
+                });
+
+                // Accept booking
+                $('#acceptBtn').click(function() {
+                    const bookingId = $('#bookingId').val();
+
+                    $.ajax({
+                        url: `/admin/bookings/${bookingId}/accept`,
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            alert('Status pembayaran berhasil diubah menjadi success');
+                            datatable.ajax.reload();
+                            $('#previewModal').addClass('hidden');
+                        },
+                        error: function(error) {
+                            alert('Terjadi kesalahan');
+                        }
+                    });
+                });
+
+                // Show reject form
+                $('#rejectBtn').click(function() {
+                    $('#rejectForm').show();
+                    $('#rejectReason').focus();
+                });
+
+                // Submit reject
+                $('#submitReject').click(function() {
+                    const bookingId = $('#bookingId').val();
+                    const rejectReason = $('#rejectReason').val();
+
+                    if (!rejectReason) {
+                        alert('Silakan isi alasan penolakan');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: `/admin/bookings/${bookingId}/reject`,
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            reason: rejectReason
+                        },
+                        success: function(response) {
+                            // Open WhatsApp with rejection message
+                            window.open(response.whatsapp_url, '_blank');
+
+                            alert('Status pembayaran berhasil diubah menjadi rejected');
+                            datatable.ajax.reload();
+                            $('#previewModal').addClass('hidden');
+                            $('#rejectForm').hide();
+                            $('#rejectReason').val('');
+                        },
+                        error: function(error) {
+                            alert('Terjadi kesalahan');
+                        }
+                    });
                 });
             });
         </script>
@@ -97,16 +173,58 @@
                             <th class="px-4 py-2">Jumlah Penumpang</th>
                             <th class="px-4 py-2">Status Pembayaran</th>
                             <th class="px-4 py-2">Total Harga</th>
-                            <th class="px-4 py-2">Bukti Pembayaran</th> <!-- ini tambahan -->
+                            <th class="px-4 py-2">Bukti Pembayaran</th>
                             <th class="px-4 py-2">Aksi</th>
                         </tr>
                     </thead>
-
                     <tbody></tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    <!-- Preview Modal -->
+    <div id="previewModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 lg:w-1/3 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Preview Bukti Pembayaran</h3>
+                <div class="mt-2 px-7 py-3">
+                    <img id="previewImage" src="" alt="Bukti Pembayaran" class="mx-auto max-h-64">
+                </div>
+                <input type="hidden" id="bookingId">
+                <input type="hidden" id="phoneNumber">
 
+                <div id="actionButtons" class="mt-4">
+                    <button id="acceptBtn"
+                        class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none">
+                        Terima Pembayaran
+                    </button>
+                    <button id="rejectBtn"
+                        class="ml-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none">
+                        Tolak Pembayaran
+                    </button>
+                </div>
+
+                <div id="rejectForm" class="mt-4 hidden">
+                    <textarea id="rejectReason" rows="3" class="w-full border rounded-md p-2"
+                        placeholder="Masukkan alasan penolakan..."></textarea>
+                    <div class="mt-2 text-sm text-gray-600">
+                        Pesan penolakan akan dikirim ke nomor customer dan akan menyertakan nomor admin:
+                        <span class="font-semibold">{{ env('ADMIN_PHONE', '085763189029') }}</span>
+                    </div>
+                    <button id="submitReject"
+                        class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none">
+                        Kirim Penolakan
+                    </button>
+                </div>
+
+                <div class="mt-4">
+                    <button id="closeModal"
+                        class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </x-app-layout>

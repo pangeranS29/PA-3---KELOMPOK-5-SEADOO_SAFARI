@@ -17,6 +17,7 @@ use App\Http\Controllers\Front\AccountController; // Pastikan controller sudah a
 | Frontend Routes
 |--------------------------------------------------------------------------
 */
+
 Route::name('front.')->group(function () {
 
     // Landing Page
@@ -45,8 +46,8 @@ Route::name('front.')->group(function () {
         Route::get('/payment/cancel/{bookingId}', [PaymentController::class, 'cancel'])->name('payment.cancel');
         Route::get('/cetak-resi/{bookingId}', [PaymentController::class, 'cetakResi'])->name('cetak.resi');
 
-         // Halaman Akun dan Tab Profile/Transaction/Reset Password
-         Route::get('/account', [AccountController::class, 'index'])->name('account'); // Tampilkan akun user
+        // Halaman Akun dan Tab Profile/Transaction/Reset Password
+        Route::get('/account', [AccountController::class, 'index'])->name('account'); // Tampilkan akun user
 
 
 
@@ -69,6 +70,10 @@ Route::prefix('admin')->name('admin.')->middleware([
 
     // CRUD Bookings
     Route::resource('bookings', AdminBookingController::class);
+
+    // Tambahan route untuk aksi terima & tolak booking
+    Route::post('/bookings/{booking}/accept', [AdminBookingController::class, 'accept'])->name('bookings.accept');
+    Route::post('/bookings/{booking}/reject', [AdminBookingController::class, 'reject'])->name('bookings.reject');
 
     // CRUD Jetski
     Route::resource('jetski', AdminJetskiController::class);
