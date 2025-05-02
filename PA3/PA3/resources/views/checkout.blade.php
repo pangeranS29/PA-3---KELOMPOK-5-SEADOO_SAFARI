@@ -196,7 +196,7 @@
                 return generatePassengerFields(); // Reset the fields if count exceeds max
             }
 
-            // Create passenger fields dynamically based on the count
+            // Create passenger fields dynamically based on the count continue
             for (let i = 1; i <= count; i++) {
                 const label = document.createElement('label');
                 label.classList.add('block', 'mb-1', 'text-white');
