@@ -28,6 +28,11 @@ class Booking extends Model
         'users_id',
     ];
 
+    protected $casts = [
+        'waktu_mulai' => 'datetime',
+        'waktu_selesai' => 'datetime',
+    ];
+
     public function detail_paket()
     {
         return $this->belongsTo(DetailPaket::class);

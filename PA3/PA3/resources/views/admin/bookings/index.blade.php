@@ -311,16 +311,17 @@
                 <input type="hidden" id="bookingId">
                 <input type="hidden" id="phoneNumber">
 
-                <div id="actionButtons" class="mt-4 flex space-x-2">
+                <div id="actionButtons" class="mt-4 flex">
                     <button id="acceptBtn"
                         class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none transition-colors">
-                        <i class="fas fa-check mr-2"></i> Terima Pembayaran
+                        Terima Pembayaran
                     </button>
                     <button id="rejectBtn"
-                        class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none transition-colors">
-                        <i class="fas fa-times mr-2"></i> Tolak Pembayaran
+                        class="ml-auto px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none transition-colors">
+                        Tolak Pembayaran
                     </button>
                 </div>
+
 
                 <div id="rejectForm" class="mt-4 hidden">
                     <label for="rejectReason" class="block text-sm font-medium text-gray-700 mb-1">Alasan
