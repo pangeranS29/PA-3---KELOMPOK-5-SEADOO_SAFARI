@@ -1,117 +1,169 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Detail_Data') }}
+            {{ __('Detail Paket') }}
         </h2>
     </x-slot>
 
-
-
     <x-slot name="script">
         <script>
-            // AJAX DataTable
-            var datatable = $('#dataTable').DataTable({
-                processing: true,
-                serverSide: true,
-                stateSave: true,
-                ajax: {
-                    url: '{!! url()->current() !!}',
-                },
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.12.1/i18n/id.json'
-                },
-                columns: [{
-                        data: 'id',
-                        name: 'id',
+            $(document).ready(function() {
+                var datatable = $('#dataTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    stateSave: true,
+                    ajax: {
+                        url: '{!! url()->current() !!}',
                     },
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.12.1/i18n/id.json',
+                        processing: '<div class="flex justify-center items-center"><i class="fas fa-spinner fa-spin fa-2x text-blue-500 mr-2"></i> Memuat data...</div>'
+                    },
+                    columns: [{
+                            data: 'id',
+                            name: 'id'
+                        },
+                        {
+                            data: 'pilihpaket.nama_paket',
+                            name: 'nama_paket',
+                            render: function(data) {
+                                return data || '-';
+                            }
+                        },
+                        {
+                            data: 'pilihpaket.harga',
+                            name: 'harga',
+                            render: function(data) {
+                                return data ? 'Rp ' + Number(data).toLocaleString('id-ID') : '-';
+                            }
+                        },
+                        {
+                            data: 'pilihpaket.deskripsi',
+                            name: 'deskripsi',
+                            render: function(data) {
+                                return data ? data.substring(0, 50) + (data.length > 50 ? '...' : '') :
+                                    '-';
+                            }
+                        },
 
-                    {
-                        data: 'pilihpaket.nama_paket',
-                        name: 'nama_paket',
-                        orderable: false,
-                        searchable: false,
-                    },
-                    {
-                        data: 'pilihpaket.harga',
-                        name: 'harga'
+                        {
+                            data: 'pilihpaket.jumlah_jetski',
+                            name: 'jumlah_jetski',
+                            render: function(data) {
+                                return data || '-';
+                            }
+                        },
 
-                    },
-                    {
-                        data: 'pilihpaket.deskripsi',
-                        name: 'deskripsi'
-                    },
-                    {
-                        data: 'pilihpaket.durasi',
-                        name: 'durasi'
-                    },
+                        {
+                            data: 'harga_drone',
+                            name: 'harga_drone',
+                            render: function(data) {
+                                return data ? 'Rp ' + Number(data).toLocaleString('id-ID') : '-';
+                            }
+                        },
+                        {
+                            data: 'foto',
+                            name: 'foto',
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false,
+                            render: function(data, type, row) {
+                                return `
+                                <div class="flex space-x-2">
+                                    <a href="/admin/detail_pakets/${row.id}/edit"
+                                        class="action-btn bg-blue-500 hover:bg-blue-600 text-white">
+                                        <i class="fas fa-edit mr-1"></i> Edit
+                                    </a>
+                                    <form class="delete-form" action="/admin/detail_pakets/${row.id}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button"
+                                            class="action-btn bg-red-500 hover:bg-red-600 text-white delete-btn"
+                                            data-id="${row.id}">
+                                            <i class="fas fa-trash mr-1"></i> Hapus
+                                        </button>
+                                    </form>
+                                </div>`;
+                            }
+                        },
+                    ],
+                });
 
-                    {
-                        data: 'pilihpaket.jumlah_jetski',
-                        name: 'jumlah_jetski',
-                    },
+                // Delete confirmation
+                $(document).on('click', '.delete-btn', function() {
+                    const form = $(this).closest('form');
 
-                    {
-                        data: 'rating',
-                        name: 'rating',
-                    },
-
-                    {
-                        data: 'harga_drone',
-                        name: 'harga_drone',
-                    },
-
-
-
-                    {
-                        data: 'foto',
-                        name: 'foto',
-
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false,
-                        width: '15%'
-                    },
-                ],
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Data akan dihapus secara permanen!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6', // biru
+                        cancelButtonColor: '#d33', // merah
+                        confirmButtonText: 'Ya, Hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit(); // Submit form jika dikonfirmasi
+                        }
+                    });
+                });
             });
         </script>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-8 px-4">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div class="mb-10">
-                <a href="{{ route('admin.detail_pakets.create') }}"
-                    class="px-4 py-2 font-bold text-white bg-green-500 rounded shadow-lg hover:bg-green-700">
-                    + Buat Detail_Paket
-                </a>
+            <div class="flex justify-between items-center mb-6">
+
+                <div class="flex space-x-3">
+                    <a href="{{ route('admin.detail_pakets.create') }}"
+                        class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors flex items-center">
+                        <i class="fas fa-plus mr-2"></i> Buat Detail Paket
+                    </a>
+                </div>
             </div>
-            <div class="overflow-hidden shadow sm:rounded-md">
+
+            <div class="overflow-hidden shadow sm:rounded-lg">
                 <div class="px-4 py-5 bg-white sm:p-6">
-                    <table id="dataTable">
-                        <thead>
-                            <tr>
-                                <th style="max-width: 1%">ID</th>
-                                <th>Nama Paket</th>
-                                <th>Harga</th>
-                                <th>Deskripsi</th>
-                                <th>Durasi</th>
-                                <th>Jumlah Jetski</th>
-                                <th>rating</th>
-                                <th>Harga Drone</th>
-                                <th>foto</th>
-                                <th>Aksi
-
-
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                    <div class="overflow-x-auto"> <!-- Added overflow container -->
+                        <table id="dataTable" class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        ID</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Nama Paket</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Harga</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Deskripsi</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Jumlah Jetski</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Harga Drone</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Foto</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-
 </x-app-layout>

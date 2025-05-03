@@ -1,23 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="">
-            <!-- Tombol Kembali -->
-            <a href="{{ url()->previous() }}"
-                class="inline-flex items-center px-4 py-2 bg-blue-500 text-white font-medium rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm-2-9a1 1 0 011.707-.707L9.414 9H16a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3A1 1 0 018 9z"
-                        clip-rule="evenodd" />
-                </svg>
-                Kembali
-            </a>
-        </div>
-        <br>
         <!-- Judul Halaman -->
         <center>
-        <h2 class="text-2xl font-bold text-gray-800 leading-tight">
-            {{ __('Buat Paket') }}
-        </h2>
+            <h2 class="text-2xl font-bold text-gray-800 leading-tight">
+                {{ __('Buat Paket') }}
+            </h2>
         </center>
     </x-slot>
 
@@ -115,7 +102,19 @@
 
 
                         <div class="flex flex-wrap -mx-3 mb-6">
-                            <div class="w-full px-3 text-right">
+                            <div class="w-full px-3 text-right flex justify-between items-center mb-6">
+
+                                <!-- Tombol Kembali -->
+                                <a href="{{ url()->previous() }}"
+                                    class="inline-flex items-center px-4 py-2 bg-blue-500 text-white font-medium rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm-2-9a1 1 0 011.707-.707L9.414 9H16a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3A1 1 0 018 9z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    Kembali
+                                </a>
                                 <button type="submit"
                                     class="shadow bg-green-500 hover:bg-green-700 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
                                     Simpan Paket

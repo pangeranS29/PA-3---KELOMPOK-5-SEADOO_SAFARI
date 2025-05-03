@@ -1,18 +1,5 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="">
-            <!-- Tombol Kembali -->
-            <a href="{{ url()->previous() }}"
-                class="inline-flex items-center px-4 py-2 bg-blue-500 text-white font-medium rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm-2-9a1 1 0 011.707-.707L9.414 9H16a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3A1 1 0 018 9z"
-                        clip-rule="evenodd" />
-                </svg>
-                Kembali
-            </a>
-        </div>
-        <br>
         <!-- Judul Halaman -->
         <center>
             <h2 class="text-2xl font-bold text-gray-800 leading-tight">
@@ -121,30 +108,7 @@
                         </div>
 
                         <div class="flex flex-wrap -mx-3 mb-6">
-                            <!-- Field: Deskripsi -->
-                            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                    for="rating">
-                                    Rating*
-                                </label>
-                                <input value="{{ old('rating') }}" name="rating"
-                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    id="rating" type="number" placeholder="Masukkan Jumlah Rating" step=".01">
-                                <p class="text-gray-600 text-xs italic">Masukkan Rating dalam angka . Contoh: 1, 3.
-                                    5
-                                </p>
-                            </div>
 
-                            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                    for="durasi">
-                                    Durasi*
-                                </label>
-                                <input value="{{ old('durasi') }}" name="durasi" id="durasi"
-                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    type="text" placeholder="Durasi Paket" required readonly>
-                                <p class="text-gray-600 text-xs italic">Masukkan Durasi Paket</p>
-                            </div>
 
 
                         </div>
@@ -169,7 +133,19 @@
 
 
                         <div class="flex flex-wrap -mx-3 mb-6 ">
-                            <div class="w-full px-3 text-right">
+                            <div class="w-full px-3 text-right flex justify-between items-center mb-6">
+
+                                <!-- Tombol Kembali -->
+                                <a href="{{ url()->previous() }}"
+                                    class="inline-flex items-center px-4 py-2 bg-blue-500 text-white font-medium rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm-2-9a1 1 0 011.707-.707L9.414 9H16a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3A1 1 0 018 9z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    Kembali
+                                </a>
                                 <button type="submit"
                                     class="shadow bg-green-500 hover:bg-green-700 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
                                     Simpan Paket

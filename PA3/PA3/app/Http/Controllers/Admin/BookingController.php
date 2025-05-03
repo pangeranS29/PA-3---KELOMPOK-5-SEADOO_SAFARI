@@ -25,8 +25,8 @@ class BookingController extends Controller
                 ->addColumn('user_name', function ($row) {
                     return $row->user ? $row->user->name : '-';
                 })
-                ->addColumn('no_telepon', function ($row) {
-                    return $row->user ? $row->user->no_telepon : '-';
+                ->addColumn('phone', function ($row) {
+                    return $row->user ? $row->user->phone : '-';
                 })
                 ->addColumn('nama_paket', function ($row) {
                     return $row->detail_paket && $row->detail_paket->pilihpaket
@@ -41,12 +41,12 @@ class BookingController extends Controller
                 })
                 ->addColumn('action', function ($booking) {
                     return '
-                    <button class="block w-full px-2 py-1 mb-1 text-xs text-center text-white transition duration-500 bg-blue-500 border border-blue-500 rounded-md select-none ease hover:bg-blue-600 focus:outline-none focus:shadow-outline preview-btn"
+                    <button class="block w-full px-3 py-2 mb-1 text-sm text-center text-white transition duration-200 bg-blue-500 border border-blue-500 rounded-md select-none ease hover:bg-blue-600 focus:outline-none focus:shadow-outline preview-btn"
                         data-id="' . $booking->id . '"
                         data-image="' . asset('storage/' . $booking->bukti_pembayaran) . '"
                         data-status="' . $booking->status_pembayaran . '"
-                        data-phone="' . ($booking->user ? $booking->user->no_telepon : '') . '">
-                        Preview
+                        data-phone="' . ($booking->user ? $booking->user->phone : '') . '">
+                        <i class="fas fa-eye mr-1"></i> Preview
                     </button>';
                 })
                 ->rawColumns(['action'])
