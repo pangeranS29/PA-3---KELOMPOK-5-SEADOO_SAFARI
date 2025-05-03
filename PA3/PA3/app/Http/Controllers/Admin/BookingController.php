@@ -104,20 +104,41 @@ class BookingController extends Controller
         return redirect()->route('admin.bookings.index');
     }
 
-    /**
-     * Accept the booking payment
-     */
-    public function accept(Booking $booking)
-    {
-        $booking->update(['status_pembayaran' => 'success']);
-        return response()->json(['message' => 'Status pembayaran berhasil diubah']);
-    }
+   /**
+ * Accept the booking payment and notify customer
+ */
+public function accept(Booking $booking)
+{
+    $booking->update(['status_pembayaran' => 'success']);
 
-    /**
-     * Reject the booking payment
-     */
-    /**
- * Reject the booking payment
+    // Get customer phone number
+    $customerPhone = $booking->user->phone;
+
+    // Format phone number (remove leading 0 if exists and add 62)
+    $formattedPhone = preg_replace('/^0/', '62', $customerPhone);
+
+    // Get admin phone from config
+    $adminPhone = env('ADMIN_PHONE', '6281234567890');
+
+    // Create WhatsApp confirmation message
+    $message = "Pembayaran Anda untuk booking #{$booking->id} telah berhasil diverifikasi.";
+    $message .= "\n\nSilakan cek di: Profile -> Transaksi Saya -> Cetak Resi";
+    $message .= "\n\nHubungi admin di: " . $adminPhone . " jika ada pertanyaan.";
+
+    // URL encode the message
+    $encodedMessage = urlencode($message);
+
+    // Create WhatsApp deep link
+    $whatsappUrl = "https://wa.me/{$formattedPhone}?text={$encodedMessage}";
+
+    return response()->json([
+        'message' => 'Status pembayaran berhasil diubah',
+        'whatsapp_url' => $whatsappUrl
+    ]);
+}
+
+  /**
+ * Reject the booking payment (but keep status as pending)
  */
 public function reject(Booking $booking, Request $request)
 {
@@ -125,7 +146,8 @@ public function reject(Booking $booking, Request $request)
         'reason' => 'required|string'
     ]);
 
-    $booking->update(['status_pembayaran' => 'rejected']);
+    // We don't change the status to rejected, we keep it as pending
+    // $booking->update(['status_pembayaran' => 'rejected']);
 
     // Get customer phone number
     $customerPhone = $booking->user->phone;
@@ -137,8 +159,9 @@ public function reject(Booking $booking, Request $request)
     $adminPhone = env('ADMIN_PHONE', '6281234567890');
 
     // Create WhatsApp message
-    $message = "Maaf, pembayaran Anda untuk booking #{$booking->id} ditolak dengan alasan: " . $request->reason;
-    $message .= "\n\nSilakan hubungi admin di: " . $adminPhone . " untuk informasi lebih lanjut.";
+    $message = "Maaf, pembayaran Anda untuk booking #{$booking->id} tidak valid dengan alasan: " . $request->reason;
+    $message .= "\n\nSilakan upload ulang bukti pembayaran yang valid.";
+    $message .= "\n\nHubungi admin di: " . $adminPhone . " jika ada pertanyaan.";
 
     // URL encode the message
     $encodedMessage = urlencode($message);
@@ -147,7 +170,7 @@ public function reject(Booking $booking, Request $request)
     $whatsappUrl = "https://wa.me/{$formattedPhone}?text={$encodedMessage}";
 
     return response()->json([
-        'message' => 'Status pembayaran berhasil diubah',
+        'message' => 'Pemberitahuan penolakan berhasil dikirim',
         'whatsapp_url' => $whatsappUrl
     ]);
 }
