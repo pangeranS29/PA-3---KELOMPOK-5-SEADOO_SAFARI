@@ -60,50 +60,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Grafik dan Pemesanan Terbaru -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                <!-- Grafik Pemesanan -->
-                <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Pemesanan Bulanan</h3>
-                        <select class="text-sm border-gray-300 rounded-md focus:border-blue-500 focus:ring-blue-500">
-                            <option>6 Bulan Terakhir</option>
-                            <option>Tahun Ini</option>
-                            <option>Tahun Lalu</option>
-                        </select>
-                    </div>
-                    <div class="h-64">
-                        <canvas id="bookingsChart"></canvas>
-                    </div>
-                </div>
-                <!-- Pemesanan Terbaru -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Pemesanan Terbaru</h3>
-                        <div class="space-y-4">
-                            @foreach($recentBookings as $booking)
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0 bg-blue-100 rounded-md p-2">
-                                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm font-medium text-gray-900">{{ $booking->user->name }}</p>
-                                    <p class="text-sm text-gray-500">{{ $booking->detail_paket->pilihpaket->nama_paket }}</p>
-                                    <p class="text-xs text-gray-400">{{ $booking->waktu_mulai->format('d M Y, H:i') }}</p>
-                                </div>
-                                <div class="ml-auto">
-                                    <span class="px-2 py-1 text-xs rounded-full {{ $booking->status_pembayaran === 'success' ? 'bg-green-100 text-green-800' : ($booking->status_pembayaran === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
-                                        {{ $booking->status_pembayaran }}
-                                    </span>
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
             <!-- Tabel Pemesanan -->
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-200">
@@ -138,7 +94,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900">{{ $booking->detail_paket->pilihpaket->nama_paket }}</div>
-                                    <div class="text-sm text-gray-500">{{ $booking->detail_paket->pilihpaket->durasi }} jam</div>
+                                    <div class="text-sm text-gray-500">{{ $booking->detail_paket->pilihpaket->durasi }} menit</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900">{{ $booking->waktu_mulai->format('d M Y') }}</div>
@@ -170,51 +126,4 @@
             </div>
         </div>
     </div>
-    @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Grafik Pemesanan
-                const bookingsCtx = document.getElementById('bookingsChart').getContext('2d');
-                const bookingsChart = new Chart(bookingsCtx, {
-                    type: 'line',
-                    data: {
-                        labels: @json($bookingMonths),
-                        datasets: [{
-                            label: 'Pemesanan',
-                            data: @json($bookingData),
-                            backgroundColor: 'rgba(59, 130, 246, 0.05)',
-                            borderColor: 'rgba(59, 130, 246, 1)',
-                            borderWidth: 2,
-                            tension: 0.1,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    drawBorder: false
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false
-                                }
-                            }
-                        }
-                    }
-                });
-            });
-        </script>
-    @endpush
-
 </x-app-layout>

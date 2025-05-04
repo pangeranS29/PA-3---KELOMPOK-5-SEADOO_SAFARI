@@ -10,8 +10,8 @@ class LandingController extends Controller
 {
     public function index()
     {
-
-        $detail_pakets = DetailPaket::with(['pilihpaket'])->latest()->take(4)->get()->reverse();
+        // Get all detail packages with their related pilihpaket, ordered by latest
+        $detail_pakets = DetailPaket::with(['pilihpaket'])->latest()->get();
 
         return view('landing', [
             'detail_pakets' => $detail_pakets

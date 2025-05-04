@@ -59,7 +59,7 @@
                             name: 'status_pembayaran',
                             className: 'text-sm',
                             render: function(data) {
-                                let color = 'bg-gray-200 text-gray-800';
+                                let color = 'bg-yellow-100 text-yellow-800';
                                 if (data === 'success') color = 'bg-green-100 text-green-800';
                                 if (data === 'rejected' || data === 'expired') color =
                                     'bg-red-100 text-red-800';

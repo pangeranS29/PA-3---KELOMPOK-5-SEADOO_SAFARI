@@ -53,15 +53,18 @@
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
     <script src="//unpkg.com/alpinejs" defer></script>
 
+
+
     <!-- Pindahkan ke sebelum penutup </head> -->
-<style>
-    .swal2-confirm {
-        background-color: #3085d6 !important;
-    }
-    .swal2-cancel {
-        background-color: #d33 !important;
-    }
-</style>
+    <style>
+        .swal2-confirm {
+            background-color: #3085d6 !important;
+        }
+
+        .swal2-cancel {
+            background-color: #d33 !important;
+        }
+    </style>
 
 
     {{-- Sweetalert Notifications --}}
@@ -145,6 +148,8 @@
     @livewireScripts
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- In your layout file (app.blade.php) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 
     {{ $script ?? '' }}
     {{ $modal ?? '' }}
