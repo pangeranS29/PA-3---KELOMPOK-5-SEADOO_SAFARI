@@ -19,15 +19,15 @@
                 </a>
             </li>
 
-            <li>
+            {{-- <li>
                 <a href="{{ route('admin.jetski.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('admin.jetski.index') ? 'bg-gray-700' : '' }}">
-                    Jetski
+
                 </a>
-            </li>
+            </li> --}}
 
             <li>
                 <a href="{{ route('admin.pilihpakets.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('admin.pilihpakets.index') ? 'bg-gray-700' : '' }}">
-                    Pilih Paket
+                    Pilih Paket Jetski
                 </a>
             </li>
             <li>

@@ -2,9 +2,9 @@
     <x-slot name="title">Admin</x-slot>
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
-            <a href="#!" onclick="window.history.go(-1); return false;" class="text-gray-500 hover:text-gray-700">
+            {{-- <a href="#!" onclick="window.history.go(-1); return false;" class="text-gray-500 hover:text-gray-700">
                 ← Kembali
-            </a>
+            </a> --}}
             {!! __('Pilih Paket &raquo; Edit &raquo; #') . $pilihpaket->id . ' &middot; ' . $pilihpaket->nama_paket !!}
         </h2>
     </x-slot>

@@ -1,147 +1,99 @@
-<x-front-layout>
-    <!-- Hero -->
-    <section class="container relative pt-[30px]" style="background-color: #000000;">
-        <div class="flex flex-col items-center justify-center gap-[30px]">
-            <!-- Preview Image -->
-            <div class="relative">
-
-                <img src="/images/images.png" style="width: 1440px; height: 450px;" class="z-10 relative" alt="">
-            </div>
-
-
-        </div>
-    </section>
-
-    <!-- Popular Cars -->
-    <section class=bg-[#000000]>
-        <div class="container relative py-[100px]">
-            <header class="mb-[10px]">
-                <div class="text-center mb-8">
-                    <h1 class="text-lg font-semibold text-white">DESTINATION</h1>
-                    <h2 class="text-4xl font-bold text-yellow-500">POPULAR PLACE</h2>
+    <x-front-layout>
+        <!-- Hero -->
+        <section class="container-fluid p-0" style="background-color: #000000;">
+            <div class="flex flex-col items-center justify-center">
+                <!-- Preview Image -->
+                <div class="w-100">
+                    <img src="/images/images.png" class="img-fluid w-100" style="height: 450px; object-fit: cover;"
+                        alt="">
                 </div>
-            </header>
+            </div>
+        </section>
 
-            <!-- Cars -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-[29px]">
+        <!-- Popular Cars -->
+        <section class="bg-black py-5">
+            <div class="container">
+                <header class="mb-5 text-center">
+                    <h1 class="text-lg font-semibold text-white">DESTINATION</h1>
+                    <h2 class="text-4xl font-bold text-warning">POPULAR PLACE</h2>
+                </header>
 
-                @foreach ($detail_pakets as $detail_paket)
-                    <!-- Card -->
-                    <div class="card-popular">
-                        <div>
-                            <div class="">
-                                <h5 class="text-lg text-dark font-bold mb-[2px]">
-                                    {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->nama_paket : '-' }}
+                <!-- Carousel -->
+                <div id="destinationCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @php
+                            $chunks = $detail_pakets->chunk(4); // 4 cards per slide for desktop
+                        @endphp
 
-                                </h5>
-                                <div class="flex items-center justify-between gap-1">
-                                    <p class="text-sm font-normal text-secondary">
-                                        {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->durasi : '-' }}/Minutes
-                                    </p>
+                        @foreach ($chunks as $index => $chunk)
+                            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                    @foreach ($chunk as $detail_paket)
+                                        <div class="col-span-1">
+                                            <!-- Card -->
+                                            <div
+                                                class="bg-dark text-white rounded-3xl overflow-hidden shadow-lg h-full flex flex-col">
+                                                <!-- Gambar -->
+                                                <img src="{{ $detail_paket->thumbnail }}"
+                                                    alt="{{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->nama_paket : 'Jetski' }}"
+                                                    class="w-full h-[150px] object-cover">
 
+                                                <!-- Konten -->
+                                                <div class="p-4 flex flex-col flex-grow">
+                                                    <!-- Nama Paket -->
+                                                    <h5 class="text-white text-lg font-bold mb-1">
+                                                        {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->nama_paket : '-' }}
+                                                    </h5>
 
+                                                    <!-- Durasi -->
+                                                    <div class="flex justify-between items-center mb-2">
+                                                        <span class="text-sm text-gray-400">
+                                                            {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->durasi : '-' }}
+                                                            Minutes
+                                                        </span>
+                                                    </div>
 
-                                    <p class="text-dark text-xs font-semibold flex items-center gap-[2px]">
-                                        ({{ $detail_paket->rating }}/5)
-                                        <img src="/svgs/ic-star.svg" alt="">
-                                    </p>
+                                                    <!-- Harga & Tombol -->
+                                                    <div class="flex justify-between items-center mt-auto pt-2">
+                                                        <!-- Harga -->
+                                                        <span class="text-yellow-500 font-bold text-base">
+                                                            Rp.
+                                                            {{ $detail_paket->pilihpaket ? number_format($detail_paket->pilihpaket->harga, 0, ',', '.') : '-' }}
+                                                        </span>
 
-
-                                    <a href="{{ route('front.detail', $detail_paket->id) }}"
-                                        class="absolute inset-0"></a>
-
+                                                        <!-- Tombol Book Now -->
+                                                        <a href="{{ route('front.detail', $detail_paket->id) }}"
+                                                            class="bg-yellow-500 hover:bg-yellow-600 text-black text-sm font-semibold px-3 py-1 rounded-md transition">
+                                                            Book Now
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
-
-
                             </div>
-                        </div>
-                        <img src="{{ $detail_paket->thumbnail }}" class="rounded-[18px] min-w-[216px] w-full h-[150px]"
-                            alt="">
-                        <div class="flex items-center justify-between gap-1">
-                            <!-- Price -->
-                            <p class="text-sm font-normal text-secondary">
-                                <span class="text-yellow-500 text-base font-bold ">Rp.
-                                    {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->harga : '-' }}
-                            </p>
-
-                            <button
-                                class="bg-black text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-black">
-                                Book Now
-                            </button>
-
-
-
-                        </div>
+                        @endforeach
                     </div>
-                @endforeach
 
+                    <!-- Custom Carousel Controls (Bootstrap tetap digunakan untuk fungsionalitas) -->
+                    <button class="carousel-control-prev position-absolute start-1 top-50 translate-middle-y"
+                        type="button" data-bs-target="#destinationCarousel" data-bs-slide="prev" style="left: -50px;">
+                        <span class="carousel-control-prev-icon bg-warning rounded-circle p-3"
+                            aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next position-absolute end-1 top-50 translate-middle-y"
+                        type="button" data-bs-target="#destinationCarousel" data-bs-slide="next" style="right: -50px;">
+                        <span class="carousel-control-next-icon bg-warning rounded-circle p-3"
+                            aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+        </section>
 
-            </div>
-
-            <!-- Carousel Navigation -->
-            <div class="flex justify-center mt-8 space-x-4">
-                <button id="carouselPrev"
-                    class="p-2 rounded-full bg-yellow-500 text-black hover:bg-yellow-600 transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </button>
-                <button id="carouselNext"
-                    class="p-2 rounded-full bg-yellow-500 text-black hover:bg-yellow-600 transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-        </div>
-    </section>
-
-    <!-- Rest of your sections remain the same -->
-    <!-- Extra Benefits, FAQ, Instant Booking, etc. -->
-
-    <!-- Add this script at the bottom of your layout -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const carousel = document.getElementById('destinationCarousel');
-            const cards = document.querySelectorAll('.card-popular');
-            const prevBtn = document.getElementById('carouselPrev');
-            const nextBtn = document.getElementById('carouselNext');
-
-            let currentIndex = 0;
-            const cardWidth = cards[0].offsetWidth;
-            const visibleCards = window.innerWidth >= 1024 ? 4 : window.innerWidth >= 768 ? 2 : 1;
-
-            function updateCarousel() {
-                const offset = -currentIndex * cardWidth;
-                carousel.style.transform = `translateX(${offset}px)`;
-            }
-
-            prevBtn.addEventListener('click', function() {
-                if (currentIndex > 0) {
-                    currentIndex--;
-                    updateCarousel();
-                }
-            });
-
-            nextBtn.addEventListener('click', function() {
-                if (currentIndex < cards.length - visibleCards) {
-                    currentIndex++;
-                    updateCarousel();
-                }
-            });
-
-            // Handle window resize
-            window.addEventListener('resize', function() {
-                const newVisibleCards = window.innerWidth >= 1024 ? 4 : window.innerWidth >= 768 ? 2 : 1;
-                if (newVisibleCards !== visibleCards) {
-                    currentIndex = 0;
-                    updateCarousel();
-                }
-            });
-        });
-    </script>
-
-</x-front-layout>
+        <!-- Bootstrap JS Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Font Awesome for icons -->
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    </x-front-layout>
