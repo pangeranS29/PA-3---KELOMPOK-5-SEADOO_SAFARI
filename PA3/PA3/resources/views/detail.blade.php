@@ -59,7 +59,7 @@
                                         </p>
                                     </div>
                                     <a href="{{ route('front.checkout', $detail_paket->id) }}"
-                                        class="bg-yellow-500 hover:bg-gray-800 text-black font-semibold px-6 py-2 rounded-lg transition-colors duration-300">
+                                        class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-6 py-2 rounded-lg transition-colors duration-300">
                                         Boooking
                                     </a>
                                 </div>
@@ -77,12 +77,10 @@
     <!-- Similar Cars -->
     <section class="bg-black">
         <div class="container relative py-[100px]">
-            <header class="mb-[30px]">
-                <h2 class="font-bold text-white text-[26px] mb-1">
-                    Similar Jetski
-                </h2>
+            <header class="mb-[30px] text-center">
+                <h2 class="font-bold text-white text-[26px] mb-1">Similar Jetski</h2>
                 <p class="text-white text-secondary">Start your big day</p>
-            </header>
+              </header>
 
             <!-- Cars -->
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-[29px]">

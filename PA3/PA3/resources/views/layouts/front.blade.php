@@ -129,7 +129,7 @@
                             </div>
                         @else
                             <!-- Log In Button -->
-                            <a href="{{ route('login') }}" class="btn-white whitespace-nowrap  ml-8 lg:ml-12">
+                            <a href="{{ route('login') }}" class="btn-white whitespace-nowrap  ml-4 lg:ml-4">
                                 Log In
                             </a>
                         @endauth
