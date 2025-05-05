@@ -9,12 +9,15 @@
                 <div class="col-span-12 lg:col-span-8">
                     <div class="bg-white p-4 rounded-[30px] flex flex-col gap-4" id="gallery">
                         <img :src="thumbnails[activeThumbnail].url" :key="thumbnails[activeThumbnail].id"
-                            class="md:h-[490px] rounded-[18px] h-auto w-full" alt="">
+                            class="w-full aspect-[16/9] rounded-[18px] object-cover" alt="">
                         <div class="grid items-center grid-cols-4 gap-3 md:gap-5">
-                            <div v-for="(thumbnail, index) in thumbnails" :key="thumbnail.id">
+                            <!-- Di bagian thumbnail -->
+                            <div v-for="(thumbnail, index) in thumbnails" :key="thumbnail.id"
+                                class="aspect-[16/9] overflow-hidden rounded-lg">
                                 <a href="#!" @click="changeActive(index)">
-                                    <img :src="thumbnail.url" alt="" class="thumbnail"
-                                        :class="{ selected: index == activeThumbnail }">
+                                    <img :src="thumbnail.url" alt=""
+                                        class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                                        :class="{ 'ring-2 ring-yellow-500': index == activeThumbnail }">
                                 </a>
                             </div>
                         </div>
@@ -27,7 +30,7 @@
                         <div class="flex flex-col h-full divide-y divide-grey">
                             <!-- Name, Category -->
                             <div class="max-w-[230px] ">
-                                <h1 class="font-bold text-[28px] leading-[42px] text-dark mb-[6px]">
+                                <h1 class="font-bold text-[24px] leading-[42px] text-dark mb-[6px]">
                                     {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->nama_paket : '-' }}
                                 </h1>
                                 <p class="text-secondary font-normal text-base mb-[10px]">
