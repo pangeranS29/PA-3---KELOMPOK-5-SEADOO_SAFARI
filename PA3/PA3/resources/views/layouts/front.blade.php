@@ -81,7 +81,7 @@
 
 <body>
     <main>
-        <nav class="container relative py-3 ">
+        <nav class="container relative py-3 bg-gray-900">
             <div class="flex flex-col justify-between w-full lg:flex-row lg:items-center">
                 <div class="flex items-center justify-between">
                     <a href="{{ route('front.index') }}">

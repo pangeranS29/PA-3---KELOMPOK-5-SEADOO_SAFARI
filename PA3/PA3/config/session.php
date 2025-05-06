@@ -198,7 +198,9 @@ return [
     | Supported: "lax", "strict", "none", null
     |
     */
-
+    'domain'    => env('SESSION_DOMAIN', null),
+    'path'      => env('SESSION_PATH', '/'),
+    'secure'    => env('SESSION_SECURE_COOKIE',false),
     'same_site' => env('SESSION_SAME_SITE', 'lax'),
 
     /*

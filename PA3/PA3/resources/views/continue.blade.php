@@ -150,7 +150,7 @@
                                 <!-- Submit Button -->
                                 <button type="button" id="submitButton"
                                     class="w-full bg-gradient-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-300 text-black font-bold py-3 px-4 rounded-lg shadow-lg transition-all transform hover:scale-[1.01]">
-                                    Kirim Bukti Pembayaran
+                                    Upload Bukti Pembayaran
                                 </button>
 
                                 <!-- Back Button -->
