@@ -2,7 +2,7 @@
     <main class="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 pt-20 pb-10">
         <div class="container mx-auto px-4">
             <div class="max-w-5xl mx-auto flex flex-col lg:flex-row gap-8">
-                <!-- Kolom Kiri - Ringkasan Booking (same as previous page) -->
+                <!-- Kolom Kiri - Ringkasan Booking -->
                 <div class="lg:w-1/3">
                     <div class="bg-gray-800 rounded-xl shadow-2xl overflow-hidden sticky top-28">
                         <div class="relative">
@@ -39,6 +39,12 @@
                                     <span class="text-white font-medium">{{ $booking->jumlah_penumpang }}</span>
                                 </div>
 
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="text-gray-300">Harga Paket:</span>
+                                    <span class="text-white font-medium">Rp
+                                        {{ number_format($booking->detail_paket->pilihpaket->harga, 0, ',', '.') }}</span>
+                                </div>
+
                                 @if ($booking->harga_drone > 0)
                                     <div class="flex justify-between items-center">
                                         <span class="text-gray-300">Tambahan Drone</span>
@@ -52,7 +58,7 @@
                             <div class="border-t border-gray-700 pt-4 mt-4">
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-300 font-medium">Total Pembayaran:</span>
-                                    <span class="text-yellow-400 text-xl font-bold">
+                                    <span class="text-yellow-400 text-l font-bold">
                                         Rp {{ number_format($booking->total_harga, 0, ',', '.') }}
                                     </span>
                                 </div>
@@ -111,14 +117,11 @@
                                 </ul>
                             </div>
 
-                            <form action="{{ route('front.payment.upload', $booking->id) }}" method="POST"
-                                enctype="multipart/form-data" class="space-y-6">
+                            <form id="paymentForm" action="{{ route('front.payment.upload', $booking->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                                 @csrf
-
                                 <!-- File Upload -->
                                 <div class="space-y-2">
-                                    <label for="bukti_pembayaran" class="block text-white font-medium">Upload Bukti
-                                        Pembayaran</label>
+                                    <label for="bukti_pembayaran" class="block text-white font-medium">Upload Bukti Pembayaran</label>
                                     <div class="flex items-center justify-center w-full">
                                         <label for="bukti_pembayaran"
                                             class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-600 rounded-lg cursor-pointer bg-gray-700/50 hover:bg-gray-700 transition">
@@ -131,8 +134,7 @@
                                                         d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                                 </svg>
                                                 <p class="text-sm text-gray-400">
-                                                    <span class="font-semibold">Klik untuk upload</span> atau drag &
-                                                    drop
+                                                    <span class="font-semibold">Klik untuk upload</span> atau drag & drop
                                                 </p>
                                                 <p class="text-xs text-gray-500">JPG, PNG, atau PDF (maks. 2MB)</p>
                                             </div>
@@ -145,11 +147,8 @@
                                     @enderror
                                 </div>
 
-                                <!-- Bank Transfer Info -->
-                               s --}}
-
                                 <!-- Submit Button -->
-                                <button type="submit"
+                                <button type="button" id="submitButton"
                                     class="w-full bg-gradient-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-300 text-black font-bold py-3 px-4 rounded-lg shadow-lg transition-all transform hover:scale-[1.01]">
                                     Kirim Bukti Pembayaran
                                 </button>
@@ -173,35 +172,119 @@
             const fileName = e.target.files[0]?.name || 'Belum ada file dipilih';
             const uploadArea = e.target.parentElement;
 
-            // Remove existing file name if any
             const existingFileName = uploadArea.querySelector('.file-name');
             if (existingFileName) {
                 existingFileName.remove();
             }
 
-            // Add file name display
             const fileNameElement = document.createElement('p');
             fileNameElement.className = 'file-name text-sm text-yellow-400 mt-2';
             fileNameElement.textContent = fileName;
             uploadArea.appendChild(fileNameElement);
         });
+
+        // Handle form submission with SweetAlert
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('paymentForm');
+            const submitButton = document.getElementById('submitButton');
+            const fileInput = document.getElementById('bukti_pembayaran');
+
+            // Show success/error messages from server
+            @if (session('success'))
+                Swal.fire({
+                    title: 'Berhasil!',
+                    html: `{!! session('success') !!}`,
+                    icon: 'success',
+                    confirmButtonColor: '#f59e0b'
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: `{!! session('error') !!}`,
+                    icon: 'error',
+                    confirmButtonColor: '#f59e0b'
+                });
+            @endif
+
+            // Form submission handler
+            submitButton.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Check if file is selected
+                if (!fileInput.files || fileInput.files.length === 0) {
+                    Swal.fire({
+                        title: 'Peringatan',
+                        text: 'Silakan pilih file bukti pembayaran terlebih dahulu',
+                        icon: 'warning',
+                        confirmButtonColor: '#f59e0b'
+                    });
+                    return;
+                }
+
+                // Check file size (max 2MB)
+                const file = fileInput.files[0];
+                const maxSize = 2 * 1024 * 1024; // 2MB
+                if (file.size > maxSize) {
+                    Swal.fire({
+                        title: 'File Terlalu Besar',
+                        text: 'Ukuran file maksimal 2MB. Silakan pilih file yang lebih kecil.',
+                        icon: 'error',
+                        confirmButtonColor: '#f59e0b'
+                    });
+                    return;
+                }
+
+                // Check file type
+                const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+                if (!validTypes.includes(file.type)) {
+                    Swal.fire({
+                        title: 'Format File Tidak Didukung',
+                        text: 'Hanya file JPG, PNG, atau PDF yang diperbolehkan.',
+                        icon: 'error',
+                        confirmButtonColor: '#f59e0b'
+                    });
+                    return;
+                }
+
+                // Show confirmation dialog
+                Swal.fire({
+                    title: 'Konfirmasi Upload',
+                    html: `
+                        <div class="text-left">
+                            <p>Anda yakin ingin mengupload bukti pembayaran ini?</p>
+                            <div class="mt-3 p-3 bg-gray-800 rounded-lg">
+                                <p class="text-sm font-medium text-gray-300">Detail File:</p>
+                                <p class="text-sm text-yellow-400">${file.name}</p>
+                                <p class="text-xs text-gray-400">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                            </div>
+                            <p class="text-sm text-yellow-400 mt-2">Pastikan file jelas dan sesuai nominal.</p>
+                        </div>
+                    `,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#f59e0b',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: 'Ya, Upload Sekarang',
+                    cancelButtonText: 'Periksa Kembali'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Show loading state
+                        Swal.fire({
+                            title: 'Sedang Mengupload...',
+                            html: 'Mohon tunggu sebentar, file Anda sedang diproses',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        // Submit the form
+                        form.submit();
+                    }
+                });
+            });
+        });
     </script>
-
-    <style>
-        .animate-fadeIn {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
 </x-front-layout>

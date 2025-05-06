@@ -275,195 +275,281 @@
     </main>
 
     <script>
-        // Pindahkan fungsi updateTotal() ke luar DOMContentLoaded agar bisa diakses global
+        // Global functions
         function updateTotal() {
             const basePrice = {{ $detail_paket->pilihpaket->harga }};
             const droneOption = document.querySelector('input[name="drone_option"]:checked');
             const dronePrice = droneOption ? parseInt(droneOption.value) : 0;
             const total = basePrice + dronePrice;
 
-            // Format angka dengan titik sebagai pemisah ribuan
             const formatRupiah = (number) => {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                return new Intl.NumberFormat('id-ID').format(number);
             };
 
-            // Update total price display
             document.getElementById('total-estimate').textContent = 'Rp ' + formatRupiah(total);
-
-            // Update drone price display
-            const dronePriceDisplay = document.getElementById('drone-price-display');
-            if (dronePrice > 0) {
-                dronePriceDisplay.textContent = '+ Rp ' + formatRupiah(dronePrice);
-            } else {
-                dronePriceDisplay.textContent = '+ Rp 0';
-            }
-
-            // Update hidden field for drone price
+            document.getElementById('drone-price-display').textContent = dronePrice > 0 ?
+                '+ Rp ' + formatRupiah(dronePrice) : '+ Rp 0';
             document.getElementById('harga-drone').value = dronePrice;
         }
 
-        // Tambahkan event listener untuk semua radio button drone
-        document.querySelectorAll('input[name="drone_option"]').forEach(radio => {
-            radio.addEventListener('change', updateTotal);
-        });
-
-        // Panggil saat halaman dimuat
-        document.addEventListener('DOMContentLoaded', function() {
-            updateTotal();
-        });
-
-        // Tambahkan event listener untuk semua radio button drone
-        document.querySelectorAll('input[name="drone_option"]').forEach(radio => {
-            radio.addEventListener('change', updateTotal);
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Panggil updateTotal saat halaman dimuat
-            updateTotal();
-
-            // Tambahkan event listener untuk radio button drone
-            document.querySelectorAll('input[name="drone_option"]').forEach(radio => {
-                radio.addEventListener('change', updateTotal);
-            });
-
-            // Hitung durasi dan set waktu check-out
+        function updateCheckoutTime() {
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
             const durasiMenit = {{ $detail_paket->pilihpaket->durasi ?? 0 }};
 
-            function updateCheckoutTime() {
-                const date = document.getElementById('date').value;
-                const time = document.getElementById('time').value;
+            if (date && time) {
+                const mulai = new Date(`${date}T${time}`);
+                const selesai = new Date(mulai.getTime() + durasiMenit * 60 * 1000);
 
-                if (date && time) {
-                    const mulai = new Date(`${date}T${time}`);
-                    const selesai = new Date(mulai.getTime() + durasiMenit * 60 *
-                        1000); // Konversi menit ke milidetik
+                document.getElementById('date-out').value = selesai.toISOString().split('T')[0];
+                document.getElementById('time-out').value = selesai.toTimeString().slice(0, 5);
+            }
+            saveFormData();
+        }
 
-                    document.getElementById('date-out').value = selesai.toISOString().split('T')[0];
-                    document.getElementById('time-out').value = selesai.toTimeString().slice(0, 5);
+        function saveFormData() {
+            const formData = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value,
+                passenger: document.getElementById('passenger').value,
+                drone_option: document.querySelector('input[name="drone_option"]:checked')?.value || '0',
+                penumpang_1_nama: document.querySelector('input[name="penumpang_1_nama"]')?.value || '',
+                penumpang_2_nama: document.querySelector('input[name="penumpang_2_nama"]')?.value || ''
+            };
+            localStorage.setItem('checkoutFormData', JSON.stringify(formData));
+        }
+
+        function loadFormData() {
+            const savedData = localStorage.getItem('checkoutFormData');
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+
+                document.getElementById('name').value = formData.name || '';
+                document.getElementById('phone').value = formData.phone || '';
+                document.getElementById('date').value = formData.date || '';
+                document.getElementById('time').value = formData.time || '';
+
+                if (formData.passenger) {
+                    document.getElementById('passenger').value = formData.passenger;
+                    generatePassengerFields();
+
+                    setTimeout(() => {
+                        if (formData.penumpang_1_nama) {
+                            const input1 = document.querySelector('input[name="penumpang_1_nama"]');
+                            if (input1) input1.value = formData.penumpang_1_nama;
+                        }
+                        if (formData.penumpang_2_nama) {
+                            const input2 = document.querySelector('input[name="penumpang_2_nama"]');
+                            if (input2) input2.value = formData.penumpang_2_nama;
+                        }
+                    }, 100);
+                }
+
+                if (formData.drone_option) {
+                    const droneOption = document.querySelector(
+                        `input[name="drone_option"][value="${formData.drone_option}"]`);
+                    if (droneOption) {
+                        droneOption.checked = true;
+                        updateTotal();
+                    }
+                }
+
+                if (formData.date && formData.time) {
+                    updateCheckoutTime();
                 }
             }
+        }
 
-            // Aktifkan date picker saat field diklik
-            document.getElementById('date').addEventListener('click', function() {
-                this.showPicker();
-            });
+        window.generatePassengerFields = function() {
+            const count = parseInt(document.getElementById('passenger').value) || 0;
+            const container = document.getElementById('passenger-names');
+            container.innerHTML = '';
 
-            // Aktifkan time picker saat field diklik
-            document.getElementById('time').addEventListener('click', function() {
-                this.showPicker();
-            });
+            for (let i = 1; i <= count; i++) {
+                const div = document.createElement('div');
+                div.classList.add('bg-gray-700/50', 'rounded-lg', 'p-4', 'border', 'border-gray-600', 'mb-4');
 
-            // Update waktu check-out saat date/time berubah
-            document.getElementById('date').addEventListener('change', updateCheckoutTime);
-            document.getElementById('time').addEventListener('change', updateCheckoutTime);
+                const label = document.createElement('label');
+                label.classList.add('block', 'text-gray-300', 'text-sm', 'mb-2');
+                label.innerText = `Nama Penumpang ${i}`;
 
-            // Set tanggal minimal hari ini
+                const input = document.createElement('input');
+                input.classList.add('w-full', 'p-3', 'rounded-lg', 'bg-gray-700', 'text-white', 'border',
+                    'border-gray-600', 'focus:border-yellow-500', 'focus:ring-2',
+                    'focus:ring-yellow-500/50', 'transition');
+                input.setAttribute('type', 'text');
+                input.setAttribute('name', `penumpang_${i}_nama`);
+                input.setAttribute('placeholder', `Masukkan nama penumpang ${i}`);
+                input.addEventListener('input', saveFormData);
+
+                div.appendChild(label);
+                div.appendChild(input);
+                container.appendChild(div);
+            }
+            saveFormData();
+        }
+
+        function tampilkanPeringatan(pesan) {
+            const alert = document.createElement('div');
+            alert.classList.add('fixed', 'top-4', 'right-4', 'bg-red-600', 'text-white', 'px-4', 'py-3',
+                'rounded-lg', 'shadow-lg', 'z-50', 'animate-fadeIn', 'transform', 'transition',
+                'duration-300');
+            alert.innerHTML = `
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>${pesan}</span>
+                </div>
+            `;
+
+            document.body.appendChild(alert);
+
+            setTimeout(() => {
+                alert.classList.add('opacity-0');
+                setTimeout(() => {
+                    alert.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set minimum date
             const today = new Date();
             const dd = String(today.getDate()).padStart(2, '0');
             const mm = String(today.getMonth() + 1).padStart(2, '0');
             const yyyy = today.getFullYear();
-            const minDate = yyyy + '-' + mm + '-' + dd;
+            document.getElementById('date').min = `${yyyy}-${mm}-${dd}`;
 
-            document.getElementById('date').min = minDate;
+            // Load saved form data
+            loadFormData();
+            updateTotal();
 
-            // Generate field nama penumpang
-            window.generatePassengerFields = function() {
-                const maxPassengers = 2;
-                const count = parseInt(document.getElementById('passenger').value) || 0;
-                const container = document.getElementById('passenger-names');
-                container.innerHTML = '';
+            // Event listeners
+            document.getElementById('date').addEventListener('click', function() {
+                this.showPicker();
+            });
 
-                if (count > maxPassengers) {
-                    tampilkanPeringatan(`Maksimal ${maxPassengers} penumpang yang diizinkan.`);
-                    document.getElementById('passenger').value = maxPassengers;
-                    return generatePassengerFields();
-                }
+            document.getElementById('time').addEventListener('click', function() {
+                this.showPicker();
+            });
 
-                for (let i = 1; i <= count; i++) {
-                    const div = document.createElement('div');
-                    div.classList.add('bg-gray-700/50', 'rounded-lg', 'p-4', 'border', 'border-gray-600');
+            document.getElementById('date').addEventListener('change', updateCheckoutTime);
+            document.getElementById('time').addEventListener('change', updateCheckoutTime);
 
-                    const label = document.createElement('label');
-                    label.classList.add('block', 'text-gray-300', 'text-sm', 'mb-2');
-                    label.innerText = `Nama Penumpang ${i}`;
+            document.querySelectorAll('input[name="drone_option"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    updateTotal();
+                    saveFormData();
+                });
+            });
 
-                    const input = document.createElement('input');
-                    input.classList.add('w-full', 'p-3', 'rounded-lg', 'bg-gray-700', 'text-white', 'border',
-                        'border-gray-600', 'focus:border-yellow-500', 'focus:ring-2',
-                        'focus:ring-yellow-500/50', 'transition');
-                    input.setAttribute('type', 'text');
-                    input.setAttribute('name', `penumpang_${i}_nama`);
-                    input.setAttribute('placeholder', `Masukkan nama penumpang ${i}`);
+            document.getElementById('passenger').addEventListener('change', function() {
+                generatePassengerFields();
+                saveFormData();
+            });
 
-                    div.appendChild(label);
-                    div.appendChild(input);
-                    container.appendChild(div);
-                }
-            }
+            // Add input listeners for all form fields
+            const formInputs = document.querySelectorAll('#checkoutForm input, #checkoutForm select');
+            formInputs.forEach(input => {
+                input.addEventListener('input', saveFormData);
+                input.addEventListener('change', saveFormData);
+            });
 
-            // Validasi form
+            // Form submission handler
             document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Validate required fields
                 const date = document.getElementById('date').value;
                 const time = document.getElementById('time').value;
-                const dateOut = document.getElementById('date-out').value;
-                const timeOut = document.getElementById('time-out').value;
+                const passengerCount = parseInt(document.getElementById('passenger').value) || 0;
 
-                if (!date || !time || !dateOut || !timeOut) {
-                    e.preventDefault();
+                if (!date || !time) {
                     tampilkanPeringatan('Harap lengkapi semua field jadwal sebelum melanjutkan.');
                     return;
                 }
 
-                const passengerCount = parseInt(document.getElementById('passenger').value) || 0;
                 if (passengerCount < 1) {
-                    e.preventDefault();
                     tampilkanPeringatan('Harap pilih minimal 1 penumpang.');
                     return;
                 }
 
-                // Simpan waktu mulai dan selesai sebagai hidden input
-                const waktuMulai = `${date}T${time}:00`;
-                const waktuSelesai = `${dateOut}T${timeOut}:00`;
+                // Prepare data for confirmation
+                const totalHarga = document.getElementById('total-estimate').textContent;
+                const durasi = {{ $detail_paket->pilihpaket->durasi ?? 0 }} + ' Menit';
+                const paketName = '{{ $detail_paket->pilihpaket->nama_paket }}';
+                const droneOption = document.querySelector('input[name="drone_option"]:checked');
+                let droneText = 'Tanpa Drone';
 
-                const inputMulai = document.createElement('input');
-                inputMulai.type = 'hidden';
-                inputMulai.name = 'waktu_mulai';
-                inputMulai.value = waktuMulai;
+                if (droneOption) {
+                    if (droneOption.value === '500000') droneText = 'Fotografi Drone (File Mentah)';
+                    else if (droneOption.value === '1000000') droneText =
+                    'Fotografi Drone (File + Editing)';
+                }
 
-                const inputSelesai = document.createElement('input');
-                inputSelesai.type = 'hidden';
-                inputSelesai.name = 'waktu_selesai';
-                inputSelesai.value = waktuSelesai;
+                // Show confirmation dialog
+                Swal.fire({
+                    title: 'Konfirmasi Pemesanan',
+                    html: `
+                        <div class="text-left">
+                            <p class="mb-2"><strong>Paket:</strong> ${paketName}</p>
+                            <p class="mb-2"><strong>Durasi:</strong> ${durasi}</p>
+                            <p class="mb-2"><strong>Opsi Drone:</strong> ${droneText}</p>
+                            <p class="mb-2"><strong>Total Harga:</strong> ${totalHarga}</p>
+                        </div>
+                    `,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#f59e0b',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: 'Ya, Lanjutkan Pembayaran',
+                    cancelButtonText: 'Periksa Kembali',
+                    backdrop: `
+                        rgba(0,0,0,0.7)
+                        left top
+                        no-repeat
+                    `
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Show loading indicator
+                        Swal.fire({
+                            title: 'Memproses Pembayaran',
+                            html: 'Mohon tunggu sebentar...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
 
-                this.appendChild(inputMulai);
-                this.appendChild(inputSelesai);
+                                // Create hidden inputs for waktu_mulai and waktu_selesai
+                                const waktuMulai = `${date}T${time}:00`;
+                                const waktuSelesai = document.getElementById('date-out')
+                                    .value + 'T' +
+                                    document.getElementById('time-out').value + ':00';
+
+                                const inputMulai = document.createElement('input');
+                                inputMulai.type = 'hidden';
+                                inputMulai.name = 'waktu_mulai';
+                                inputMulai.value = waktuMulai;
+
+                                const inputSelesai = document.createElement('input');
+                                inputSelesai.type = 'hidden';
+                                inputSelesai.name = 'waktu_selesai';
+                                inputSelesai.value = waktuSelesai;
+
+                                this.appendChild(inputMulai);
+                                this.appendChild(inputSelesai);
+
+                                // Clear saved form data and submit
+                                localStorage.removeItem('checkoutFormData');
+                                this.submit();
+                            }
+                        });
+                    }
+                });
             });
-
-            function tampilkanPeringatan(pesan) {
-                const alert = document.createElement('div');
-                alert.classList.add('fixed', 'top-4', 'right-4', 'bg-red-600', 'text-white', 'px-4', 'py-3',
-                    'rounded-lg', 'shadow-lg', 'z-50', 'animate-fadeIn', 'transform', 'transition',
-                    'duration-300');
-                alert.innerHTML = `
-                    <div class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>${pesan}</span>
-                    </div>
-                `;
-
-                document.body.appendChild(alert);
-
-                setTimeout(() => {
-                    alert.classList.add('opacity-0');
-                    setTimeout(() => {
-                        alert.remove();
-                    }, 300);
-                }, 3000);
-            }
-
-
         });
     </script>
 

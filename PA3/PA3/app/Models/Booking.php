@@ -22,7 +22,7 @@ class Booking extends Model
         'metode_pembayaran',
         'status_pembayaran',
         'bukti_pembayaran',
-        'url_pembayaran',
+        'harga_drone',
         'total_harga',
         'detail_paket_id',
         'users_id',

@@ -20,6 +20,24 @@
 
     <!-- Tambahkan di <head> jika belum ada -->
     <script defer src="https://unpkg.com/alpinejs@3.13.0/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        .swal2-popup {
+            background: #1f2937 !important;
+            color: #fff !important;
+            border-radius: 0.75rem !important;
+        }
+        .swal2-title, .swal2-html-container {
+            color: #fff !important;
+        }
+        .swal2-confirm {
+            background-color: #f59e0b !important;
+        }
+        .swal2-cancel {
+            background-color: #3085d6 !important;
+        }
+    </style>
 
     @vite(['resources/css/front.css'])
     @livewireStyles
