@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Booking extends Model
 {
     use HasFactory;
-    protected $table = 'bookings'; // Nama tabel
+
+    protected $table = 'bookings';
 
     protected $fillable = [
         'nama_customer',
@@ -16,7 +17,7 @@ class Booking extends Model
         'waktu_mulai',
         'waktu_selesai',
         'status',
-        'jumlah_penumpang', // Tambahkan ini
+        'jumlah_penumpang',
         'nama_penumpang1',
         'nama_penumpang2',
         'metode_pembayaran',
@@ -43,9 +44,14 @@ class Booking extends Model
         return $this->belongsTo(User::class, 'users_id');
     }
 
-    // Model Booking.php
     public function jetskis()
     {
         return $this->hasMany(Jetski::class);
+    }
+
+    // Tambahan relasi JetskiAdjustment
+    public function jetskiAdjustments()
+    {
+        return $this->hasMany(JetskiAdjustment::class);
     }
 }
