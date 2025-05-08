@@ -17,6 +17,10 @@
     <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
     <!-- Libraries -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
 
     <!-- Tambahkan di <head> jika belum ada -->
     <script defer src="https://unpkg.com/alpinejs@3.13.0/dist/cdn.min.js"></script>
@@ -28,12 +32,16 @@
             color: #fff !important;
             border-radius: 0.75rem !important;
         }
-        .swal2-title, .swal2-html-container {
+
+        .swal2-title,
+        .swal2-html-container {
             color: #fff !important;
         }
+
         .swal2-confirm {
             background-color: #f59e0b !important;
         }
+
         .swal2-cancel {
             background-color: #3085d6 !important;
         }

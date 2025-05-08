@@ -34,7 +34,7 @@
                                     {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->nama_paket : '-' }}
                                 </h1>
                                 <p class="text-secondary font-normal text-base mb-[10px]">
-                                    {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->durasi : '-' }}/Minutes
+                                  Duriasi Paket   {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->durasi : '-' }} Menit
                                 </p>
                             </div>
 
@@ -62,12 +62,12 @@
                                     @auth
                                         <a href="{{ route('front.checkout', $detail_paket->id) }}"
                                             class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-6 py-2 rounded-lg transition-colors duration-300">
-                                            Booking
+                                            Pesan Sekarang
                                         </a>
                                     @else
                                         <a href="{{ route('login', ['redirect_to' => route('front.detail', $detail_paket->id)]) }}"
                                             class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-6 py-2 rounded-lg transition-colors duration-300">
-                                            Booking
+                                            Pesan Sekarang
                                         </a>
                                     @endauth
                                 </div>
@@ -126,13 +126,13 @@
                                 <!-- Tombol Book Now -->
                                 @auth
                                     <a href="{{ route('front.detail', $similiarItem->id) }}"
-                                        class="bg-yellow-500 hover:bg-yellow-600 text-black text-sm font-semibold px-3 py-1 rounded-md transition">
-                                        Book Now
+                                        class="bg-yellow-500 hover:bg-yellow-600 text-black text-xs font-semibold px-3 py-1 rounded-md transition">
+                                        Pesan Sekarang
                                     </a>
-                                @else
+                                    @else
                                     <a href="{{ route('login', ['redirect_to' => route('front.detail', $detail_paket->id)]) }}"
-                                        class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-6 py-2 rounded-lg transition-colors duration-300">
-                                        Login untuk Booking
+                                        class="bg-yellow-500 hover:bg-yellow-600 text-black text-xs font-semibold px-3 py-1 rounded-md transition">
+                                        Pesan Sekarang
                                     </a>
                                 @endauth
                             </div>

@@ -48,8 +48,8 @@
                                                     <!-- Durasi -->
                                                     <div class="flex justify-between items-center mb-2">
                                                         <span class="text-sm text-gray-400">
-                                                            {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->durasi : '-' }}
-                                                            Minutes
+                                                          Durasi Paket  {{ $detail_paket->pilihpaket ? $detail_paket->pilihpaket->durasi : '-' }}
+                                                            Menit
                                                         </span>
                                                     </div>
 
@@ -64,7 +64,7 @@
                                                         <!-- Tombol Book Now -->
                                                         <a href="{{ route('front.detail', $detail_paket->id) }}"
                                                             class="bg-yellow-500 hover:bg-yellow-600 text-black text-sm font-semibold px-3 py-1 rounded-md transition">
-                                                            Book Now
+                                                            Pesan Sekarang
                                                         </a>
                                                     </div>
                                                 </div>
