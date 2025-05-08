@@ -58,10 +58,18 @@
                                             {{ number_format($detail_paket->pilihpaket ? $detail_paket->pilihpaket->harga : 0, 0, ',', '.') }}
                                         </p>
                                     </div>
-                                    <a href="{{ route('front.checkout', $detail_paket->id) }}"
-                                        class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-6 py-2 rounded-lg transition-colors duration-300">
-                                        Boooking
-                                    </a>
+                                    <!-- Tombol Booking -->
+                                    @auth
+                                        <a href="{{ route('front.checkout', $detail_paket->id) }}"
+                                            class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-6 py-2 rounded-lg transition-colors duration-300">
+                                            Booking
+                                        </a>
+                                    @else
+                                        <a href="{{ route('login', ['redirect_to' => route('front.detail', $detail_paket->id)]) }}"
+                                            class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-6 py-2 rounded-lg transition-colors duration-300">
+                                            Booking
+                                        </a>
+                                    @endauth
                                 </div>
                             </div>
                         </div>
@@ -80,7 +88,7 @@
             <header class="mb-[30px] text-center">
                 <h2 class="font-bold text-white text-[26px] mb-1">Similar Jetski</h2>
                 <p class="text-white text-secondary">Start your big day</p>
-              </header>
+            </header>
 
             <!-- Cars -->
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-[29px]">
@@ -116,10 +124,17 @@
                                 </span>
 
                                 <!-- Tombol Book Now -->
-                                <a href="{{ route('front.detail', $similiarItem->id) }}"
-                                    class="bg-yellow-500 hover:bg-yellow-600 text-black text-sm font-semibold px-3 py-1 rounded-md transition">
-                                    Book Now
-                                </a>
+                                @auth
+                                    <a href="{{ route('front.detail', $similiarItem->id) }}"
+                                        class="bg-yellow-500 hover:bg-yellow-600 text-black text-sm font-semibold px-3 py-1 rounded-md transition">
+                                        Book Now
+                                    </a>
+                                @else
+                                    <a href="{{ route('login', ['redirect_to' => route('front.detail', $detail_paket->id)]) }}"
+                                        class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-6 py-2 rounded-lg transition-colors duration-300">
+                                        Login untuk Booking
+                                    </a>
+                                @endauth
                             </div>
                         </div>
                     </div>

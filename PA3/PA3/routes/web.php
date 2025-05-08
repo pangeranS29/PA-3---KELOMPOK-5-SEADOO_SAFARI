@@ -10,7 +10,18 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PilihPaketController as AdminPilihPaketController;
 use App\Http\Controllers\Admin\DetailPaketController as AdminDetailPaketController;
 use App\Http\Controllers\Front\PaymentController;
-use App\Http\Controllers\Front\AccountController; // Pastikan controller sudah ada
+use App\Http\Controllers\Front\AccountController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController; // 👈 Tambahkan ini
+
+/*
+|--------------------------------------------------------------------------
+| Auth Routes (Guest Only)
+|--------------------------------------------------------------------------
+*/
+// Route::middleware('guest')->group(function () {
+//     Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
+//     Route::post('login', [AuthenticatedSessionController::class, 'store']);
+// });
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +40,6 @@ Route::name('front.')->group(function () {
     // Payment Success Page
     Route::get('/payment/success/{bookingId}', [PaymentController::class, 'success'])->name('payment.success');
 
-
     // Group Middleware Auth (Hanya Pengguna yang Login)
     Route::group(['middleware' => 'auth'], function () {
         // Checkout Page
@@ -41,40 +51,31 @@ Route::name('front.')->group(function () {
         Route::post('/payment/update/{bookingId}', [PaymentController::class, 'updatePaymentMethod'])->name('payment.update');
         Route::post('/payment/upload/{bookingId}', [PaymentController::class, 'uploadBuktiPembayaran'])->name('payment.upload');
 
-
-        // 👇 Batalkan Pembayaran (route baru)
+        // Batalkan dan Cetak
         Route::get('/payment/cancel/{bookingId}', [PaymentController::class, 'cancel'])->name('payment.cancel');
         Route::get('/cetak-resi/{bookingId}', [PaymentController::class, 'cetakResi'])->name('cetak.resi');
 
-        // Halaman Akun dan Tab Profile/Transaction/Reset Password
-        Route::get('/account', [AccountController::class, 'index'])->name('account'); // Tampilkan akun user
-
-
-
+        // Akun
+        Route::get('/account', [AccountController::class, 'index'])->name('account');
     });
 });
 
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
 Route::prefix('admin')->name('admin.')->middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    // Dashboard Admin
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    // CRUD Pilih Paket
     Route::resource('pilihpakets', AdminPilihPaketController::class);
-
-    // CRUD Detail Paket
     Route::resource('detail_pakets', AdminDetailPaketController::class);
-
-    // CRUD Bookings
     Route::resource('bookings', AdminBookingController::class);
-
-    // Tambahan route untuk aksi terima & tolak booking
     Route::post('/bookings/{booking}/accept', [AdminBookingController::class, 'accept'])->name('bookings.accept');
     Route::post('/bookings/{booking}/reject', [AdminBookingController::class, 'reject'])->name('bookings.reject');
-
-    // CRUD Jetski
     Route::resource('jetski', AdminJetskiController::class);
 });
