@@ -44,14 +44,5 @@ class Booking extends Model
         return $this->belongsTo(User::class, 'users_id');
     }
 
-    public function jetskis()
-    {
-        return $this->hasMany(Jetski::class);
-    }
 
-    // Tambahan relasi JetskiAdjustment
-    public function jetskiAdjustments()
-    {
-        return $this->hasMany(JetskiAdjustment::class);
-    }
 }
