@@ -109,18 +109,22 @@
                                             Check-In</label>
                                         <div class="relative">
                                             <input
-                                                class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/50 transition cursor-pointer"
-                                                id="date" name="date" type="date" required>
+                                            class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/50 transition cursor-pointer"
+                                            id="date" name="date" type="date" required
+                                            min="{{ date('Y-m-d') }}" max="{{ date('Y-m-d', strtotime('+14 days')) }}">
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label class="block text-gray-300 text-sm mb-1" for="time">Waktu
-                                            Check-In</label>
+                                        <label class="block text-gray-300 text-sm mb-1" for="time">Waktu Check-In</label>
                                         <div class="relative">
-                                            <input
-                                                class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/50 transition cursor-pointer"
-                                                id="time" name="time" type="time" required>
+                                            <input class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/50 transition cursor-pointer" id="time" name="time" type="time" required min="07:00" max="16:59">
+                                            <div class="mt-2 text-sm text-gray-400">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                                </svg>
+                                                Jam operasional: 07:00 - 17:00
+                                            </div>
                                         </div>
                                     </div>
 
@@ -307,6 +311,49 @@
             saveFormData();
         }
 
+        function validateTimeInput() {
+            const dateInput = document.getElementById('date');
+            const timeInput = document.getElementById('time');
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+
+            const today = now.toISOString().split('T')[0];
+            const selectedDate = dateInput.value;
+            const selectedTime = timeInput.value;
+
+            if (!selectedTime) return false;
+
+            // Validate operational hours (07:00-17:00)
+            const [hours, minutes] = selectedTime.split(':').map(Number);
+            if (hours < 7 || hours >= 17) {
+                tampilkanPeringatan("Waktu booking harus antara jam 07:00 - 17:00.");
+                timeInput.value = '';
+                return false;
+            }
+
+            // Validate if selected time is in the past
+            if (selectedDate === today) {
+                // Check if selected time is before current time
+                if (hours < currentHour || (hours === currentHour && minutes < currentMinute)) {
+                    tampilkanPeringatan("Tidak bisa memesan waktu yang sudah lewat. Silakan pilih waktu yang akan datang.");
+                    timeInput.value = '';
+                    return false;
+                }
+
+                // Validate minimum booking time (5 minutes from now)
+                const selectedDateTime = new Date(`${selectedDate}T${selectedTime}`);
+                const timeDiff = selectedDateTime.getTime() - now.getTime();
+
+                if (timeDiff < 5 * 60 * 1000) {
+                    tampilkanPeringatan("Waktu yang dipilih minimal 5 menit dari sekarang.");
+                    timeInput.value = '';
+                    return false;
+                }
+            }
+            return true;
+        }
+
         function saveFormData() {
             const formData = {
                 name: document.getElementById('name').value,
@@ -325,6 +372,30 @@
             const savedData = localStorage.getItem('checkoutFormData');
             if (savedData) {
                 const formData = JSON.parse(savedData);
+
+                // Validate loaded time against operational hours
+                if (formData.time) {
+                    const [hours, minutes] = formData.time.split(':').map(Number);
+                    if (hours < 7 || hours >= 17) {
+                        formData.time = ''; // Clear invalid time
+                    }
+                }
+
+                // Validate if loaded time is in the past
+                if (formData.date && formData.time) {
+                    const now = new Date();
+                    const today = now.toISOString().split('T')[0];
+                    const [hours, minutes] = formData.time.split(':').map(Number);
+
+                    if (formData.date === today) {
+                        const currentHour = now.getHours();
+                        const currentMinute = now.getMinutes();
+
+                        if (hours < currentHour || (hours === currentHour && minutes < currentMinute)) {
+                            formData.time = ''; // Clear past time
+                        }
+                    }
+                }
 
                 document.getElementById('name').value = formData.name || '';
                 document.getElementById('phone').value = formData.phone || '';
@@ -348,8 +419,7 @@
                 }
 
                 if (formData.drone_option) {
-                    const droneOption = document.querySelector(
-                        `input[name="drone_option"][value="${formData.drone_option}"]`);
+                    const droneOption = document.querySelector(`input[name="drone_option"][value="${formData.drone_option}"]`);
                     if (droneOption) {
                         droneOption.checked = true;
                         updateTotal();
@@ -399,7 +469,7 @@
             alert.innerHTML = `
                 <div class="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-16 0 9 9 0 0118 0z" />
                     </svg>
                     <span>${pesan}</span>
                 </div>
@@ -417,141 +487,99 @@
 
         // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
-            // Set minimum date
             const today = new Date();
-            const dd = String(today.getDate()).padStart(2, '0');
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const yyyy = today.getFullYear();
-            document.getElementById('date').min = `${yyyy}-${mm}-${dd}`;
+            const maxDate = new Date();
+            maxDate.setDate(today.getDate() + 14);
+
+            const formatDateForInput = (date) => {
+                const dd = String(date.getDate()).padStart(2, '0');
+                const mm = String(date.getMonth() + 1).padStart(2, '0');
+                const yyyy = date.getFullYear();
+                return `${yyyy}-${mm}-${dd}`;
+            };
+
+            const dateInput = document.getElementById('date');
+            dateInput.min = formatDateForInput(today);
+            dateInput.max = formatDateForInput(maxDate);
+
+            const timeInput = document.getElementById('time');
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+
+            // Set operational hours constraints (07:00-17:00)
+            timeInput.min = '07:00';
+            timeInput.max = '16:59';
+
+            dateInput.addEventListener('change', function() {
+                const selectedDate = new Date(this.value);
+                const todayFormatted = formatDateForInput(today);
+                const selectedDateFormatted = formatDateForInput(selectedDate);
+
+                if (selectedDateFormatted === todayFormatted) {
+                    // Calculate minimum time (current time + 5 minutes)
+                    const minTime = new Date(now.getTime() + 5 * 60 * 1000);
+                    let minHours = String(minTime.getHours()).padStart(2, '0');
+                    let minMinutes = String(minTime.getMinutes()).padStart(2, '0');
+
+                    // Ensure minimum time is within operational hours
+                    if (minHours >= 7 && minHours < 17) {
+                        timeInput.min = `${minHours}:${minMinutes}`;
+                    } else {
+                        timeInput.min = '07:00';
+                    }
+                } else {
+                    timeInput.removeAttribute('min');
+                }
+
+                updateCheckoutTime();
+            });
+
+            timeInput.addEventListener('change', function() {
+                if (validateTimeInput()) {
+                    updateCheckoutTime();
+                }
+            });
+
+            // Initialize time input constraints based on today's date
+            if (dateInput.value === formatDateForInput(today)) {
+                const minTime = new Date(now.getTime() + 5 * 60 * 1000);
+                let minHours = String(minTime.getHours()).padStart(2, '0');
+                let minMinutes = String(minTime.getMinutes()).padStart(2, '0');
+
+                if (minHours >= 7 && minHours < 17) {
+                    timeInput.min = `${minHours}:${minMinutes}`;
+                } else {
+                    timeInput.min = '07:00';
+                }
+            }
 
             // Load saved form data
             loadFormData();
+
+            // Update total price
             updateTotal();
 
-            // Event listeners
-            document.getElementById('date').addEventListener('click', function() {
+            // Add event listeners for showing picker
+            dateInput.addEventListener('click', function() {
                 this.showPicker();
             });
 
-            document.getElementById('time').addEventListener('click', function() {
+            timeInput.addEventListener('click', function() {
                 this.showPicker();
             });
 
-            document.getElementById('date').addEventListener('change', updateCheckoutTime);
-            document.getElementById('time').addEventListener('change', updateCheckoutTime);
-
-            document.querySelectorAll('input[name="drone_option"]').forEach(radio => {
-                radio.addEventListener('change', function() {
-                    updateTotal();
-                    saveFormData();
-                });
+            // Add event listeners for drone options
+            document.querySelectorAll('input[name="drone_option"]').forEach(option => {
+                option.addEventListener('change', updateTotal);
             });
 
-            document.getElementById('passenger').addEventListener('change', function() {
-                generatePassengerFields();
-                saveFormData();
-            });
-
-            // Add input listeners for all form fields
-            const formInputs = document.querySelectorAll('#checkoutForm input, #checkoutForm select');
-            formInputs.forEach(input => {
-                input.addEventListener('input', saveFormData);
-                input.addEventListener('change', saveFormData);
-            });
-
-            // Form submission handler
-            document.getElementById('checkoutForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                // Validate required fields
-                const date = document.getElementById('date').value;
-                const time = document.getElementById('time').value;
-                const passengerCount = parseInt(document.getElementById('passenger').value) || 0;
-
-                if (!date || !time) {
-                    tampilkanPeringatan('Harap lengkapi semua field jadwal sebelum melanjutkan.');
-                    return;
-                }
-
-                if (passengerCount < 1) {
-                    tampilkanPeringatan('Harap pilih minimal 1 penumpang.');
-                    return;
-                }
-
-                // Prepare data for confirmation
-                const totalHarga = document.getElementById('total-estimate').textContent;
-                const durasi = {{ $detail_paket->pilihpaket->durasi ?? 0 }} + ' Menit';
-                const paketName = '{{ $detail_paket->pilihpaket->nama_paket }}';
-                const droneOption = document.querySelector('input[name="drone_option"]:checked');
-                let droneText = 'Tanpa Drone';
-
-                if (droneOption) {
-                    if (droneOption.value === '500000') droneText = 'Fotografi Drone (File Mentah)';
-                    else if (droneOption.value === '1000000') droneText =
-                    'Fotografi Drone (File + Editing)';
-                }
-
-                // Show confirmation dialog
-                Swal.fire({
-                    title: 'Konfirmasi Pemesanan',
-                    html: `
-                        <div class="text-left">
-                            <p class="mb-2"><strong>Paket:</strong> ${paketName}</p>
-                            <p class="mb-2"><strong>Durasi:</strong> ${durasi}</p>
-                            <p class="mb-2"><strong>Opsi Drone:</strong> ${droneText}</p>
-                            <p class="mb-2"><strong>Total Harga:</strong> ${totalHarga}</p>
-                        </div>
-                    `,
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#f59e0b',
-                    cancelButtonColor: '#6b7280',
-                    confirmButtonText: 'Ya, Lanjutkan Pembayaran',
-                    cancelButtonText: 'Periksa Kembali',
-                    backdrop: `
-                        rgba(0,0,0,0.7)
-                        left top
-                        no-repeat
-                    `
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Show loading indicator
-                        Swal.fire({
-                            title: 'Memproses Pembayaran',
-                            html: 'Mohon tunggu sebentar...',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-
-                                // Create hidden inputs for waktu_mulai and waktu_selesai
-                                const waktuMulai = `${date}T${time}:00`;
-                                const waktuSelesai = document.getElementById('date-out')
-                                    .value + 'T' +
-                                    document.getElementById('time-out').value + ':00';
-
-                                const inputMulai = document.createElement('input');
-                                inputMulai.type = 'hidden';
-                                inputMulai.name = 'waktu_mulai';
-                                inputMulai.value = waktuMulai;
-
-                                const inputSelesai = document.createElement('input');
-                                inputSelesai.type = 'hidden';
-                                inputSelesai.name = 'waktu_selesai';
-                                inputSelesai.value = waktuSelesai;
-
-                                this.appendChild(inputMulai);
-                                this.appendChild(inputSelesai);
-
-                                // Clear saved form data and submit
-                                localStorage.removeItem('checkoutFormData');
-                                this.submit();
-                            }
-                        });
-                    }
-                });
-            });
+            // Add event listener for passenger count
+            document.getElementById('passenger').addEventListener('change', generatePassengerFields);
         });
     </script>
+
+
 
     <style>
         .animate-fadeIn {

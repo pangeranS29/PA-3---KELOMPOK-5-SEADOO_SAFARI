@@ -24,7 +24,18 @@ class CheckoutController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string',
             'phone' => 'required|string',
-            'waktu_mulai' => 'required|date',
+            'waktu_mulai' => [
+                'required',
+                'date',
+                'after_or_equal:now',
+                'before_or_equal:+14 days',
+                function ($attribute, $value, $fail) {
+                    $hour = date('H', strtotime($value));
+                    if ($hour < 7 || $hour >= 17) {
+                        $fail('Waktu booking harus antara jam 07:00 - 17:00.');
+                    }
+                }
+            ],
             'waktu_selesai' => 'required|date|after:waktu_mulai',
             'jumlah_penumpang' => 'required|integer|min:1|max:2',
             'penumpang_1_nama' => 'required|string',
