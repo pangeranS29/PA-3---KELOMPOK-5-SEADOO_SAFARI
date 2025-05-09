@@ -67,7 +67,7 @@ class PaymentController extends Controller
 
             // Update data booking
             $booking->bukti_pembayaran = $path;
-            $booking->status_pembayaran = 'pending';
+            $booking->status_pembayaran = 'menunggu_konfirmasi';
             $booking->save();
 
             // Arahkan ke halaman continue.blade.php dengan data booking
@@ -83,18 +83,6 @@ class PaymentController extends Controller
         return view('success', compact('booking'));
     }
 
-    public function cancel($bookingId)
-    {
-        $booking = Booking::findOrFail($bookingId);
-
-        // Reset data pembayaran
-        $booking->bukti_pembayaran = null;
-        $booking->status_pembayaran = 'pending';
-        $booking->save();
-
-        return redirect()->route('front.payment', $booking->id)
-            ->with('success', 'Upload bukti pembayaran dibatalkan. Silakan upload ulang.');
-    }
 
     public function cetakResi($bookingId)
     {
@@ -106,5 +94,50 @@ class PaymentController extends Controller
 
         $pdf = Pdf::loadView('pdf.resi', compact('booking'));
         return $pdf->download('resi_booking_' . $booking->id . '.pdf');
+    }
+
+    public function checkExpired($bookingId)
+    {
+        $booking = Booking::findOrFail($bookingId);
+
+        if (now()->greaterThan($booking->waktu_selesai) && $booking->status_pembayaran === 'pending') {
+            $booking->status_pembayaran = 'expired';
+            $booking->save();
+        }
+
+        return response()->json(['status' => 'success']);
+    }
+
+    public function cancel($bookingId)
+    {
+        $booking = Booking::findOrFail($bookingId);
+
+        // Hanya bisa dibatalkan jika status masih pending
+        if ($booking->status_pembayaran === 'pending') {
+            $booking->status_pembayaran = 'dibatalkan';
+            $booking->save();
+
+            return response()->json(['status' => 'success']);
+        }
+
+        return response()->json(['status' => 'error', 'message' => 'Pesanan tidak bisa dibatalkan'], 400);
+    }
+    public function showUploadForm($bookingId)
+    {
+        $booking = Booking::with('detail_paket.pilihpaket', 'user')->findOrFail($bookingId);
+
+        // Cek status dan waktu
+        if (now()->greaterThan($booking->waktu_selesai)) {
+            $booking->status_pembayaran = 'expired';
+            $booking->save();
+            return redirect()->route('front.index')->with('error', 'Booking sudah kadaluarsa. Silakan booking ulang.');
+        }
+
+        // Pastikan metode pembayaran sudah dipilih
+        if (empty($booking->metode_pembayaran)) {
+            return redirect()->route('front.payment', $booking->id);
+        }
+
+        return view('continue', compact('booking'));
     }
 }

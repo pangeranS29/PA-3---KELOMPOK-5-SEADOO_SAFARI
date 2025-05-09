@@ -2,7 +2,7 @@
     <main class="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 pt-20 pb-10">
         <div class="container mx-auto px-4">
             <div class="max-w-5xl mx-auto flex flex-col lg:flex-row gap-8">
-                <!-- Kolom Kiri - Ringkasan Booking (same as continue.blade.php) -->
+                <!-- Kolom Kiri - Ringkasan Booking -->
                 <div class="lg:w-1/3">
                     <div class="bg-gray-800 rounded-xl shadow-2xl overflow-hidden sticky top-28">
                         <div class="relative">
@@ -57,12 +57,22 @@
 
                             <div class="border-t border-gray-700 pt-4 mt-4">
                                 <div class="flex justify-between items-center">
-                                    <span class="text-gray-300 font-medium">Total Pembayaran:</span>
-                                    <span class="text-yellow-400 text-l font-bold">
-                                        Rp {{ number_format($booking->total_harga, 0, ',', '.') }}
+                                    <span class="text-gray-300 font-medium text-sm whitespace-nowrap">
+                                        Pembayaran:a
                                     </span>
+                                    @if($booking->status_pembayaran === 'pending')
+                                        <span class="text-yellow-400 text-sm font-bold whitespace-nowrap">
+                                            Menunggu Konfirmasi
+                                        </span>
+                                    @else
+                                        <span class="text-yellow-400 text-sm font-bold whitespace-nowrap">
+                                            Rp {{ number_format($booking->total_harga, 0, ',', '.') }}
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
+
+
                         </div>
                     </div>
                 </div>

@@ -147,7 +147,7 @@ public function reject(Booking $booking, Request $request)
     ]);
 
     // We don't change the status to rejected, we keep it as pending
-    // $booking->update(['status_pembayaran' => 'rejected']);
+     $booking->update(['status_pembayaran' => 'rejected']);
 
     // Get customer phone number
     $customerPhone = $booking->user->phone;

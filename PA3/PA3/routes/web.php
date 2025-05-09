@@ -48,8 +48,12 @@ Route::name('front.')->group(function () {
 
         // Payment Page
         Route::get('/payment/{bookingId}', [PaymentController::class, 'index'])->name('payment');
+        // Ubah route upload menjadi GET untuk menampilkan form
+        Route::get('/payment/{bookingId}/upload', [PaymentController::class, 'showUploadForm'])->name   ('payment.show');
         Route::post('/payment/update/{bookingId}', [PaymentController::class, 'updatePaymentMethod'])->name('payment.update');
         Route::post('/payment/upload/{bookingId}', [PaymentController::class, 'uploadBuktiPembayaran'])->name('payment.upload');
+        Route::post('/payment/{booking}/check-expired', [PaymentController::class, 'checkExpired'])->name('payment.check-expired');
+        Route::post('/payment/{booking}/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
 
         // Batalkan dan Cetak
         Route::get('/payment/cancel/{bookingId}', [PaymentController::class, 'cancel'])->name('payment.cancel');

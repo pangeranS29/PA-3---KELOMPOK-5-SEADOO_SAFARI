@@ -75,6 +75,26 @@
                         </div>
 
                         <div class="p-6">
+                            <!-- Tambahkan countdown timer di sini -->
+                            <div class="mb-6 bg-red-900/30 rounded-lg p-4 border border-red-600">
+                                <div class="flex items-center text-red-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM10 2a8 8 0 100 16 8 8 0 000-16zm0 12a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0V7a1 1 0 112 0v2z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <h3 class="font-semibold">Selesaikan Pembayaran Dalam:</h3>
+                                    <div id="countdownTimer" class="ml-2 font-bold">
+                                        <span id="countdownHours">00</span>:
+                                        <span id="countdownMinutes">00</span>:
+                                        <span id="countdownSeconds">00</span>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-red-300 mt-2">Jika waktu habis, pesanan akan otomatis dibatalkan.
+                                </p>
+                            </div>
+
                             @if (session('success'))
                                 <div class="bg-green-500 text-white p-4 rounded mb-6 flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
@@ -117,11 +137,13 @@
                                 </ul>
                             </div>
 
-                            <form id="paymentForm" action="{{ route('front.payment.upload', $booking->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                            <form id="paymentForm" action="{{ route('front.payment.upload', $booking->id) }}"
+                                method="POST" enctype="multipart/form-data" class="space-y-6">
                                 @csrf
                                 <!-- File Upload -->
                                 <div class="space-y-2">
-                                    <label for="bukti_pembayaran" class="block text-white font-medium">Upload Bukti Pembayaran</label>
+                                    <label for="bukti_pembayaran" class="block text-white font-medium">Upload Bukti
+                                        Pembayaran</label>
                                     <div class="flex items-center justify-center w-full">
                                         <label for="bukti_pembayaran"
                                             class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-600 rounded-lg cursor-pointer bg-gray-700/50 hover:bg-gray-700 transition">
@@ -134,7 +156,8 @@
                                                         d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                                 </svg>
                                                 <p class="text-sm text-gray-400">
-                                                    <span class="font-semibold">Klik untuk upload</span> atau drag & drop
+                                                    <span class="font-semibold">Klik untuk upload</span> atau drag &
+                                                    drop
                                                 </p>
                                                 <p class="text-xs text-gray-500">JPG, PNG, atau PDF (maks. 2MB)</p>
                                             </div>
@@ -153,6 +176,12 @@
                                     Upload Bukti Pembayaran
                                 </button>
 
+                                <!-- Batalkan Pesanan Button -->
+                                <button type="button" id="cancelButton"
+                                    class="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white font-bold py-3 px-4 rounded-lg shadow-lg transition-all transform hover:scale-[1.01] mt-4">
+                                    Batalkan Pesanan
+                                </button>
+
                                 <!-- Back Button -->
                                 <a href="{{ route('front.index') }}"
                                     class="block text-center text-gray-300 hover:text-white mt-4 transition">
@@ -167,6 +196,77 @@
     </main>
 
     <script>
+         // Countdown timer
+    function updateCountdown() {
+        const bookingTime = new Date("{{ $booking->waktu_selesai }}").getTime();
+        const now = new Date().getTime();
+        const distance = bookingTime - now;
+
+        if (distance <= 0) {
+            // Waktu habis, update status via AJAX
+            document.getElementById('countdownHours').textContent = '00';
+            document.getElementById('countdownMinutes').textContent = '00';
+            document.getElementById('countdownSeconds').textContent = '00';
+
+            // Kirim request untuk update status
+            fetch("{{ route('front.payment.check-expired', $booking->id) }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    // Redirect ke halaman beranda dengan pesan expired
+                    window.location.href = "{{ route('front.index') }}";
+                }
+            });
+
+            return;
+        }
+
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById('countdownHours').textContent = hours.toString().padStart(2, '0');
+        document.getElementById('countdownMinutes').textContent = minutes.toString().padStart(2, '0');
+        document.getElementById('countdownSeconds').textContent = seconds.toString().padStart(2, '0');
+    }
+
+    // Update countdown setiap detik
+    setInterval(updateCountdown, 1000);
+    updateCountdown(); // Jalankan segera
+
+    // Handle cancel button
+    document.getElementById('cancelButton').addEventListener('click', function() {
+        Swal.fire({
+            title: 'Batalkan Pesanan?',
+            text: "Anda yakin ingin membatalkan pesanan ini?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, Batalkan',
+            cancelButtonText: 'Kembali'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Kirim request pembatalan
+                fetch("{{ route('front.payment.cancel', $booking->id) }}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.href = "{{ route('front.index') }}";
+                    }
+                });
+            }
+        });
+    });
+
         // Preview uploaded file name
         document.getElementById('bukti_pembayaran').addEventListener('change', function(e) {
             const fileName = e.target.files[0]?.name || 'Belum ada file dipilih';

@@ -59,12 +59,36 @@
                             name: 'status_pembayaran',
                             className: 'text-sm',
                             render: function(data) {
-                                let color = 'bg-yellow-100 text-yellow-800';
-                                if (data === 'success') color = 'bg-green-100 text-green-800';
-                                if (data === 'rejected' || data === 'expired') color =
-                                    'bg-red-100 text-red-800';
+                                let color, text;
 
-                                return `<span class="status-badge ${color}">${data}</span>`;
+                                // Determine color and display text based on status
+                                switch (data) {
+                                    case 'success':
+                                        color = 'bg-green-100 text-green-800';
+                                        text = 'Berhasil';
+                                        break;
+                                    case 'expired':
+                                        color = 'bg-red-100 text-red-800';
+                                        text = 'Kedaluwarsa';
+                                        break;
+                                    case 'menunggu_konfirmasi':
+                                        color = 'bg-yellow-100 text-yellow-800';
+                                        text = 'Menunggu Konfirmasi';
+                                        break;
+                                    case 'pending':
+                                        color = 'bg-gray-100 text-gray-800';
+                                        text = 'Tertunda';
+                                        break;
+                                    case 'rejected':
+                                        color = 'bg-red-100 text-red-800';
+                                        text = 'Ditolak';
+                                        break;
+                                    default:
+                                        color = 'bg-gray-100 text-gray-800';
+                                        text = data;
+                                }
+
+                                return `<span class="px-2 py-1 rounded-full text-xs font-medium ${color}">${text}</span>`;
                             }
                         },
                         {

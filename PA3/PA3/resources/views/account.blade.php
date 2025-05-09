@@ -57,22 +57,39 @@
                                 </div>
                                 <div
                                     class="flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 md:space-x-3 lg:space-x-4">
-                                    @if ($booking->status_pembayaran === 'pending' && now()->lessThanOrEqualTo($booking->waktu_selesai))
+
+                                    {{-- Status Pembayaran --}}
+                                    @if ($booking->status_pembayaran === 'pending' && $booking->metode_pembayaran && empty($booking->bukti_pembayaran))
+                                        <a href="{{ route('front.payment.show', $booking->id) }}"
+                                            class="bg-blue-500 text-white py-1 px-3 rounded-l text-sm">Lanjutkan
+                                            Pembayaran</a>
+                                    @elseif ($booking->status_pembayaran === 'pending')
                                         <a href="{{ route('front.payment', $booking->id) }}"
-                                            class="bg-blue-500 text-white py-1 px-3 rounded-lg text-sm">Pay Now</a>
-                                    @elseif ($booking->status_pembayaran === 'pending' && now()->greaterThan($booking->waktu_selesai))
-                                        <span class="bg-red-500 text-white py-1 px-3 rounded-lg text-sm">Expired</span>
+                                            class="bg-blue-500 text-white py-1 px-3 rounded-lg text-sm">Bayar
+                                            Sekarang</a>
+                                    @elseif ($booking->status_pembayaran === 'menunggu_konfirmasi')
+                                        <span class="bg-yellow-500 text-white py-1 px-3 rounded-lg text-sm">Menunggu
+                                            Konfirmasi</span>
+                                    @elseif ($booking->status_pembayaran === 'expired' && now()->greaterThan($booking->waktu_selesai))
+                                        <span
+                                            class="bg-red-500 text-white py-1 px-3 rounded-lg text-sm">Kadaluarsa</span>
                                     @elseif ($booking->status_pembayaran === 'success')
-                                        <span class="bg-green-500 text-white py-1 px-3 rounded-lg text-sm">Paid</span>
+                                        <span class="bg-green-500 text-white py-1 px-3 rounded-lg text-sm">Lunas</span>
+                                    @elseif ($booking->status_pembayaran === 'rejected')
+                                        <a href="{{ route('front.payment', $booking->id) }}"
+                                            class="bg-blue-500 text-white py-1 px-3 rounded-lg text-sm">Bayar
+                                            Kembali</a>
                                     @endif
+
+                                    {{-- ID Pesanan --}}
                                     <div class="text-xs md:text-base text-white">
-                                        <p>Order ID</p>
+                                        <p>ID Pesanan</p>
                                         <p class="font-semibold truncate">{{ $booking->id }}</p>
                                     </div>
+
+                                    {{-- Cetak Resi --}}
                                     @php
-                                        $isExpired =
-                                            $booking->status_pembayaran === 'pending' &&
-                                            now()->greaterThan($booking->waktu_selesai);
+                                        $isExpired = $booking->status_pembayaran === 'expired';
                                     @endphp
 
                                     @if ($booking->status_pembayaran === 'success')
@@ -84,7 +101,7 @@
                                     @elseif ($isExpired)
                                         <span
                                             class="text-gray-400 text-xs md:text-base whitespace-nowrap cursor-not-allowed"
-                                            title="Resi tidak tersedia karena status expired">
+                                            title="Resi tidak tersedia karena status kadaluarsa">
                                             Cetak Resi
                                         </span>
                                     @else
@@ -94,7 +111,10 @@
                                             Cetak Resi
                                         </span>
                                     @endif
+
                                 </div>
+
+
                             </div>
                         @empty
                             <p class="text-white">Belum ada transaksi.</p>
