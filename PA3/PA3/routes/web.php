@@ -40,27 +40,31 @@ Route::name('front.')->group(function () {
     // Payment Success Page
     Route::get('/payment/success/{bookingId}', [PaymentController::class, 'success'])->name('payment.success');
 
+    // Payment Page
+        Route::get('/payment/{bookingId}', [PaymentController::class, 'index'])->name('payment');
+
     // Group Middleware Auth (Hanya Pengguna yang Login)
     Route::group(['middleware' => 'auth'], function () {
         // Checkout Page
         Route::get('/checkout/{id}', [CheckoutController::class, 'index'])->name('checkout');
         Route::post('/checkout/{id}', [CheckoutController::class, 'store'])->name('checkout.store');
 
-        // Payment Page
-        Route::get('/payment/{bookingId}', [PaymentController::class, 'index'])->name('payment');
+
         // Ubah route upload menjadi GET untuk menampilkan form
-        Route::get('/payment/{bookingId}/upload', [PaymentController::class, 'showUploadForm'])->name   ('payment.show');
+        Route::get('/payment/{bookingId}/upload', [PaymentController::class, 'showUploadForm'])->name('payment.show');
         Route::post('/payment/update/{bookingId}', [PaymentController::class, 'updatePaymentMethod'])->name('payment.update');
         Route::post('/payment/upload/{bookingId}', [PaymentController::class, 'uploadBuktiPembayaran'])->name('payment.upload');
         Route::post('/payment/{booking}/check-expired', [PaymentController::class, 'checkExpired'])->name('payment.check-expired');
         Route::post('/payment/{booking}/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
 
-        // Batalkan dan Cetak
-        Route::get('/payment/cancel/{bookingId}', [PaymentController::class, 'cancel'])->name('payment.cancel');
+
         Route::get('/cetak-resi/{bookingId}', [PaymentController::class, 'cetakResi'])->name('cetak.resi');
 
-        // Akun
+        // Account Page
         Route::get('/account', [AccountController::class, 'index'])->name('account');
+        Route::put('/account/update', [AccountController::class, 'update'])->name('account.update');
+        Route::post('/account/reset-password', [AccountController::class, 'resetPassword'])->name('account.reset-password');
+
     });
 });
 

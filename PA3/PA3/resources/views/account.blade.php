@@ -61,7 +61,7 @@
                                     {{-- Status Pembayaran --}}
                                     @if ($booking->status_pembayaran === 'pending' && $booking->metode_pembayaran && empty($booking->bukti_pembayaran))
                                         <a href="{{ route('front.payment.show', $booking->id) }}"
-                                            class="bg-blue-500 text-white py-1 px-3 rounded-l text-sm">Lanjutkan
+                                            class="bg-blue-500 text-white py-1 px-3 rounded-lg text-sm">Lanjutkan
                                             Pembayaran</a>
                                     @elseif ($booking->status_pembayaran === 'pending')
                                         <a href="{{ route('front.payment', $booking->id) }}"
@@ -70,7 +70,7 @@
                                     @elseif ($booking->status_pembayaran === 'menunggu_konfirmasi')
                                         <span class="bg-yellow-500 text-white py-1 px-3 rounded-lg text-sm">Menunggu
                                             Konfirmasi</span>
-                                    @elseif ($booking->status_pembayaran === 'expired' && now()->greaterThan($booking->waktu_selesai))
+                                    @elseif ($booking->status_pembayaran === 'expired')
                                         <span
                                             class="bg-red-500 text-white py-1 px-3 rounded-lg text-sm">Kadaluarsa</span>
                                     @elseif ($booking->status_pembayaran === 'success')
@@ -128,13 +128,41 @@
                 @elseif (($activeTab ?? '') === 'reset-password')
                     <h2 class="text-white text-xl font-semibold">Reset Password</h2>
                     <!-- Form reset password -->
+                    <form action="{{ route('front.account.reset-password') }}" method="POST" id="resetPasswordForm"
+                        class="space-y-4 mt-4">
+                        @csrf
+                        <div>
+                            <label class="block mb-1 text-sm text-white" for="current_password">Password Saat
+                                Ini</label>
+                            <input class="w-full p-2 rounded bg-gray-800 border border-gray-600 text-sm text-white"
+                                id="current_password" type="password" name="current_password" required />
+                        </div>
+
+                        <div>
+                            <label class="block mb-1 text-sm text-white" for="new_password">Password Baru</label>
+                            <input class="w-full p-2 rounded bg-gray-800 border border-gray-600 text-sm text-white"
+                                id="new_password" type="password" name="new_password" required />
+                        </div>
+
+                        <div>
+                            <label class="block mb-1 text-sm text-white" for="new_password_confirmation">Konfirmasi
+                                Password Baru</label>
+                            <input class="w-full p-2 rounded bg-gray-800 border border-gray-600 text-sm text-white"
+                                id="new_password_confirmation" type="password" name="new_password_confirmation"
+                                required />
+                        </div>
+
+                        <button type="submit" class="mt-3 p-2 bg-yellow-500 text-black rounded text-sm">
+                            Reset Password
+                        </button>
+                    </form>
                 @elseif (($activeTab ?? '') === 'profile')
                     <h2 class="text-white text-xl font-semibold">Account Details</h2>
                     <section class="bg-gray-700 p-4 md:p-8 rounded-lg w-full space-y-4 md:space-y-6">
 
                         <!-- Edit Profile Form -->
-                        <form action="" method="POST" class="space-y-3 md:space-y-4">
-                            {{-- {{ route('profile.update') }} --}}
+                        <form action="{{ route('front.account.update') }}" method="POST"
+                            class="space-y-3 md:space-y-4">
                             @csrf
                             @method('PUT')
 
@@ -153,7 +181,8 @@
                             <div>
                                 <label class="block mb-1 text-sm text-white" for="phone">Phone Number</label>
                                 <input class="w-full p-2 rounded bg-gray-800 border border-gray-600 text-sm text-white"
-                                    id="phone" type="tel" name="phone" value="{{ Auth::user()->phone }}" />
+                                    id="phone" type="tel" name="phone"
+                                    value="{{ Auth::user()->phone }}" />
                             </div>
 
                             <div class="flex justify-between items-center">
@@ -161,15 +190,7 @@
                                     class="mt-3 md:mt-4 p-2 bg-yellow-500 text-black rounded text-sm md:text-base">
                                     Update Profile
                                 </button>
-
-                                <a class="text-yellow-500 mb-4 md:mb-6 block text-sm md:text-base " href="#">Reset
-                                    Password</a>
                             </div>
-
-
-
-
-
                         </form>
                     </section>
                 @else
@@ -178,4 +199,87 @@
             </section>
         </div>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tangkap form update profile
+            const updateForm = document.querySelector('form[action="{{ route('front.account.update') }}"]');
+
+            if (updateForm) {
+                updateForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    // Ambil nilai form
+                    const name = document.getElementById('name').value;
+                    const email = document.getElementById('email').value;
+                    const phone = document.getElementById('phone').value;
+
+                    // Show confirmation dialog
+                    Swal.fire({
+                        title: 'Konfirmasi Update Profile',
+                        html: `
+                <div class="text-left">
+                    <p class="mb-2"><strong>Nama:</strong> ${name}</p>
+                    <p class="mb-2"><strong>Email:</strong> ${email}</p>
+                    <p class="mb-2"><strong>Nomor Telepon:</strong> ${phone || '-'}</p>
+                </div>
+                `,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#f59e0b',
+                        cancelButtonColor: '#6b7280',
+                        confirmButtonText: 'Ya, Update Profile',
+                        cancelButtonText: 'Periksa Kembali',
+                        backdrop: `
+                rgba(0,0,0,0.7)
+                left top
+                no-repeat
+                `
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Show loading indicator
+                            Swal.fire({
+                                title: 'Memproses Update',
+                                html: 'Mohon tunggu sebentar...',
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                    // Submit form secara manual setelah konfirmasi
+                                    updateForm.submit();
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+        });
+
+        document.getElementById('resetPasswordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Reset Password?',
+                text: "Anda yakin ingin mengubah password?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#f59e0b',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, Reset Password',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Tampilkan loading
+                    Swal.fire({
+                        title: 'Memproses Update',
+                        html: 'Mohon tunggu sebentar...',
+                        didOpen: () => {
+                            Swal.showLoading();
+                            // Submit form setelah konfirmasi
+                            e.target.submit();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </x-front-layout>

@@ -131,7 +131,7 @@
                                 </div>
                                 <ul class="text-gray-300 text-sm space-y-2 pl-5 list-disc">
                                     <li>Pastikan bukti transfer jelas terbaca</li>
-                                    <li>Format file: JPG, PNG, atau PDF (maks. 2MB)</li>
+                                    <li>Format file: JPG, PNG, atau JPEG </li>
                                     <li>Nominal transfer harus sesuai dengan total pembayaran</li>
                                     <li>Verifikasi membutuhkan waktu 1x24 jam</li>
                                 </ul>
@@ -159,7 +159,7 @@
                                                     <span class="font-semibold">Klik untuk upload</span> atau drag &
                                                     drop
                                                 </p>
-                                                <p class="text-xs text-gray-500">JPG, PNG, atau PDF (maks. 2MB)</p>
+                                                <p class="text-xs text-gray-500">JPEG,JPG,atau PNG,</p>
                                             </div>
                                             <input id="bukti_pembayaran" name="bukti_pembayaran" type="file"
                                                 class="hidden" required />
@@ -184,7 +184,7 @@
 
                                 <!-- Back Button -->
                                 <a href="{{ route('front.index') }}"
-                                    class="block text-center text-gray-300 hover:text-white mt-4 transition">
+                                    class="block text-center bg-[#3085d6] text-white hover:bg-[#3085d6] mt-4 px-4 py-2 rounded transition">
                                     Kembali ke Beranda
                                 </a>
                             </form>
@@ -196,63 +196,29 @@
     </main>
 
     <script>
-         // Countdown timer
-    function updateCountdown() {
-        const bookingTime = new Date("{{ $booking->waktu_selesai }}").getTime();
-        const now = new Date().getTime();
-        const distance = bookingTime - now;
+        // Countdown timer
+        function updateCountdown() {
+            // Hitung waktu expired berdasarkan status
+            let expiryTime;
 
-        if (distance <= 0) {
-            // Waktu habis, update status via AJAX
-            document.getElementById('countdownHours').textContent = '00';
-            document.getElementById('countdownMinutes').textContent = '00';
-            document.getElementById('countdownSeconds').textContent = '00';
+            @if ($booking->status_pembayaran === 'success')
+                // Untuk booking success, pakai waktu_selesai
+                expiryTime = new Date("{{ $booking->waktu_selesai }}").getTime();
+            @else
+                // Untuk booking pending, hitung 24 jam dari created_at
+                const createdTime = new Date("{{ $booking->created_at }}").getTime();
+                expiryTime = createdTime + (24 * 60 * 60 * 1000); // 24 jam dalam milidetik
+            @endif
 
-            // Kirim request untuk update status
-            fetch("{{ route('front.payment.check-expired', $booking->id) }}", {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => {
-                if (response.ok) {
-                    // Redirect ke halaman beranda dengan pesan expired
-                    window.location.href = "{{ route('front.index') }}";
-                }
-            });
+            const now = new Date().getTime();
+            const distance = expiryTime - now;
 
-            return;
-        }
+            if (distance <= 0) {
+                document.getElementById('countdownHours').textContent = '00';
+                document.getElementById('countdownMinutes').textContent = '00';
+                document.getElementById('countdownSeconds').textContent = '00';
 
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        document.getElementById('countdownHours').textContent = hours.toString().padStart(2, '0');
-        document.getElementById('countdownMinutes').textContent = minutes.toString().padStart(2, '0');
-        document.getElementById('countdownSeconds').textContent = seconds.toString().padStart(2, '0');
-    }
-
-    // Update countdown setiap detik
-    setInterval(updateCountdown, 1000);
-    updateCountdown(); // Jalankan segera
-
-    // Handle cancel button
-    document.getElementById('cancelButton').addEventListener('click', function() {
-        Swal.fire({
-            title: 'Batalkan Pesanan?',
-            text: "Anda yakin ingin membatalkan pesanan ini?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#6b7280',
-            confirmButtonText: 'Ya, Batalkan',
-            cancelButtonText: 'Kembali'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Kirim request pembatalan
-                fetch("{{ route('front.payment.cancel', $booking->id) }}", {
+                fetch("{{ route('front.payment.check-expired', $booking->id) }}", {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -263,9 +229,74 @@
                         window.location.href = "{{ route('front.index') }}";
                     }
                 });
+
+                return;
             }
+
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('countdownHours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('countdownMinutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('countdownSeconds').textContent = seconds.toString().padStart(2, '0');
+        }
+
+        // Update countdown setiap detik
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Jalankan segera
+
+        document.getElementById('cancelButton').addEventListener('click', function() {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Anda tidak akan dapat mengembalikan tindakan ini!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, batalkan!',
+                cancelButtonText: 'Kembali',
+                reverseButtons: false, // Balik ke posisi default
+                preConfirm: () => {
+                    return fetch("{{ route('front.payment.cancel', $booking->id) }}", {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            credentials: 'include'
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Terjadi kesalahan pada jaringan');
+                            }
+                            return response.json();
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(
+                                `Gagal: ${error.message}`
+                            );
+                        });
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Dibatalkan!',
+                        text: 'Pembayaran telah berhasil dibatalkan.',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                    // Arahkan ke halaman front.index setelah 1.5 detik
+                    setTimeout(() => {
+                        window.location.href = "{{ route('front.index') }}";
+                    }, 1500);
+                }
+            });
         });
-    });
+
 
         // Preview uploaded file name
         document.getElementById('bukti_pembayaran').addEventListener('change', function(e) {
@@ -284,106 +315,82 @@
         });
 
         // Handle form submission with SweetAlert
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('paymentForm');
-            const submitButton = document.getElementById('submitButton');
+        document.getElementById('submitButton').addEventListener('click', function(e) {
+            e.preventDefault();
             const fileInput = document.getElementById('bukti_pembayaran');
+            const form = document.getElementById('paymentForm');
 
-            // Show success/error messages from server
-            @if (session('success'))
+            // Check if file is selected
+            if (!fileInput.files || fileInput.files.length === 0) {
                 Swal.fire({
-                    title: 'Berhasil!',
-                    html: `{!! session('success') !!}`,
-                    icon: 'success',
+                    title: 'Peringatan',
+                    text: 'Silakan pilih file bukti pembayaran terlebih dahulu',
+                    icon: 'warning',
                     confirmButtonColor: '#f59e0b'
                 });
-            @endif
+                return;
+            }
 
-            @if (session('error'))
+            // Check file size (max 2MB)
+            const file = fileInput.files[0];
+            const maxSize = 2 * 1024 * 1024; // 2MB
+            if (file.size > maxSize) {
                 Swal.fire({
-                    title: 'Gagal!',
-                    text: `{!! session('error') !!}`,
+                    title: 'File Terlalu Besar',
+                    text: 'Ukuran file maksimal 2MB. Silakan pilih file yang lebih kecil.',
                     icon: 'error',
                     confirmButtonColor: '#f59e0b'
                 });
-            @endif
+                return;
+            }
 
-            // Form submission handler
-            submitButton.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                // Check if file is selected
-                if (!fileInput.files || fileInput.files.length === 0) {
-                    Swal.fire({
-                        title: 'Peringatan',
-                        text: 'Silakan pilih file bukti pembayaran terlebih dahulu',
-                        icon: 'warning',
-                        confirmButtonColor: '#f59e0b'
-                    });
-                    return;
-                }
-
-                // Check file size (max 2MB)
-                const file = fileInput.files[0];
-                const maxSize = 2 * 1024 * 1024; // 2MB
-                if (file.size > maxSize) {
-                    Swal.fire({
-                        title: 'File Terlalu Besar',
-                        text: 'Ukuran file maksimal 2MB. Silakan pilih file yang lebih kecil.',
-                        icon: 'error',
-                        confirmButtonColor: '#f59e0b'
-                    });
-                    return;
-                }
-
-                // Check file type
-                const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
-                if (!validTypes.includes(file.type)) {
-                    Swal.fire({
-                        title: 'Format File Tidak Didukung',
-                        text: 'Hanya file JPG, PNG, atau PDF yang diperbolehkan.',
-                        icon: 'error',
-                        confirmButtonColor: '#f59e0b'
-                    });
-                    return;
-                }
-
-                // Show confirmation dialog
+            // Check file type
+            const validTypes = ['image/jpeg', 'image/png'];
+            if (!validTypes.includes(file.type)) {
                 Swal.fire({
-                    title: 'Konfirmasi Upload',
-                    html: `
-                        <div class="text-left">
-                            <p>Anda yakin ingin mengupload bukti pembayaran ini?</p>
-                            <div class="mt-3 p-3 bg-gray-800 rounded-lg">
-                                <p class="text-sm font-medium text-gray-300">Detail File:</p>
-                                <p class="text-sm text-yellow-400">${file.name}</p>
-                                <p class="text-xs text-gray-400">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                            </div>
-                            <p class="text-sm text-yellow-400 mt-2">Pastikan file jelas dan sesuai nominal.</p>
-                        </div>
-                    `,
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#f59e0b',
-                    cancelButtonColor: '#6b7280',
-                    confirmButtonText: 'Ya, Upload Sekarang',
-                    cancelButtonText: 'Periksa Kembali'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Show loading state
-                        Swal.fire({
-                            title: 'Sedang Mengupload...',
-                            html: 'Mohon tunggu sebentar, file Anda sedang diproses',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
-
-                        // Submit the form
-                        form.submit();
-                    }
+                    title: 'Format File Tidak Didukung',
+                    text: 'Hanya file JPG, PNG yang diperbolehkan.',
+                    icon: 'error',
+                    confirmButtonColor: '#f59e0b'
                 });
+                return;
+            }
+
+            // Show confirmation dialog
+            Swal.fire({
+                title: 'Konfirmasi Upload',
+                html: `
+                <div class="text-left">
+                    <p>Anda yakin ingin mengupload bukti pembayaran ini?</p>
+                    <div class="mt-3 p-3 bg-gray-800 rounded-lg">
+                        <p class="text-sm font-medium text-gray-300">Detail File:</p>
+                        <p class="text-sm text-yellow-400">${file.name}</p>
+                        <p class="text-xs text-gray-400">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                    </div>
+                    <p class="text-sm text-yellow-400 mt-2">Pastikan file jelas dan sesuai nominal.</p>
+                </div>
+            `,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#f59e0b',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, Upload Sekarang',
+                cancelButtonText: 'Periksa Kembali'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading state
+                    Swal.fire({
+                        title: 'Sedang Mengupload...',
+                        html: 'Mohon tunggu sebentar, file Anda sedang diproses',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    // Submit the form
+                    form.submit();
+                }
             });
         });
     </script>

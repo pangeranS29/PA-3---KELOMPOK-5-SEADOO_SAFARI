@@ -133,7 +133,7 @@
                     $('#phoneNumber').val(phoneNumber);
 
                     // Show/hide buttons based on current status
-                    if (currentStatus === 'pending') {
+                    if (currentStatus === 'menunggu_konfirmasi' || currentStatus === 'rejected') {
                         $('#actionButtons').show();
                     } else {
                         $('#actionButtons').hide();
