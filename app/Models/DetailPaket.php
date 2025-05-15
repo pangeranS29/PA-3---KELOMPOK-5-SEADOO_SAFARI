@@ -34,10 +34,11 @@ class DetailPaket extends Model
      public function getThumbnailAttribute()
      {
           // If photos exist
-        if ($this->foto) {
+       if ($this->foto) {
         $filename = json_decode($this->foto)[0]; // contoh: "assets/item/foto1.jpg"
         return '/storage/' . $filename;
     }
+
 
         return asset('images/default.png');
 

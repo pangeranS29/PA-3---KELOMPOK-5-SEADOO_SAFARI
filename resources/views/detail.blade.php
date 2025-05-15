@@ -145,30 +145,28 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
 
     <script>
-        const {
-            createApp
-        } = Vue
-        createApp({
-            data() {
-                return {
-                    activeThumbnail: 0,
-                    thumbnails: [
-                        @foreach (json_decode($detail_paket->foto) as $key => $foto)
-                            {
-                                id: {{ $key }},
-                                url: "{{ Storage::url($foto) }}"
-                            },
-                        @endforeach
-                    ],
-                }
-            },
-            methods: {
-                changeActive(id) {
-                    this.activeThumbnail = id;
-                }
+    const { createApp } = Vue
+    createApp({
+        data() {
+            return {
+                activeThumbnail: 0,
+                thumbnails: [
+                    @foreach (json_decode($detail_paket->foto) as $key => $foto)
+                        {
+                            id: {{ $key }},
+                            url: "/storage/{{ $foto }}"
+                        },
+                    @endforeach
+                ],
             }
-        }).mount('#gallery')
-    </script>
+        },
+        methods: {
+            changeActive(id) {
+                this.activeThumbnail = id;
+            }
+        }
+    }).mount('#gallery')
+</script>
 
 
 
