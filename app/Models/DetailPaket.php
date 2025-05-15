@@ -35,8 +35,9 @@ class DetailPaket extends Model
      {
           // If photos exist
         if ($this->foto) {
-            return Storage::url(json_decode($this->foto)[0]);
-        }
+        $filename = json_decode($this->foto)[0]; // contoh: "assets/item/foto1.jpg"
+        return '/storage/' . $filename;
+    }
 
         return asset('images/default.png');
 
