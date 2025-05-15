@@ -1,0 +1,86 @@
+/* Status badge styling */
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.status-pending {
+    background-color: #e5e7eb;
+    color: #92400e;
+}
+
+.status-success {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.status-rejected, .status-expired {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+/* Modal styling */
+.modal-overlay {
+    transition: opacity 0.3s ease;
+}
+
+.modal-content {
+    transition: all 0.3s ease;
+    transform: translateY(-20px);
+}
+
+.modal-open .modal-content {
+    transform: translateY(0);
+}
+
+/* booking.css */
+#dataTable {
+    width: 100% !important;
+}
+
+#dataTable th,
+#dataTable td {
+    padding: 12px 15px;
+    white-space: nowrap;
+}
+
+#dataTable tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+#dataTable tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+/* Make status badges more prominent */
+.status-badge {
+    display: inline-block;
+    padding: 0.35rem 0.65rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+/* Action buttons styling */
+.action-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+/* Ensure table is properly responsive */
+@media (max-width: 1024px) {
+    #dataTable {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+
