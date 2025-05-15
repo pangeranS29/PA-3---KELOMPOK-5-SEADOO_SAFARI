@@ -95,7 +95,6 @@ Route::prefix('admin')->name('admin.')->middleware([
     Route::resource('bookings', AdminBookingController::class);
     Route::post('/bookings/{booking}/accept', [AdminBookingController::class, 'accept'])->name('bookings.accept');
     Route::post('/bookings/{booking}/reject', [AdminBookingController::class, 'reject'])->name('bookings.reject');
-    Route::resource('jetski', AdminJetskiController::class);
 
     // Berita Routes
     Route::resource('beritas', AdminBeritaPaketController::class)
