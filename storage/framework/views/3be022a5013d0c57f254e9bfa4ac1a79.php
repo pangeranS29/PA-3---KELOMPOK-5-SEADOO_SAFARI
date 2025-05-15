@@ -1,0 +1,2 @@
+<img src="<?php echo e(asset('images/logoseado.png')); ?>" alt="Logo" <?php echo e($attributes->merge(['class' => 'h-8 w-auto'])); ?>>
+<?php /**PATH C:\laragon\www\PA3\PA-3---KELOMPOK-5-SEADOO_SAFARI\PA3\PA3\resources\views/components/application-mark.blade.php ENDPATH**/ ?>

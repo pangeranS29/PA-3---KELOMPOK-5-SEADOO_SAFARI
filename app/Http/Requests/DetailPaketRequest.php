@@ -21,13 +21,12 @@ class DetailPaketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'paket_jetski_id' => 'required|exists:paket_jetski,id',
-            'foto' => 'required|array',
-            'foto.*' => 'required|image|mimes:jpeg,png,jpg,webp|max:5048',
-            'rating' => 'nullable|numeric|min:0|max:5',
-            'deskripsi' => 'nullable|string',
-            'jumlah_penumpang' => 'nullable|integer|min:0',
+            'paket_jetski_id'   => 'required|exists:paket_jetski,id',
+            'harga'             => 'required|numeric|min:0',
+            'deskripsi'         => 'required|string',
+            'jumlah_jetski'     => 'required|integer|min:0',
+            'harga_drone'       => 'nullable|numeric|min:0',
+            'foto'              => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5048', // foto opsional saat update
         ];
     }
-
 }

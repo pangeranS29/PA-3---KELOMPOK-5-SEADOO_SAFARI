@@ -21,9 +21,7 @@ class DetailPaket extends Model
         'deskripsi',
     ];
 
-    protected $casts = [
-        'foto' => 'array', // Laravel akan otomatis mengubah JSON menjadi array
-    ];
+
 
      /**
      * Accessor to get the first photo from the 'foto' column as a thumbnail.
@@ -31,19 +29,9 @@ class DetailPaket extends Model
      * @return string
      */
 
-     public function getThumbnailAttribute()
-     {
-          // If photos exist
-       if ($this->foto) {
-        $filename = json_decode($this->foto)[0]; // contoh: "assets/item/foto1.jpg"
-        return '/storage/' . $filename;
-    }
 
 
-        return asset('images/default.png');
 
-
-     }
 
 
 

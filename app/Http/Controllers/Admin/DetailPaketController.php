@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\PilihPaket;
 use App\Models\DetailPaket;
 use Yajra\DataTables\DataTables;
-
+use Illuminate\Support\Facades\Storage;
 
 class DetailPaketController extends Controller
 {
@@ -22,8 +22,6 @@ class DetailPaketController extends Controller
             $query = DetailPaket::with(['pilihpaket']);
 
             return DataTables::of($query)
-
-
                 ->addColumn('action', function ($detail_paket) {
                     return '
                         <a class="block w-full px-2 py-1 mb-1 text-xs text-center text-white transition duration-500 bg-gray-700 border border-gray-700 rounded-md select-none ease hover:bg-gray-800 focus:outline-none focus:shadow-outline"
@@ -38,25 +36,15 @@ class DetailPaketController extends Controller
                             ' . method_field('delete') . csrf_field() . '
                         </form>';
                 })
-
                 ->editColumn('foto', function ($detail_paket) {
-
-
-                    $photos = json_decode($detail_paket->foto, true);
-
-
-                    if (!empty($photos)) {
-
-                        return '<img src="' . asset('storage/' . $photos[0]) . '" alt="foto" class="w-20 mx-auto rounded-md">';
+                    if ($detail_paket->foto) {
+                        return '<img src="' . asset('storage/' . $detail_paket->foto) . '" alt="foto" class="w-20 mx-auto rounded-md">';
                     }
-
                     return 'Tidak ada foto';
                 })
                 ->rawColumns(['foto', 'action'])
                 ->make();
         }
-
-
 
         //Script untuk return halaman view Item
         return view('admin.detail_pakets.index');
@@ -68,7 +56,6 @@ class DetailPaketController extends Controller
     public function create()
     {
         $pilihpakets = PilihPaket::all();
-
         return view('admin.detail_pakets.create', compact('pilihpakets'));
     }
 
@@ -79,26 +66,15 @@ class DetailPaketController extends Controller
     {
         $data = $request->all();
 
-
-        // Upload multiple photos
+        // Upload single photo
         if ($request->hasFile('foto')) {
-            $foto = [];
-
-            foreach ($request->file('foto') as $photo) {
-                $photoPath = $photo->store('assets/item', 'public');
-
-                // Store as json
-                array_push($foto, $photoPath);
-            }
-
-            $data['foto'] = json_encode($foto);
+            $photo = $request->file('foto');
+            $data['foto'] = $photo->store('item', 'public');
         }
 
         DetailPaket::create($data);
-
         return redirect()->route('admin.detail_pakets.index');
     }
-
 
     /**
      * Display the specified resource.
@@ -113,13 +89,8 @@ class DetailPaketController extends Controller
      */
     public function edit(DetailPaket $detail_paket)
     {
-        // Memuat relasi pilihpaket untuk dropdown
         $detail_paket->load('pilihpaket');
-
-        // Mengambil semua opsi pilihan paket untuk dropdown
         $pilihpakets = PilihPaket::all();
-
-        // Mengirimkan data ke view
         return view('admin.detail_pakets.edit', compact('detail_paket', 'pilihpakets'));
     }
 
@@ -130,21 +101,16 @@ class DetailPaketController extends Controller
     {
         $data = $request->all();
 
-
-        // Upload multiple photos
+        // Upload single photo
         if ($request->hasFile('foto')) {
-            $foto = [];
-
-            foreach ($request->file('foto') as $photo) {
-                $photoPath = $photo->store('assets/item', 'public');
-
-                // Store as json
-                array_push($foto, $photoPath);
+            // Delete old photo first
+            if ($detail_paket->foto) {
+                Storage::disk('public')->delete($detail_paket->foto);
             }
 
-            $data['foto'] = json_encode($foto);
+            $photo = $request->file('foto');
+            $data['foto'] = $photo->store('item', 'public');
         } else {
-            // If photos is empty, then use old photos
             $data['foto'] = $detail_paket->foto;
         }
 
@@ -157,8 +123,12 @@ class DetailPaketController extends Controller
      */
     public function destroy(DetailPaket $detail_paket)
     {
-        $detail_paket->delete();
+        // Delete associated photo
+        if ($detail_paket->foto) {
+            Storage::disk('public')->delete($detail_paket->foto);
+        }
 
+        $detail_paket->delete();
         return redirect()->route('admin.detail_pakets.index');
     }
 }
