@@ -47,7 +47,7 @@
         }
     </style>
 
-    @vite(['resources/css/front.css'])
+
     @livewireStyles
 
     <style>

@@ -29,9 +29,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if(config('app.env') === 'local'){
-            URL::forceScheme('https');
-        }
+        // if(config('app.env') === 'local'){
+        //     URL::forceScheme('https');
+        // }
 
         $this->app->singleton(LoginResponse::class, CustomLoginResponse::class);
         $this->app->singleton(RegisterResponse::class, CustomRegisterResponse::class);
